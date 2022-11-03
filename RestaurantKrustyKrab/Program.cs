@@ -1,10 +1,15 @@
-﻿namespace RestaurantKrustyKrab
+﻿using RestaurantKrustyKrab.Restaurant;
+
+namespace RestaurantKrustyKrab
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
+            Lobby MyLobby = new Lobby();
+            MyLobby.LobbyRun();
+            Console.ReadKey();
         }
     }
 }

@@ -1,12 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RestaurantKrustyKrab.People
+﻿namespace RestaurantKrustyKrab.People
 {
-    internal class Chef
+    internal class Chef : Person
     {
+        internal int Competence { get; set; }
+
+        public Chef(string name, int Competence) : base Name
+        {
+            Name = name;
+            Competence = Competence;
+        }
+
+
+    internal void work()
+    {
+        void taEmotBeställning()
+        {
+
+        }
+
+        void lagaMat()
+        {
+
+        }
     }
+
+}
 }

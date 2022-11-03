@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RestaurantKrustyKrab.People
+﻿namespace RestaurantKrustyKrab.People
 {
-    internal class Guest
+    internal class Guest : Person
     {
+        public Guest(string name) : base(name)
+        {
+
+        }
     }
 }
