@@ -16,6 +16,9 @@ namespace RestaurantKrustyKrab.Restaurant
         private int CounterRestaurant { get; set; }
 
         internal Kitchen Kitchen { get; set; }
+        internal DishStation DishStation { get; set; }
+        internal Reception Reception { get; set; }
+        internal WC WC { get; set; }
 
 
 
@@ -28,6 +31,9 @@ namespace RestaurantKrustyKrab.Restaurant
             this.PositionY = 2;
             this.TableList = new List<Table>();
             this.Kitchen = new Kitchen(false, 3, 157);
+            this.DishStation = new DishStation(3, 128);
+            this.Reception = new Reception(3, 31);
+            this.WC = new WC(25, 188);
         }
         public void LobbyRun()
         {
@@ -35,6 +41,9 @@ namespace RestaurantKrustyKrab.Restaurant
             GenerateTable(TableList);
             DrawTables();
             DrawKitchen();
+            DrawDishStation();
+            DrawReception();
+            DrawWC();
         }
         //public static void PrintMe()
         //{
@@ -79,6 +88,18 @@ namespace RestaurantKrustyKrab.Restaurant
         public void DrawKitchen()
         {
             Window.OurDraw("Kitchen", Kitchen.PositionY, Kitchen.PositionX, Kitchen.DrawKitchen);
+        }
+        public void DrawDishStation()
+        {
+            Window.OurDraw("Dish Station", DishStation.PositionY, DishStation.PositionX, DishStation.DrawDishes);
+        }
+        public void DrawReception()
+        {
+            Window.OurDraw("Reception", Reception.PositionY, Reception.PositionX, Reception.DrawReception);
+        }
+        public void DrawWC()
+        {
+            Window.OurDraw("WC", WC.PositionY, WC.PositionX, WC.DrawWC);
         }
     }
 }
