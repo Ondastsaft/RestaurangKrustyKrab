@@ -9,7 +9,7 @@ namespace RestaurantKrustyKrab
             Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
             Lobby MyLobby = new Lobby();
             MyLobby.LobbyRun();
-            Console.ReadKey();
+            
         }
     }
 }

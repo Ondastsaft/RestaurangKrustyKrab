@@ -55,12 +55,13 @@ namespace RestaurantKrustyKrab.Restaurant
             {
                 CompanyWaitingList.Enqueue(GenerateCompany());                
             }
-            if (number > 50 && CompanyWaitingList.Count > 0)
+            if (number > 50 && CompanyWaitingList.Count > 0)   //Här någonstans kan vi ha en bool som en waiter styr när vi dequeuear
             {
                 foreach(Company company in CompanyWaitingList)
                 {
                     company.Guests[0].PositionY = (company.Guests[0].PositionY-1);
                 }
+
                 CompanyWaitingList.Dequeue();
             }
             PrintWaitingCompanies();
@@ -74,10 +75,7 @@ namespace RestaurantKrustyKrab.Restaurant
             Console.SetCursorPosition(person.PositionX, person.PositionY);
             Console.WriteLine(person.Name);
         }
-        //public static void PrintMe()
-        //{
-
-        //}
+    
         public void PrintCompany()
         {
             foreach (Company company in CompanyWaitingList)
@@ -104,14 +102,14 @@ namespace RestaurantKrustyKrab.Restaurant
                 if(j < 10)
                 {
                     j++;
-                    Console.SetCursorPosition(company.Guests[0].PositionX, company.Guests[0].PositionY);
-                    Console.Write("                          ");
+                    Console.SetCursorPosition(company.Guests[0].PositionX, company.Guests[0].PositionY); 
+                    Console.Write("                          ");   //Rensar raden innan den skriver ut sällskapet
                     if (CompanyWaitingList.Count > j)
                     {                                               
                         Console.SetCursorPosition(company.Guests[0].PositionX, company.Guests[0].PositionY);
                         if (company.Guests.Count == 1)
                         {
-                            Console.Write("Company" + " " + j + ": " + company.Guests[0].Name);
+                            Console.Write("Company" + " " + j + ": " + company.Guests[0].Name); //Skriver endast ut sitt eget namn om sällskapet enbart är en person
                         }
                         else if (company.Guests.Count > 1)
                         {
@@ -125,29 +123,7 @@ namespace RestaurantKrustyKrab.Restaurant
                     }                   
                 }      
             }
-            //int j = 0;
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    j++;
-            //    if (CompanyWaitingList.Count > i+1)
-            //    {
-            //        Console.SetCursorPosition(CompanyWaitingList[i].Guests[0].PositionX, CompanyWaitingList[i].Guests[0].PositionY);
-
-            //        if (CompanyWaitingList[i].Guests.Count == 1)
-            //        {
-            //            Console.Write("Company" + " " + j + ": " + CompanyWaitingList[i].Guests[0].Name);
-            //        }
-            //        else
-            //        {
-            //            Console.Write("Company" + " " + j + ": " + CompanyWaitingList[i].Guests[0].Name + " + " + (CompanyWaitingList[i].Guests.Count - 1));
-            //        }
-            //    }
-            //    else
-            //    {
-            //        Console.SetCursorPosition(CompanyWaitingList[0].Guests[0].PositionX, CompanyWaitingList[0].Guests[0].PositionY + j);
-            //        Console.WriteLine("                      ");
-            //    }
-            //}
+ 
         }
         public static void Count()
         {
@@ -176,7 +152,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
         }
 
-        public void Draw()
+        public void Draw()  
         {
             foreach (Table table in TableList)
             {
@@ -189,7 +165,7 @@ namespace RestaurantKrustyKrab.Restaurant
         }
         public Company GenerateCompany()
         {
-            Company company = new Company(CompanyWaitingList.Count);
+            Company company = new Company(CompanyWaitingList.Count); //Skapar ett nytt company objekt med offset som inparameter, vilket är storleken på sällskapet
             return company;
         }
 
