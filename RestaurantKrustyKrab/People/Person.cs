@@ -3,9 +3,9 @@
     public abstract class Person
     {
         public string Name { get; set; }
-        public Person(string Name)
+        public Person(string name)
         {
-            Name = this.Name;
+            Name = name;
         }
     }
 }
