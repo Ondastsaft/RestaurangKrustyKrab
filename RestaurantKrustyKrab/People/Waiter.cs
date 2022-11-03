@@ -2,12 +2,12 @@
 {
     internal class Waiter : Person
     {
-        private bool busy { get; set; }
-        private int servicenivå { get; set; }
-        public Waiter(string Namn, int Servicenivå, bool Busy) : base(Namn)
+        private bool Busy { get; set; }
+        private int ServiceLevel { get; set; }
+        public Waiter(string name, int serviceLevel, bool busy) : base(name)
         {
-            namn = Namn;
-            servicenivå = Servicenivå;
+            Name = name;
+            ServiceLevel = serviceLevel;
             busy = Busy;
         }
 

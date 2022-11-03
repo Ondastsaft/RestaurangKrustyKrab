@@ -4,7 +4,7 @@
     {
         internal int Competence { get; set; }
 
-        public Chef(string name, int Competence) : base(Name)
+        public Chef(string name, int Competence) : base(name)
         {
             Name = name;
             Competence = Competence;
