@@ -4,7 +4,7 @@
     {
         private bool Busy { get; set; }
         private int ServiceLevel { get; set; }
-        public Waiter(string name, int serviceLevel, bool busy) : base(name)
+        public Waiter(string name, int serviceLevel, bool busy, int PositionX, int PositionY) : base(name, PositionX, PositionY)
         {
             Name = name;
             ServiceLevel = serviceLevel;

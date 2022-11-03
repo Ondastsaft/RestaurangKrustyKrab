@@ -19,6 +19,8 @@ namespace RestaurantKrustyKrab.Restaurant
         internal DishStation DishStation { get; set; }
         internal Reception Reception { get; set; }
         internal WC WC { get; set; }
+        public int Time { get; set; }
+
 
         public Lobby()
         {
@@ -31,13 +33,38 @@ namespace RestaurantKrustyKrab.Restaurant
             this.DishStation = new DishStation(3, 128);
             this.Reception = new Reception(3, 31);
             this.WC = new WC(25, 188);
+            this.Time = 0;
+            this.CompanyWaitingList = new List<Company>();
         }
         public void LobbyRun()
         {
             Window.OurDraw(this.Name, this.PositionX, this.PositionY, this.MyDrawing);
             GenerateTable(TableList);
             Draw();
-        
+            while(true)
+            {
+                LoopRestaurant();
+                Console.ReadKey();
+            } 
+        }
+        public void LoopRestaurant()
+        {
+            if(Time % 10 == 0)
+            {
+                CompanyWaitingList.Add(GenerateCompany());
+            }  
+            foreach(Company company in CompanyWaitingList)
+            {
+                foreach(Person person in company.Guests)
+                {
+                    PrintPosition(person);
+                }
+            }
+        }
+        public void PrintPosition(Person person)
+        {
+            Console.SetCursorPosition(person.PositionX, person.PositionY);
+            Console.Write(person.Name);
         }
         //public static void PrintMe()
         //{
@@ -82,6 +109,11 @@ namespace RestaurantKrustyKrab.Restaurant
             Window.OurDraw("Dish Station", DishStation.PositionY, DishStation.PositionX, DishStation.Frame);
             Window.OurDraw("Reception", Reception.PositionY, Reception.PositionX, Reception.Frame);
             Window.OurDraw("WC", WC.PositionY, WC.PositionX, WC.Frame);
+        }
+        public Company GenerateCompany()
+        {
+            Company company = new Company();
+            return company;
         }
 
     }

@@ -2,7 +2,7 @@
 {
     internal class Guest : Person
     {
-        public Guest(string name) : base(name)
+        public Guest(string name, int PositionX, int PositionY) : base(name, PositionX, PositionY)
         {
 
         }
