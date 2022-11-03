@@ -2,21 +2,19 @@
 
 namespace RestaurantKrustyKrab.Restaurant
 {
-    internal class Table
+    internal class Table : Template
     {
-        internal string[,] DrawTable { get; set; }
-        private int Seats { get; set; }
-        private int Quality { get; set; }
-        private Company Company { get; set; }
-        internal int PositionX { get; set; }
-        internal int PositionY { get; set; }
-        private bool IsAvailable { get; set; }
+
+        internal int Seats { get; set; }
+        internal int Quality { get; set; }
+        internal Company Company { get; set; }
+        internal bool IsAvailable { get; set; }
         internal int TableNumber { get; set; }
 
 
         public Table(int seats, int quality, int positionX, int positionY, bool isAvailable, int tableNumber)
         {
-            this.DrawTable = new string[4, 20];
+            this.Frame = new string[4, 20];
             Seats = seats;
             Quality = quality;
             PositionX = positionX;

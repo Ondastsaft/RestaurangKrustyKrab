@@ -5,23 +5,20 @@ namespace RestaurantKrustyKrab.Restaurant
 {
     internal class Lobby
     {
-        public string[,] MyDrawing { get; set; }
-        public string Name { get; set; }
-        public int PositionX { get; set; }
-        public int PositionY { get; set; }
+        internal string[,] MyDrawing { get; set; }
+        internal string Name { get; set; }
+        internal int PositionX { get; set; }
+        internal int PositionY { get; set; }
 
         public List<Table> TableList { get; set; }
-        private List<Waiter> WaiterList { get; set; }
-        private List<Company> CompanyWaitingList { get; set; }
-        private int CounterRestaurant { get; set; }
+        internal List<Waiter> WaiterList { get; set; }
+        internal List<Company> CompanyWaitingList { get; set; }
+        internal int CounterRestaurant { get; set; }
 
         internal Kitchen Kitchen { get; set; }
         internal DishStation DishStation { get; set; }
         internal Reception Reception { get; set; }
         internal WC WC { get; set; }
-
-
-
 
         public Lobby()
         {
@@ -39,11 +36,8 @@ namespace RestaurantKrustyKrab.Restaurant
         {
             Window.OurDraw(this.Name, this.PositionX, this.PositionY, this.MyDrawing);
             GenerateTable(TableList);
-            DrawTables();
-            DrawKitchen();
-            DrawDishStation();
-            DrawReception();
-            DrawWC();
+            Draw();
+        
         }
         //public static void PrintMe()
         //{
@@ -78,28 +72,17 @@ namespace RestaurantKrustyKrab.Restaurant
 
         }
 
-        public void DrawTables()
+        public void Draw()
         {
             foreach (Table table in TableList)
             {
-                Window.OurDraw("Bord " + table.TableNumber, table.PositionY, table.PositionX, table.DrawTable);
+                Window.OurDraw("Bord " + table.TableNumber, table.PositionY, table.PositionX, table.Frame);
             }
+            Window.OurDraw("Kitchen", Kitchen.PositionY, Kitchen.PositionX, Kitchen.Frame);
+            Window.OurDraw("Dish Station", DishStation.PositionY, DishStation.PositionX, DishStation.Frame);
+            Window.OurDraw("Reception", Reception.PositionY, Reception.PositionX, Reception.Frame);
+            Window.OurDraw("WC", WC.PositionY, WC.PositionX, WC.Frame);
         }
-        public void DrawKitchen()
-        {
-            Window.OurDraw("Kitchen", Kitchen.PositionY, Kitchen.PositionX, Kitchen.DrawKitchen);
-        }
-        public void DrawDishStation()
-        {
-            Window.OurDraw("Dish Station", DishStation.PositionY, DishStation.PositionX, DishStation.DrawDishes);
-        }
-        public void DrawReception()
-        {
-            Window.OurDraw("Reception", Reception.PositionY, Reception.PositionX, Reception.DrawReception);
-        }
-        public void DrawWC()
-        {
-            Window.OurDraw("WC", WC.PositionY, WC.PositionX, WC.DrawWC);
-        }
+
     }
 }
