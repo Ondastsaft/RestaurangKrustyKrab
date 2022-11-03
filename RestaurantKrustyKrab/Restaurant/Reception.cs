@@ -8,7 +8,7 @@ namespace RestaurantKrustyKrab.Restaurant
  
         public Reception(int positionX, int positionY)
         {
-            this.Frame = new string[13, 12];
+            this.Frame = new string[13, 25];
             this.WaitingList = WaitingList;
             PositionX = positionX;
             PositionY = positionY;

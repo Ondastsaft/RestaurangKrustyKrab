@@ -6,13 +6,13 @@
         internal int timeWaiting { get; set; }
         static internal Random random = new Random();
 
-        public Company()
+        public Company(int offSetRow)
         {
             int guests = random.Next(1, 5);   
             this.Guests = new List<Guest>();
             for(int i = 0; i < guests; i++)
             {
-                Guests.Add(new Guest(GetName(), 6+i, 15));
+                Guests.Add(new Guest(GetName(), 32, 4+i+offSetRow));
             }
             this.timeWaiting = 0;
         }

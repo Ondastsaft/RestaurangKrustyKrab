@@ -41,35 +41,76 @@ namespace RestaurantKrustyKrab.Restaurant
             Window.OurDraw(this.Name, this.PositionX, this.PositionY, this.MyDrawing);
             GenerateTable(TableList);
             Draw();
-            while(true)
+            while (true)
             {
                 LoopRestaurant();
                 Console.ReadKey();
-            } 
+            }
         }
         public void LoopRestaurant()
         {
-            if(Time % 10 == 0)
+            if (Time % 10 == 0)
             {
                 CompanyWaitingList.Add(GenerateCompany());
-            }  
-            foreach(Company company in CompanyWaitingList)
-            {
-                foreach(Person person in company.Guests)
-                {
-                    PrintPosition(person);
-                }
             }
+            PrintWaitingCompanies();
         }
         public void PrintPosition(Person person)
         {
+
             Console.SetCursorPosition(person.PositionX, person.PositionY);
-            Console.Write(person.Name);
+            Console.WriteLine("              ");
+            Console.SetCursorPosition(person.PositionX, person.PositionY);
+            Console.WriteLine(person.Name);
         }
         //public static void PrintMe()
         //{
 
         //}
+        public void PrintCompany()
+        {
+            foreach (Company company in CompanyWaitingList)
+            {
+                Console.SetCursorPosition(company.Guests[0].PositionX, company.Guests[0].PositionY);
+                Console.WriteLine("              ");
+                Console.SetCursorPosition(company.Guests[0].PositionX, company.Guests[0].PositionY + 1);
+                Console.WriteLine("              ");
+                Console.SetCursorPosition(company.Guests[0].PositionX, company.Guests[0].PositionY + 2);
+                Console.WriteLine("              ");
+                Console.SetCursorPosition(company.Guests[0].PositionX, company.Guests[0].PositionY + 3);
+                Console.WriteLine("              ");
+                foreach (Person person in company.Guests)
+                {
+                    PrintPosition(person);
+                }
+            }
+        }
+        public void PrintWaitingCompanies()
+        {
+            int j = 0;
+            for (int i = 0; i < 10; i++)
+            {
+                j++;
+                if (CompanyWaitingList.Count > i+1)
+                {
+                    Console.SetCursorPosition(CompanyWaitingList[i].Guests[0].PositionX, CompanyWaitingList[i].Guests[0].PositionY + j);
+
+                    if (CompanyWaitingList[i].Guests.Count == 1)
+                    {
+                        Console.WriteLine("Company" + " " + j + ": " + CompanyWaitingList[i].Guests[0].Name);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Company" + " " + j + ": " + CompanyWaitingList[i].Guests[0].Name + " + " + (CompanyWaitingList[i].Guests.Count - 1));
+                    }
+                }
+                else
+                {
+                    Console.SetCursorPosition(CompanyWaitingList[0].Guests[0].PositionX, CompanyWaitingList[0].Guests[0].PositionY + j);
+                    Console.WriteLine("                      ");
+                }
+            }
+        }
         public static void Count()
         {
 
@@ -112,7 +153,7 @@ namespace RestaurantKrustyKrab.Restaurant
         }
         public Company GenerateCompany()
         {
-            Company company = new Company();
+            Company company = new Company(CompanyWaitingList.Count);
             return company;
         }
 
