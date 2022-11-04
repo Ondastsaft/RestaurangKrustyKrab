@@ -7,7 +7,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
         internal int Seats { get; set; }
         internal int Quality { get; set; }
-        internal Company Company { get; set; }
+        internal List<Company> BookedSeats { get; set; }
         internal bool IsAvailable { get; set; }
         internal int TableNumber { get; set; }
 
@@ -21,7 +21,8 @@ namespace RestaurantKrustyKrab.Restaurant
             PositionY = positionY;
             IsAvailable = isAvailable;
             TableNumber = tableNumber;
-            this.Company = new Company(0);
+            this.BookedSeats = new List<Company>();
+            
         }
 
 

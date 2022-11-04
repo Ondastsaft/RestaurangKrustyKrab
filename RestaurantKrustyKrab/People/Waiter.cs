@@ -14,13 +14,8 @@ namespace RestaurantKrustyKrab.People
         {
             Name = name;
             ServiceLevel = serviceLevel;
-            Busy = busy;
+            Busy = busy;            
 
-            this.CompanyProperty = new Company(0);
-            static void work()
-            {
-
-            }
         }
 
          

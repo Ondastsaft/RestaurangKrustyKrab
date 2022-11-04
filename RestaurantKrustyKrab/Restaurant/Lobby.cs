@@ -40,14 +40,11 @@ namespace RestaurantKrustyKrab.Restaurant
             this.WaiterList = new List<Waiter>();
             this.ChefList = new List<Chef>();
         }
-        public void LobbyRun()
+        public void Generate()
         {
-
             GenerateTable(TableList);
             GenerateWaiter();
-            GenerateChefs();
-           
-         
+            GenerateChefs();  
         }
    
         public void PrintWaiters()
@@ -134,45 +131,23 @@ namespace RestaurantKrustyKrab.Restaurant
             {
                 foreach (Table table in TableList)
                 {
-                    if (table.Seats >= waiter.CompanyProperty.Guests.Count)
+                    if (table.Seats >= waiter.CompanyProperty.Guests.Count  && table.IsAvailable == true)
                     {
-                        table.Company = waiter.CompanyProperty;
+                        table.BookedSeats.Add(waiter.CompanyProperty);
                         table.IsAvailable = false;
                         break;
                     }
 
                 }
             }
+            void Take_Order(Waiter waiter)
+            {
+
+            }
         }
 
        
-        void ge_meny()
-                {
-
-                }
-
-                void ta_Beställning()
-                {
-
-                }
-
-                void hämta_mat()
-                {
-
-                }
-                void servera_mat()
-                {
-
-                }
-                void ta_Emot_Pengar()
-                {
-
-                }
-
-                void duka_undan()
-                {
-
-                }
+       
             }
         }
     

@@ -9,32 +9,24 @@ namespace RestaurantKrustyKrab
         static void Main(string[] args)
         {
             Lobby MyLobby = new Lobby();
-            MyLobby.LobbyRun();
+            MyLobby.Generate();
             while (true)
             {   MyLobby.Addguests();
-                MyLobby.Addguests();
-                MyLobby.Addguests();
-
-
-                MyLobby.work();
-
+        
                 PrintCompanies(MyLobby);
-                
                 PrintWaiters(MyLobby);
-            
                 Printtables(MyLobby);
-               
                 Console.WriteLine("-----------------------------------");
                 PrintChefs(MyLobby);
                 Console.WriteLine("-----------------------------------");
                 Console.ReadKey();
                 Console.Clear();
+                MyLobby.work();
             }
            
 
             static void Printtables(Lobby lobby)
             {
-                
 
                 foreach (Table table in lobby.TableList)
                 {
@@ -43,8 +35,14 @@ namespace RestaurantKrustyKrab
                         {
                          Console.WriteLine("Company: " );
                         }
-                        foreach (Guest guest in table.Company.Guests)
-                        Console.WriteLine(guest.Name);
+                        foreach (Company company in table.BookedSeats)
+                        {
+                        foreach (Guest guest in company.Guests)
+                        {
+                            Console.WriteLine(guest.Name);
+                        }
+                        }
+                        
                     Console.WriteLine();
                 }
 
@@ -71,7 +69,9 @@ namespace RestaurantKrustyKrab
 
                 }
 
-            }
+            } //Klar
+
+
             static void PrintChefs(Lobby lobby)
             {
                 int i = 1;
@@ -84,6 +84,7 @@ namespace RestaurantKrustyKrab
                 }
 
             }
+
             static void PrintCompanies(Lobby lobby)
             {
                 int i = 1;
@@ -101,8 +102,11 @@ namespace RestaurantKrustyKrab
                 }
                 
 
-            }
+            } //Klar
+            static void PrintKitchen()
+            {
 
+            }
 
 
 
