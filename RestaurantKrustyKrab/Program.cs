@@ -46,7 +46,8 @@ namespace RestaurantKrustyKrab
                     Console.WriteLine();
                 }
 
-            }
+            } //Klar
+
             static void PrintWaiters(Lobby lobby)
             {
 
@@ -70,7 +71,6 @@ namespace RestaurantKrustyKrab
                 }
 
             } //Klar
-
 
             static void PrintChefs(Lobby lobby)
             {
@@ -103,6 +103,7 @@ namespace RestaurantKrustyKrab
                 
 
             } //Klar
+
             static void PrintKitchen()
             {
 
