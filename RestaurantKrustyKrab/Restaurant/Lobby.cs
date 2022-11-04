@@ -66,6 +66,7 @@ namespace RestaurantKrustyKrab.Restaurant
             }
             PrintWaitingCompanies();
 
+
         }
         public void PrintPosition(Person person)
         {
