@@ -11,14 +11,19 @@ namespace RestaurantKrustyKrab
             Lobby MyLobby = new Lobby();
             MyLobby.LobbyRun();
             while (true)
-            {
+            {   MyLobby.Addguests();
+                MyLobby.Addguests();
+                MyLobby.Addguests();
 
-                MyLobby.LoopQueue();
-                
+
+                MyLobby.work();
+
                 PrintCompanies(MyLobby);
-                Printtables(MyLobby);
-                Console.WriteLine("-----------------------------------");
+                
                 PrintWaiters(MyLobby);
+            
+                Printtables(MyLobby);
+               
                 Console.WriteLine("-----------------------------------");
                 PrintChefs(MyLobby);
                 Console.WriteLine("-----------------------------------");
@@ -34,20 +39,35 @@ namespace RestaurantKrustyKrab
                 foreach (Table table in lobby.TableList)
                 {
                     Console.WriteLine("Tablenumber: " + table.TableNumber + " seats " + table.Seats + " Available? " + table.IsAvailable);
-                    
-                    
-
+                        if (table.IsAvailable == false)
+                        {
+                         Console.WriteLine("Company: " );
+                        }
+                        foreach (Guest guest in table.Company.Guests)
+                        Console.WriteLine(guest.Name);
+                    Console.WriteLine();
                 }
 
             }
             static void PrintWaiters(Lobby lobby)
             {
-                int i = 1;
 
                 foreach (Waiter waiter in lobby.WaiterList)
                 {
-                    Console.WriteLine(waiter.Name);
-                    i++;
+                    Console.WriteLine(waiter.Name + " Busy? " + waiter.Busy);
+                    if (waiter.Busy == true)
+                    {
+                        Console.WriteLine("Serving : ");
+
+                        if (waiter.CompanyProperty.Guests.Count > 0)
+                        {
+                            foreach (Guest guest in waiter.CompanyProperty.Guests)
+                                Console.WriteLine(guest.Name);
+                        }
+                        Console.WriteLine("-----------------------------------");
+                    }
+                   
+                        
 
                 }
 

@@ -21,6 +21,7 @@ namespace RestaurantKrustyKrab.Restaurant
             PositionY = positionY;
             IsAvailable = isAvailable;
             TableNumber = tableNumber;
+            this.Company = new Company(0);
         }
 
 

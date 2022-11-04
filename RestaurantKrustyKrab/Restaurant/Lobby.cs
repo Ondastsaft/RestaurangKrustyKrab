@@ -42,25 +42,14 @@ namespace RestaurantKrustyKrab.Restaurant
         }
         public void LobbyRun()
         {
-            LoopQueue();
+
             GenerateTable(TableList);
             GenerateWaiter();
-            CompanyWaitingList.Enqueue(GenerateCompany());
             GenerateChefs();
-
-            //while (true)
-            //{
-            //    LoopRestaurant();
-            //    Console.ReadKey();
-            //}
+           
+         
         }
-        //public void LoopRestaurant()
-        //{
-        //    LoopQueue();
-        //    PrintWaitingCompanies();
-        //    PrintWaiters();
-        //    work();
-        //}
+   
         public void PrintWaiters()
         {
             foreach (Waiter waiter in WaiterList)
@@ -69,79 +58,13 @@ namespace RestaurantKrustyKrab.Restaurant
                 Console.Write(waiter.Name);
             }
         }
-        public void LoopQueue()
-        {
-                this.CompanyWaitingList.Enqueue(GenerateCompany());
-            
-            //if (number > 50 && CompanyWaitingList.Count > 0)   //Här någonstans kan vi ha en bool som en waiter styr när vi dequeuear
-            //{
-            //    foreach (Company company in CompanyWaitingList)
-            //    {
-            //        company.Guests[0].PositionY = (company.Guests[0].PositionY - 1);
-            //    }
+        public void Addguests()
 
-            //    this.CompanyWaitingList.Dequeue();
-            }
-        
-        public void PrintPosition(Person person)
         {
-
-            Console.SetCursorPosition(person.PositionX, person.PositionY);
-            Console.WriteLine("              ");
-            Console.SetCursorPosition(person.PositionX, person.PositionY);
-            Console.WriteLine(person.Name);
-        }
-
-        public void PrintCompany()
-        {
-            foreach (Company company in CompanyWaitingList)
-            {
-                Console.SetCursorPosition(company.Guests[0].PositionX, company.Guests[0].PositionY);
-                Console.WriteLine("              ");
-                Console.SetCursorPosition(company.Guests[0].PositionX, company.Guests[0].PositionY + 1);
-                Console.WriteLine("              ");
-                Console.SetCursorPosition(company.Guests[0].PositionX, company.Guests[0].PositionY + 2);
-                Console.WriteLine("              ");
-                Console.SetCursorPosition(company.Guests[0].PositionX, company.Guests[0].PositionY + 3);
-                Console.WriteLine("              ");
-                foreach (Person person in company.Guests)
-                {
-                    PrintPosition(person);
-                }
-            }
-        }
-        public void PrintWaitingCompanies()
-        {
-            int j = 0;
-            foreach (Company company in CompanyWaitingList)
-            {
-                if (j < 10)
-                {
-                    j++;
-                    Console.SetCursorPosition(company.Guests[0].PositionX, company.Guests[0].PositionY);
-                    Console.Write("                          ");   //Rensar raden innan den skriver ut sällskapet
-                    if (CompanyWaitingList.Count > j)
-                    {
-                        Console.SetCursorPosition(company.Guests[0].PositionX, company.Guests[0].PositionY);
-                        if (company.Guests.Count == 1)
-                        {
-                            Console.Write("Company" + " " + j + ": " + company.Guests[0].Name); //Skriver endast ut sitt eget namn om sällskapet enbart är en person
-                        }
-                        else if (company.Guests.Count > 1)
-                        {
-                            Console.Write("Company" + " " + j + ": " + company.Guests[0].Name + " + " + (company.Guests.Count - 1));
-                        }
-                        else
-                        {
-                            Console.SetCursorPosition(company.Guests[0].PositionX, company.Guests[0].PositionY);
-                            Console.Write("                          ");
-                        }
-                    }
-                }
-            }
+            CompanyWaitingList.Enqueue(GenerateCompany());
 
         }
-   
+          
         public List<Table> GenerateTable(List<Table> tableList)
         {
             int top = 12;
@@ -159,20 +82,6 @@ namespace RestaurantKrustyKrab.Restaurant
             }
             return tableList;
 
-
-
-        }
-
-        public void Draw()
-        {
-            foreach (Table table in TableList)
-            {
-                Window.OurDraw("Bord " + table.TableNumber, table.PositionY, table.PositionX, table.Frame);
-            }
-            Window.OurDraw("Kitchen", Kitchen.PositionY, Kitchen.PositionX, Kitchen.Frame);
-            Window.OurDraw("Dish Station", DishStation.PositionY, DishStation.PositionX, DishStation.Frame);
-            Window.OurDraw("Reception", Reception.PositionY, Reception.PositionX, Reception.Frame);
-            Window.OurDraw("WC", WC.PositionY, WC.PositionX, WC.Frame);
         }
         public Company GenerateCompany()
         {
@@ -199,28 +108,45 @@ namespace RestaurantKrustyKrab.Restaurant
         {
             foreach (Waiter waiter in WaiterList)
             {
-                while (waiter.Busy == false)
+
+                if (waiter.Busy == false)
                 {
-                    bemöta_gäst();
-                    void bemöta_gäst()
+
+                    if (CompanyWaitingList.Count > 0)
                     {
-                        if (CompanyWaitingList.Count > 0)
-                        {
-                            Console.SetCursorPosition(waiter.PositionX, waiter.PositionY);
-                            Console.Write(new String(' ', waiter.Name.Length));
-                            waiter.PositionX = 10;
-                            waiter.PositionY = 21;
-                            Console.SetCursorPosition(waiter.PositionX,waiter.PositionY);
-                        }
+                        waiter.Busy = true;
+                        greet_guest(waiter);
+                        lead_to_table(waiter);
+
                     }
                 }
+                
+            }
 
-                void visa_bord()
+
+            void greet_guest(Waiter waiter)
+            {
+                waiter.CompanyProperty = CompanyWaitingList.Dequeue();
+
+            }
+
+            void lead_to_table(Waiter waiter)
+            {
+                foreach (Table table in TableList)
                 {
+                    if (table.Seats >= waiter.CompanyProperty.Guests.Count)
+                    {
+                        table.Company = waiter.CompanyProperty;
+                        table.IsAvailable = false;
+                        break;
+                    }
 
                 }
+            }
+        }
 
-                void ge_meny()
+       
+        void ge_meny()
                 {
 
                 }
@@ -249,5 +175,4 @@ namespace RestaurantKrustyKrab.Restaurant
                 }
             }
         }
-    }
-}
+    
