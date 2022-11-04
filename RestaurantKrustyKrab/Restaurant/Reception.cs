@@ -2,10 +2,11 @@
 
 namespace RestaurantKrustyKrab.Restaurant
 {
-    internal class Reception: Template
+    internal class Reception : Template
     {
         internal List<Guest> WaitingList { get; set; }
- 
+
+
         public Reception(int positionX, int positionY)
         {
             this.Frame = new string[13, 25];

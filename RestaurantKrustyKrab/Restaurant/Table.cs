@@ -10,6 +10,7 @@ namespace RestaurantKrustyKrab.Restaurant
         internal Company Company { get; set; }
         internal bool IsAvailable { get; set; }
         internal int TableNumber { get; set; }
+        internal Waiter WaiterAtTable { get; set; }
 
 
         public Table(int seats, int quality, int positionX, int positionY, bool isAvailable, int tableNumber)
