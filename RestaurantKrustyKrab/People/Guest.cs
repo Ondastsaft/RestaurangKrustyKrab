@@ -4,6 +4,7 @@
     {
         public Guest(string name, int PositionX, int PositionY) : base(name, PositionX, PositionY)
         {
+            Name = name;
 
         }
     }

@@ -1,5 +1,6 @@
 ﻿using RestaurantKrustyKrab.GUI;
 using RestaurantKrustyKrab.People;
+using System.Xml.Linq;
 
 namespace RestaurantKrustyKrab.Restaurant
 {
@@ -14,8 +15,9 @@ namespace RestaurantKrustyKrab.Restaurant
         internal List<Waiter> WaiterList { get; set; }
         internal Queue<Company> CompanyWaitingList { get; set; }
         internal int CounterRestaurant { get; set; }
+        internal  List<Chef> ChefList { get; set; }
 
-        internal Kitchen Kitchen { get; set; }
+    internal Kitchen Kitchen { get; set; }
         internal DishStation DishStation { get; set; }
         internal Reception Reception { get; set; }
         internal WC WC { get; set; }
@@ -36,26 +38,29 @@ namespace RestaurantKrustyKrab.Restaurant
             this.Time = 0;
             this.CompanyWaitingList = new Queue<Company>();
             this.WaiterList = new List<Waiter>();
+            this.ChefList = new List<Chef>();
         }
         public void LobbyRun()
         {
-            Window.OurDraw(this.Name, this.PositionX, this.PositionY, this.MyDrawing);
+            LoopQueue();
             GenerateTable(TableList);
             GenerateWaiter();
-            Draw();
-            while (true)
-            {
-                LoopRestaurant();
-                Console.ReadKey();
-            }
+            CompanyWaitingList.Enqueue(GenerateCompany());
+            GenerateChefs();
+
+            //while (true)
+            //{
+            //    LoopRestaurant();
+            //    Console.ReadKey();
+            //}
         }
-        public void LoopRestaurant()
-        {
-            LoopQueue();
-            PrintWaitingCompanies();
-            PrintWaiters();
-            work();
-        }
+        //public void LoopRestaurant()
+        //{
+        //    LoopQueue();
+        //    PrintWaitingCompanies();
+        //    PrintWaiters();
+        //    work();
+        //}
         public void PrintWaiters()
         {
             foreach (Waiter waiter in WaiterList)
@@ -66,22 +71,18 @@ namespace RestaurantKrustyKrab.Restaurant
         }
         public void LoopQueue()
         {
-            Random random = new Random();
-            int number = random.Next(0, 100);
-            if (number < 50 && CompanyWaitingList.Count < 10)
-            {
-                CompanyWaitingList.Enqueue(GenerateCompany());
-            }
-            if (number > 50 && CompanyWaitingList.Count > 0)   //Här någonstans kan vi ha en bool som en waiter styr när vi dequeuear
-            {
-                foreach (Company company in CompanyWaitingList)
-                {
-                    company.Guests[0].PositionY = (company.Guests[0].PositionY - 1);
-                }
+                this.CompanyWaitingList.Enqueue(GenerateCompany());
+            
+            //if (number > 50 && CompanyWaitingList.Count > 0)   //Här någonstans kan vi ha en bool som en waiter styr när vi dequeuear
+            //{
+            //    foreach (Company company in CompanyWaitingList)
+            //    {
+            //        company.Guests[0].PositionY = (company.Guests[0].PositionY - 1);
+            //    }
 
-                CompanyWaitingList.Dequeue();
+            //    this.CompanyWaitingList.Dequeue();
             }
-        }
+        
         public void PrintPosition(Person person)
         {
 
@@ -140,14 +141,7 @@ namespace RestaurantKrustyKrab.Restaurant
             }
 
         }
-        public static void Count()
-        {
-
-        }
-        public static void DrawArray()
-        {
-
-        }
+   
         public List<Table> GenerateTable(List<Table> tableList)
         {
             int top = 12;
@@ -160,10 +154,12 @@ namespace RestaurantKrustyKrab.Restaurant
             top = 12;
             for (int i = 0; i < 5; i++)
             {
-                tableList.Add(new Table(2, 0, 40, top, true, tablenumber));
+                tableList.Add(new Table(4, 0, 40, top, true, tablenumber));
                 tablenumber++; top = top + 30;
             }
             return tableList;
+
+
 
         }
 
@@ -180,7 +176,7 @@ namespace RestaurantKrustyKrab.Restaurant
         }
         public Company GenerateCompany()
         {
-            Company company = new Company(CompanyWaitingList.Count); //Skapar ett nytt company objekt med offset som inparameter, vilket är storleken på sällskapet
+            Company company = new Company(this.CompanyWaitingList.Count); //Skapar ett nytt company objekt med offset som inparameter, vilket är storleken på sällskapet
             return company;
         }
         public void GenerateWaiter()
@@ -188,9 +184,16 @@ namespace RestaurantKrustyKrab.Restaurant
             for (int i = 0; i < 3; i++)
             {
                 string name = "Waiter " + (i + 1);
-                WaiterList.Add(new Waiter(name, 0, false, 110, (3 + i + 1)));
+                this.WaiterList.Add(new Waiter(name, 0, false, 110, (3 + i + 1)));
             }
 
+        }
+
+        internal void GenerateChefs()
+
+        {
+            for (int i = 1; i < 4; i++)
+                this.ChefList.Add(new Chef("Chef: " + i, 0, 0,0));
         }
         internal void work()
         {
