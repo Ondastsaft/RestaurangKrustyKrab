@@ -72,7 +72,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
             foreach (Table table in this.TableList)
             {
-                Console.WriteLine("Tablenumber: " + table.TableNumber + " Seats " + table.Seats + " Available? " + table.IsAvailable+ " Waiting for food?" + table.WaitingForFood);
+                Console.WriteLine("Tablenumber: " + table.TableNumber + " Seats " + table.Seats + " Available? " + table.IsAvailable+ " Waiting for food?   " + table.WaitingForFood);
                 if (table.IsAvailable == false)
                 {
                     Console.WriteLine("Company: ");
@@ -147,19 +147,19 @@ namespace RestaurantKrustyKrab.Restaurant
 
         } //Klar
 
-        public void Generate()
+        internal void Generate()
         {
             GenerateTable(TableList);
             GenerateWaiter();
             GenerateChefs();  
         }
    
-        public void Addguests()
+        internal void Addguests()
         {
             CompanyWaitingList.Enqueue(GenerateCompany());
         }
           
-        public List<Table> GenerateTable(List<Table> tableList)
+        static List<Table> GenerateTable(List<Table> tableList)
         {
             int top = 12;
             int tablenumber = 1;
@@ -178,13 +178,13 @@ namespace RestaurantKrustyKrab.Restaurant
 
         }
 
-        public Company GenerateCompany()
+        internal Company GenerateCompany()
         {
             Company company = new Company(this.CompanyWaitingList.Count); //Skapar ett nytt company objekt med offset som inparameter, vilket är storleken på sällskapet
             return company;
         }
 
-        public void GenerateWaiter()
+        internal void GenerateWaiter()
         {
             for (int i = 0; i < 3; i++)
             {
@@ -211,7 +211,6 @@ namespace RestaurantKrustyKrab.Restaurant
 
                     if (CompanyWaitingList.Count > 0)
                     {
-
                         waiter.Busy = true;
                         greet_guest(waiter);
                         Sequence2(waiter);
@@ -267,8 +266,6 @@ namespace RestaurantKrustyKrab.Restaurant
             
         }
 
-       
-       
-            }
+    }
         
     
