@@ -1,4 +1,5 @@
 ﻿using RestaurantKrustyKrab.People;
+using System.Collections;
 
 namespace RestaurantKrustyKrab.Restaurant
 {
@@ -10,7 +11,7 @@ namespace RestaurantKrustyKrab.Restaurant
         internal List<Company> BookedSeats { get; set; }
         internal bool IsAvailable { get; set; }
         internal int TableNumber { get; set; }
-
+        internal Hashtable Orders { get; set; }
 
         public Table(int seats, int quality, int positionX, int positionY, bool isAvailable, int tableNumber)
         {
@@ -22,7 +23,7 @@ namespace RestaurantKrustyKrab.Restaurant
             IsAvailable = isAvailable;
             TableNumber = tableNumber;
             this.BookedSeats = new List<Company>();
-            
+            this.Orders = new Hashtable();
         }
 
 

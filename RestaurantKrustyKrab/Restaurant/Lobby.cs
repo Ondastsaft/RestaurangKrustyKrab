@@ -135,15 +135,21 @@ namespace RestaurantKrustyKrab.Restaurant
                     {
                         table.BookedSeats.Add(waiter.CompanyProperty);
                         table.IsAvailable = false;
+                        Take_Order();
                         break;
                     }
-
+                    void Take_Order()
+                    {
+                        foreach (Guest guest in waiter.CompanyProperty.Guests)
+                        {
+                            waiter.Order.Add(new Dish("Placeholder",0,0,table.TableNumber, guest.Name));
+                            table.Orders.Add(guest.Name, "Placeholder");
+                        }
+                        
+                    }
                 }
             }
-            void Take_Order(Waiter waiter)
-            {
-
-            }
+            
         }
 
        

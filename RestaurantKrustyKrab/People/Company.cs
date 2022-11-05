@@ -4,6 +4,7 @@
     {
         internal List<Guest> Guests { get; set; }
         internal int timeWaiting { get; set; }
+
         static internal Random random = new Random();
 
         public Company(int offSetRow)
