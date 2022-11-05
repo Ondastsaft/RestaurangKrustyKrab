@@ -14,7 +14,8 @@ namespace RestaurantKrustyKrab.People
         {
             Name = name;
             ServiceLevel = serviceLevel;
-            Busy = busy;            
+            Busy = busy;
+            Order = new List<Dish>();
 
         }
 

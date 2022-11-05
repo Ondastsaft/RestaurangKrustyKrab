@@ -1,5 +1,6 @@
 ﻿using RestaurantKrustyKrab.People;
 using RestaurantKrustyKrab.Restaurant;
+using System.Collections;
 using System.Security.Cryptography.X509Certificates;
 
 namespace RestaurantKrustyKrab
@@ -43,6 +44,11 @@ namespace RestaurantKrustyKrab
                         }
                         }
                         
+                        foreach (DictionaryEntry de in table.Orders)
+                    {
+                        Console.WriteLine("Guest: " + de.Key + " Dish: " + de.Value);
+                    }
+
                     Console.WriteLine();
                 }
 

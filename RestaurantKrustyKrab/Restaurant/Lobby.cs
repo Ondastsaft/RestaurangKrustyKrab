@@ -142,8 +142,10 @@ namespace RestaurantKrustyKrab.Restaurant
                     {
                         foreach (Guest guest in waiter.CompanyProperty.Guests)
                         {
-                            waiter.Order.Add(new Dish("Placeholder",0,0,table.TableNumber, guest.Name));
-                            table.Orders.Add(guest.Name, "Placeholder");
+                            
+                            waiter.Order.Add(new Dish("Placeholder ",0,0,table.TableNumber, guest.Name));
+                            table.Orders.Add(guest.Name, "Placeholder");  //orders är en hashtable
+                           
                         }
                         
                     }
