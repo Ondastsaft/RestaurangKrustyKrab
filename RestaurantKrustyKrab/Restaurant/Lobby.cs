@@ -52,22 +52,27 @@ namespace RestaurantKrustyKrab.Restaurant
             Work();
         }
 
-         internal void PrintAll()
+        internal void PrintAll()
         {
             PrintCompanies();
             PrintWaiters();
             PrintTables();
+            PrintKitchen();
             PrintChefs();
             Console.ReadKey();
             Console.Clear();
         }
 
+        void PrintKitchen() //Börja gärna här
+        {
+
+        }
         void PrintTables()
         {
 
             foreach (Table table in this.TableList)
             {
-                Console.WriteLine("Tablenumber: " + table.TableNumber + " seats " + table.Seats + " Available? " + table.IsAvailable);
+                Console.WriteLine("Tablenumber: " + table.TableNumber + " Seats " + table.Seats + " Available? " + table.IsAvailable+ " Waiting for food?" + table.WaitingForFood);
                 if (table.IsAvailable == false)
                 {
                     Console.WriteLine("Company: ");
@@ -90,7 +95,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
         } //Klar
 
-         void PrintWaiters()
+        void PrintWaiters()
         {
 
             foreach (Waiter waiter in this.WaiterList)
@@ -114,7 +119,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
         } //Klar
 
-         void PrintChefs()
+        void PrintChefs()
         {
             foreach (Chef chef in this.ChefList)
             {
@@ -142,7 +147,6 @@ namespace RestaurantKrustyKrab.Restaurant
 
         } //Klar
 
-
         public void Generate()
         {
             GenerateTable(TableList);
@@ -150,14 +154,6 @@ namespace RestaurantKrustyKrab.Restaurant
             GenerateChefs();  
         }
    
-        //public void PrintWaiters()
-        //{
-        //    foreach (Waiter waiter in WaiterList)
-        //    {
-        //        Console.SetCursorPosition(waiter.PositionX, waiter.PositionY);
-        //        Console.Write(waiter.Name);
-        //    }
-        //}
         public void Addguests()
         {
             CompanyWaitingList.Enqueue(GenerateCompany());
@@ -169,23 +165,25 @@ namespace RestaurantKrustyKrab.Restaurant
             int tablenumber = 1;
             for (int i = 0; i < 5; i++)
             {
-                tableList.Add(new Table(2, 0, 24, top, true, tablenumber));
+                tableList.Add(new Table(2, 0, 24, top, true, tablenumber, false));
                 tablenumber++; top = top + 30;
             }
             top = 12;
             for (int i = 0; i < 5; i++)
             {
-                tableList.Add(new Table(4, 0, 40, top, true, tablenumber));
+                tableList.Add(new Table(4, 0, 40, top, true, tablenumber, false));
                 tablenumber++; top = top + 30;
             }
             return tableList;
 
         }
+
         public Company GenerateCompany()
         {
             Company company = new Company(this.CompanyWaitingList.Count); //Skapar ett nytt company objekt med offset som inparameter, vilket är storleken på sällskapet
             return company;
         }
+
         public void GenerateWaiter()
         {
             for (int i = 0; i < 3; i++)
@@ -202,6 +200,7 @@ namespace RestaurantKrustyKrab.Restaurant
             for (int i = 1; i < 4; i++)
                 this.ChefList.Add(new Chef("Chef: " + i, 0, 0,0));
         }
+
         internal void Work()
         {
             foreach (Waiter waiter in WaiterList)
@@ -215,8 +214,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
                         waiter.Busy = true;
                         greet_guest(waiter);
-
-                        lead_to_table(waiter);
+                        Sequence2(waiter);
 
                     }
                 }
@@ -230,7 +228,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
             }
 
-            void lead_to_table(Waiter waiter)
+            void Sequence2(Waiter waiter)
             {
                 foreach (Table table in TableList)
                 {
@@ -238,20 +236,32 @@ namespace RestaurantKrustyKrab.Restaurant
                     {
                         table.BookedSeats.Add(waiter.CompanyProperty);
                         table.IsAvailable = false;
+                        table.WaitingForFood = true;
                         Take_Order();
+                        Give_Kitchen_Order();
                         break;
                     }
                     void Take_Order()
                     {
                         foreach (Guest guest in waiter.CompanyProperty.Guests)
                         {
-                            
-                            waiter.Order.Add(new Dish("Placeholder ",0,0,table.TableNumber, guest.Name));
+
+                            waiter.Order.Add(new Dish("Placeholder ", 0, 0, table.TableNumber, guest.Name));
                             table.Orders.Add(guest.Name, "Placeholder");  //orders är en hashtable
-                           
+
+                        }
+                    }
+                    void Give_Kitchen_Order()
+                        {
+                            foreach(Dish dish in waiter.Order)
+                            {
+                                this.Kitchen.Order.Add(dish); //kitchen.order is a list of dishes
+                            }
+                             
                         }
                         
                     }
+
                 }
             }
             
@@ -260,5 +270,5 @@ namespace RestaurantKrustyKrab.Restaurant
        
        
             }
-        }
+        
     
