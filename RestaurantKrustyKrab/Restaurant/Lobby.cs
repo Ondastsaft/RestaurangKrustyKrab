@@ -10,6 +10,7 @@ namespace RestaurantKrustyKrab.Restaurant
         internal int PositionX { get; set; }
         internal int PositionY { get; set; }
 
+        internal List<RestaurantArea> MyRestaurantArea { get; set; }
         public List<Table> TableList { get; set; }
         internal List<Waiter> WaiterList { get; set; }
         internal int CounterRestaurant { get; set; }
@@ -23,24 +24,24 @@ namespace RestaurantKrustyKrab.Restaurant
 
         public Lobby()
         {
+            this.MyRestaurantArea = new List<RestaurantArea>();
+            MyRestaurantArea.Add(new Kitchen(3, 157));
+            MyRestaurantArea = GenerateTables(MyRestaurantArea);
+            MyRestaurantArea.Add(new Reception(3,31));
+            MyRestaurantArea.Add(new WC(25, 188));
+            MyRestaurantArea.Add(new WaiterWaitingArea(110, 3));
+            MyRestaurantArea.Add(new DishStation(3,128));
+
             this.MyDrawing = new string[50, 200];
             this.Name = "Krusty Krab";
             this.PositionX = 4;
             this.PositionY = 2;
-            this.TableList = new List<Table>();
-            this.Kitchen = new Kitchen(false, 3, 157);
-            this.DishStation = new DishStation(3, 128);
-            this.Reception = new Reception(3, 31);
-            this.WC = new WC(25, 188);
             this.Time = 0;
-            this.WaiterList = new List<Waiter>();
-            this.WaitersAtReception = new List<Waiter>();
         }
         public void LobbyRun()
         {
             Window.OurDraw(this.Name, this.PositionX, this.PositionY, this.MyDrawing);
-            GenerateTable(TableList);
-            GenerateWaiter();
+            PrintAllAreas();
             Draw();
             while (true)
             {
@@ -55,10 +56,17 @@ namespace RestaurantKrustyKrab.Restaurant
             Thread.Sleep(2000);
             PrintList(WaiterList);
             Thread.Sleep(2000);
-            work();
+            //work();
             Thread.Sleep(2000);
             //PrintList();
             //PrintList(WaitersAtReception as <Person>);
+        }
+        public void PrintAllAreas()
+        {
+            foreach(RestaurantArea area in MyRestaurantArea)
+            {
+                PrintRestaurantArea(area);
+            }
         }
         public void PrintWaiters()
         {
@@ -86,9 +94,9 @@ namespace RestaurantKrustyKrab.Restaurant
             }
         }
 
-        private void work(List<Waiter> waiterlist)
+        private void work(List<Waiter> waiterList)
         {
-            foreach (Waiter waiter in waiterlist)
+            foreach (Waiter waiter in waiterList)
             {
                 while (waiter.Busy == false)
                 {
@@ -132,6 +140,20 @@ namespace RestaurantKrustyKrab.Restaurant
                     Console.Write(waiter.Name);
                 }
             }
+        }
+        private void PrintRestaurantArea(RestaurantArea restaurantArea)
+        {
+            PrintList(restaurantArea.GuestsAtArea);
+            PrintList(restaurantArea.CompaniesAtArea);
+            PrintList(restaurantArea.WaitersAtArea);
+            PrintList(restaurantArea.ChefsAtArea);
+        }
+        private void EraseRestaurantArea(RestaurantArea restaurantArea)
+        {
+            EraseList(restaurantArea.GuestsAtArea);
+            EraseList(restaurantArea.CompaniesAtArea);
+            EraseList(restaurantArea.WaitersAtArea);
+            EraseList(restaurantArea.ChefsAtArea);
         }
         private bool bemöta_gäst(Waiter waiter)
         {
@@ -183,6 +205,17 @@ namespace RestaurantKrustyKrab.Restaurant
                 row++;
             }
         }
+
+        public void PrintList<T>(List<T> personList)
+        {
+            int row = 0;
+            foreach (T person in personList)
+            {
+                Console.SetCursorPosition((person as Person).PositionX, ((person as Person).PositionY + row));
+                Console.Write((person as Person).Name);
+                row++;
+            }
+        }
         public void PrintWaitingCompanies()
         {
             int j = 0;
@@ -214,37 +247,27 @@ namespace RestaurantKrustyKrab.Restaurant
             }
 
         }
-        public void PrintList<T>(List<T> personList)
-        {
-            int row = 0;
-            foreach (T person in personList)
-            {
-                Console.SetCursorPosition((person as Person).PositionX, ((person as Person).PositionY + row));
-                Console.Write((person as Person).Name);
-                row++;
-            }
-        }
         public static void TimeCounter()
         {
 
         }
 
-        public List<Table> GenerateTable(List<Table> tableList)
+        public List<RestaurantArea> GenerateTables (List<RestaurantArea> restaurantAreaList)
         {
             int top = 12;
             int tablenumber = 1;
             for (int i = 0; i < 5; i++)
             {
-                tableList.Add(new Table(2, 0, 24, top, true, tablenumber));
+                restaurantAreaList.Add(new Table(2, 0, 24, top, tablenumber));
                 tablenumber++; top = top + 30;
             }
             top = 12;
             for (int i = 0; i < 5; i++)
             {
-                tableList.Add(new Table(2, 0, 40, top, true, tablenumber));
+                restaurantAreaList.Add(new Table(2, 0, 40, top, tablenumber));
                 tablenumber++; top = top + 30;
             }
-            return tableList;
+            return restaurantAreaList;
 
         }
 
@@ -263,15 +286,6 @@ namespace RestaurantKrustyKrab.Restaurant
         {
             Company company = new Company(Reception.CompanyWaitingQueue.Count); //Skapar ett nytt company objekt med offset som inparameter, vilket är storleken på sällskapet
             return company;
-        }
-        public void GenerateWaiter()
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                string name = "Waiter " + (i + 1);
-                WaiterList.Add(new Waiter(name, 0, false, 110, 3));
-            }
-
         }
     }
 }

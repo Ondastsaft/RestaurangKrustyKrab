@@ -11,17 +11,18 @@ namespace RestaurantKrustyKrab.Restaurant
     {
         internal string[,] Frame { get; set; }
         //internal Dictionary<string, RestaurantArea> Area { get; set; }
-        List<Waiter> WaitersAtArea = new List<Waiter>();
-        List<Chef> ChefsAtArea = new List<Chef>();
-        List<Company> CompaniesAtArea = new List<Company>();
-        List<Guest> GuestsAtArea = new List<Guest>();
+        internal string Name { get; set; }
+        internal List<Waiter> WaitersAtArea = new List<Waiter>();
+        internal List<Chef> ChefsAtArea = new List<Chef>();
+        internal List<Company> CompaniesAtArea = new List<Company>();
+        internal List<Guest> GuestsAtArea = new List<Guest>();
         internal int PositionX { get; set; }
         internal int PositionY { get; set; }
 
         public RestaurantArea(int positionX, int positionY)
         {
-            this.PositionX = positionX;
-            this.PositionY = positionY;
+            PositionX = positionX;
+            PositionY = positionY;
         }
     }
 }

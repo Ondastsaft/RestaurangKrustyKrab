@@ -4,14 +4,19 @@ namespace RestaurantKrustyKrab.Restaurant
 {
     internal class Kitchen : RestaurantArea
     {
-        internal bool FoodIsReady { get; set; }
+        internal bool FoodIsReady = true;
 
-        public Kitchen(bool foodIsReady, int positionX, int positionY) : base(positionX, positionY)
+        public Kitchen(int positionX, int positionY) : base(positionX, positionY)
         {
-            this.Frame = new string[12, 45];
+            Frame = new string[12, 45];
             PositionX = positionX;
             PositionY = positionY;
-            FoodIsReady = foodIsReady;
+
+            for (int i = 0; i < 5; i++)
+            {
+                string name = "Chef " + (i + 1);
+                ChefsAtArea.Add(new Chef(name, 0, this.PositionX, this.PositionY));
+            }
         }
     }
 }

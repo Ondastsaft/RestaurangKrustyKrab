@@ -8,7 +8,7 @@ namespace RestaurantKrustyKrab.Restaurant
    
         public WC(int positionX, int positionY) : base(positionX, positionY)
         {
-            this.Frame = new string[13, 12];
+            Frame = new string[13, 12];
             PositionX = positionX;
             PositionY = positionY;
         }
