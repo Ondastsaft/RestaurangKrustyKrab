@@ -1,6 +1,6 @@
 ﻿namespace RestaurantKrustyKrab.Restaurant
 {
-    internal class WC : Template
+    internal class WC : RestaurantArea
     {
    
         public WC(int positionX, int positionY)

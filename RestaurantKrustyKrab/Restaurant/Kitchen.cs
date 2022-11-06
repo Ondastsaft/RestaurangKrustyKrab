@@ -2,7 +2,7 @@
 
 namespace RestaurantKrustyKrab.Restaurant
 {
-    internal class Kitchen : Template
+    internal class Kitchen : RestaurantArea
     {
   
         internal List<Chef> ChefList { get; set; }

@@ -88,7 +88,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
         private void work()
         {
-            foreach (Waiter waiter in WaiterList)
+            foreach (Waiter waiter in WaiterList.ToList())
             {
                 while (waiter.Busy == false)
                 {
@@ -129,6 +129,7 @@ namespace RestaurantKrustyKrab.Restaurant
                     waiter.PositionY = 3;
                     WaiterList.Add(waiter);
                     waiter.Busy = true;
+                    Console.Write(waiter.Name);
                 }
             }
         }
@@ -218,7 +219,7 @@ namespace RestaurantKrustyKrab.Restaurant
             int row = 0;
             foreach (T person in personList)
             {
-                Console.SetCursorPosition((person as Person).PositionY, ((person as Person).PositionX + row));
+                Console.SetCursorPosition((person as Person).PositionX, ((person as Person).PositionY + row));
                 Console.Write((person as Person).Name);
                 row++;
             }

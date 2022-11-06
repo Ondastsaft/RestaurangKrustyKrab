@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace RestaurantKrustyKrab.Restaurant
 {
-    internal class Template
+    internal class RestaurantArea
     {
         internal string[,] Frame { get; set; }
         internal int PositionX { get; set; }
         internal int PositionY { get; set; }
 
-        public Template()
+        public RestaurantArea()
         {
             
 

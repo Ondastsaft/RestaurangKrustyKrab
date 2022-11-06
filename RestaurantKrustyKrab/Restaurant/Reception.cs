@@ -2,7 +2,7 @@
 
 namespace RestaurantKrustyKrab.Restaurant
 {
-    internal class Reception : Template
+    internal class Reception : RestaurantArea
     {
         internal Queue<Company> CompanyWaitingQueue = new Queue<Company>();
         internal List<Guest> WaitingList { get; set; }

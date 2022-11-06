@@ -2,7 +2,7 @@
 
 namespace RestaurantKrustyKrab.Restaurant
 {
-    internal class Table : Template
+    internal class Table : RestaurantArea
     {
 
         internal int Seats { get; set; }
