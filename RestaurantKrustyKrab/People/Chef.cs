@@ -12,7 +12,7 @@ namespace RestaurantKrustyKrab.People
 
         public Chef(string name, int competence, int PositionX, int PositionY) : base(name, PositionX, PositionY)
         {
-            TimeStart = 0;
+            TimeStart = -11;
             Name = name;
             Competence = competence;
             Busy = false;

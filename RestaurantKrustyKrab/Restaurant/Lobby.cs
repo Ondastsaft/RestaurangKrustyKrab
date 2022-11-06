@@ -48,41 +48,42 @@ namespace RestaurantKrustyKrab.Restaurant
         {
             Addguests();
             PrintAll();
-            Work();
+            Sequence1();
+            PrintAll();
+            Sequence2();
             GlobalTimer++;
-
         }
 
         internal void PrintAll()
         {
+            Console.Clear();
             PrintCompanies();
             PrintWaiters();
             PrintTables();
             PrintKitchen();
             Console.WriteLine("Time: " + GlobalTimer);
             Console.ReadKey();
-            Console.Clear();
         }
 
-        void PrintKitchen() //Börja gärna här
+        void PrintKitchen()
 
         {
             Console.WriteLine("KITCHEN");
             Console.WriteLine();
             Console.WriteLine("Chefs: ");
 
-            foreach (Chef chef in this.ChefList)
+            foreach (Chef chef in ChefList)
             {
                 Console.WriteLine("Name: " + chef.Name + " Busy? " + chef.Busy);
-                    if (chef.Busy == true)
-                { 
-                        Console.WriteLine("Preparing: ");
+                if (chef.Busy == true)
+                {
+                    Console.WriteLine("Preparing: ");
 
                     foreach (Dish dish in chef.Preparing)
                     {
                         Console.WriteLine("Dish: " + dish.NameOfDish + "Table: " + dish.DestinationTable);
                     }
-                }         
+                }
             }
 
             Console.WriteLine("Orders: ");
@@ -95,46 +96,62 @@ namespace RestaurantKrustyKrab.Restaurant
                 Console.WriteLine();
             }
             Console.WriteLine("Ready for delivery: ");
-                if (this.Kitchen.ReadyOrders.Count > 0)
-                {
+            if (this.Kitchen.ReadyOrders.Count > 0)
+            {
                 foreach (Dish order in this.Kitchen.ReadyOrders)
                     Console.WriteLine(order);
-                }
+            }
             Console.WriteLine();
         }
 
         void PrintTables()
         {
 
-            foreach (Table table in this.TableList)
+            foreach (Table table in TableList)
             {
-                Console.WriteLine("Tablenumber: " + table.TableNumber + " Seats " + table.Seats + " Available? " + table.IsAvailable + " Waiting for food? " + table.WaitingForFood);
-                if (table.IsAvailable == false)
+                Console.Write("Tablenumber: " + table.TableNumber + " Seats " + table.Seats + " Available? " + table.IsAvailable + " Waiting for food? " + table.WaitingForFood);
+                Console.WriteLine(" Finished eating? " + table.Finished_Eating);
+
+
+                if (table.EatTimer == (GlobalTimer - 20))
+                    table.Finished_Eating = true;
+
+                if (table.RecievedOrder == true)
                 {
-                    Console.WriteLine("Company: ");
-                }
-                foreach (Company company in table.BookedSeats)
-                {
-                    foreach (Guest guest in company.Guests)
+                    foreach (DictionaryEntry de in table.Orders)
                     {
-                        Console.WriteLine(guest.Name);
+                        Console.WriteLine("Guest: " + de.Key + " Dish: " + de.Value);
                     }
                 }
-
-                foreach (DictionaryEntry de in table.Orders)
+                else
                 {
-                    Console.WriteLine("Guest: " + de.Key + " Dish: " + de.Value);
-                }
+                    if (table.IsAvailable == false)
+                    {
+                        Console.WriteLine("Company: ");
+                    }
 
-                Console.WriteLine();
+                    foreach (Company company in table.BookedSeats)
+                    {
+                        foreach (Guest guest in company.Guests)
+                        {
+                            Console.WriteLine(guest.Name);
+                        }
+                    }
+
+                    foreach (DictionaryEntry de in table.Orders)
+                    {
+                        Console.WriteLine("Guest: " + de.Key + " Dish: " + de.Value);
+                    }
+
+                    Console.WriteLine();
+                }  
             }
-
-        } //Klar
+        } 
 
         void PrintWaiters()
         {
 
-            foreach (Waiter waiter in this.WaiterList)
+            foreach (Waiter waiter in WaiterList)
             {
                 Console.WriteLine(waiter.Name + " Busy? " + waiter.Busy);
                 if (waiter.Busy == true)
@@ -151,7 +168,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
             }
 
-        } //Klar
+        } 
 
         void PrintCompanies()
         {
@@ -228,113 +245,167 @@ namespace RestaurantKrustyKrab.Restaurant
                 ChefList.Add(new Chef("Chef: " + i, 0, 0, 0));
         }
 
-        internal void Work()
+        internal void Sequence1()
         {
+            foreach (Chef chef in ChefList)
+            {
+                Chef_take_Order_from_kitchen_and_Prepare();
+            }
             foreach (Waiter waiter in WaiterList)
             {
-                Chef_take_Order_and_Prepare();
+                Lead_guest_to_table_and_take_order_and_give_it_to_kitchen(waiter);
+            }
+
+            void Lead_guest_to_table_and_take_order_and_give_it_to_kitchen(Waiter waiter)
+            {
                 if (waiter.Busy == false)
                 {
                     if (CompanyWaitingList.Count > 0)
                     {
                         waiter.Busy = true;
-                        greet_guest(waiter);
-                        Sequence2(waiter);
+                        waiter.CompanyProperty = CompanyWaitingList.Dequeue();
+                        foreach (Table table in TableList)
+                        {
+                            if (table.Seats >= waiter.CompanyProperty.Guests.Count && table.IsAvailable == true)
+                            {
+                                table.BookedSeats.Add(waiter.CompanyProperty);
+                                table.IsAvailable = false;
+                                table.WaitingForFood = true;
+
+                                Take_Order();
+                                Give_Kitchen_Order();
+                                break;
+                            }
+                            void Take_Order()
+                            {
+                                foreach (Guest guest in waiter.CompanyProperty.Guests)
+                                {
+                                    waiter.Order.Add(new Dish("Placeholder ", 0, 0, table.TableNumber, guest.Name));
+                                    table.Orders.Add(guest.Name, "Placeholder");  //orders är en hashtable
+                                }
+                            }
+                            void Give_Kitchen_Order()
+                            {
+                                foreach (Dish dish in waiter.Order)
+                                {
+                                    this.Kitchen.Orders.Enqueue(dish); //kitchen.order is a list of dishes
+                                }
+                                waiter.Order.Clear();
+                                waiter.CompanyProperty.Guests.Clear();
+                                waiter.Busy = false;
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            void Chef_take_Order_from_kitchen_and_Prepare()
+            {
+                foreach (Chef chef in ChefList)
+                {
+                    {
+                        if (chef.Busy == false && Kitchen.Orders.Count > 0)
+                        {
+                                chef.Busy = true;
+                                chef.Preparing.Add(Kitchen.Orders.Dequeue());
+                                if (Kitchen.Orders.Count > 0)
+                                {
+                                    foreach (Dish dish in Kitchen.Orders.ToList())
+                                        if (dish.DestinationTable == chef.Preparing[0].DestinationTable)
+                                            Kitchen.Orders.Dequeue();
+                                }
+                                chef.TimeStart = GlobalTimer;
+                                break;
+                        }
                     }
                 }
             }
+        }
 
+        internal void Sequence2()
+        {
             foreach (Chef chef in ChefList)
             {
                 Chef_Order_Made(chef);
             }
 
-            void greet_guest(Waiter waiter)
+            foreach (Waiter waiter in WaiterList)
             {
-                waiter.CompanyProperty = CompanyWaitingList.Dequeue();
+                Take_order_from_kitchen(waiter);
+                Give_food_to_table(waiter);
             }
 
-            void Sequence2(Waiter waiter)
-            {
-                foreach (Table table in TableList)
-                {
-                    if (table.Seats >= waiter.CompanyProperty.Guests.Count && table.IsAvailable == true)
-                    {
-                        table.BookedSeats.Add(waiter.CompanyProperty);
-                        table.IsAvailable = false;
-                        table.WaitingForFood = true;
-
-                        Take_Order();
-                        Give_Kitchen_Order();
-                        break;
-                    }
-                    void Take_Order()
-                    {
-                        foreach (Guest guest in waiter.CompanyProperty.Guests)
-                        {
-
-                            waiter.Order.Add(new Dish("Placeholder ", 0, 0, table.TableNumber, guest.Name));
-                            table.Orders.Add(guest.Name, "Placeholder");  //orders är en hashtable
-
-                        }
-                    }
-                    void Give_Kitchen_Order()
-                    {
-                        foreach (Dish dish in waiter.Order)
-                        {
-                            this.Kitchen.Orders.Enqueue(dish); //kitchen.order is a list of dishes
-                        }
-                        waiter.Order.Clear();
-                        waiter.CompanyProperty.Guests.Clear();
-                        waiter.Busy = false;
-                    }
-                }
-            }
 
             void Chef_Order_Made(Chef chef)
             {
-                if (chef.TimeStart == (this.GlobalTimer - 10))
+                if (chef.TimeStart == (GlobalTimer - 10))
                 {
                     foreach (Dish dish in chef.Preparing)
                     {
                         Kitchen.ReadyOrders.Enqueue(dish);
-
                     }
                     chef.Preparing.Clear();
-
+                    chef.Busy = false;
+                    chef.TimeStart = -11;
                 }
             }
-
-            void Chef_take_Order_and_Prepare()
+            void Take_order_from_kitchen(Waiter waiter)
             {
-                foreach (Chef chef in ChefList)
+                if (Kitchen.ReadyOrders.Count > 0)
                 {
+                    waiter.Order.Add(Kitchen.ReadyOrders.Dequeue());
+                    foreach (Dish dish in Kitchen.ReadyOrders.ToList())
+                        if (dish.DestinationTable == waiter.Order[0].DestinationTable)
+                            Kitchen.Orders.Dequeue();
+                }
+            }
+            void Give_food_to_table(Waiter waiter)
+            {
+                foreach(Table table in TableList)
+                {
+                    if (waiter.Order.Count > 0)
                     {
-                        if (chef.Busy == false)
+                        if (waiter.Order[0].DestinationTable == table.TableNumber)
                         {
-                            if (this.Kitchen.Orders.Count > 0)
-                            {
-                                chef.Busy = true;
-
-                                chef.Preparing.Add(this.Kitchen.Orders.Dequeue());
-                                if (Kitchen.Orders.Count > 0)
-                                {
-                                    foreach (Dish dish in this.Kitchen.Orders.ToList())
-                                        if (dish.DestinationTable == chef.Preparing[0].DestinationTable)
-                                            this.Kitchen.Orders.Dequeue();
-                                }
-                                chef.TimeStart = this.GlobalTimer;
-                                break;
-
-                            }
+                            table.RecievedOrder = true;
+                            waiter.Order.Clear();
+                            waiter.Busy = false;
+                            table.EatTimer = GlobalTimer;
+                            break;
                         }
-                    }
-
+                    }  
                 }
             }
         }
+
+        internal void Check_if_food_is_eaten()
+        {
+            foreach (Table table in TableList)
+            {
+                if (table.EatTimer == (GlobalTimer - 20))
+                    {
+                    table.Finished_Eating = true;
+                    }
+            }
+        }
+
+        internal void Sequence3()
+        {
+            foreach(Table table in TableList)
+            {
+                if (table.Finished_Eating == true)
+                {
+
+                }
+
+            }
+        }
+
     }
 }
+
+
     
         
     

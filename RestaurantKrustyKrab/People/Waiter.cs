@@ -10,12 +10,14 @@ namespace RestaurantKrustyKrab.People
         internal Company CompanyProperty { get; set; }
         internal List<Dish> Menu { get; set; }
         internal List<Dish> Order { get; set; }
+        internal int WipeTimer { get; set; }
         public Waiter(string name, int serviceLevel, bool busy, int PositionX, int PositionY) : base(name, PositionX, PositionY)
         {
             Name = name;
             ServiceLevel = serviceLevel;
             Busy = busy;
             Order = new List<Dish>();
+            WipeTimer = -4;
 
         }
 
