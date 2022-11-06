@@ -40,7 +40,6 @@ namespace RestaurantKrustyKrab.Restaurant
             this.CompanyWaitingList = new Queue<Company>();
             this.WaiterList = new List<Waiter>();
             this.ChefList = new List<Chef>();
-
             Generate();
         }
 
@@ -58,28 +57,39 @@ namespace RestaurantKrustyKrab.Restaurant
             PrintWaiters();
             PrintTables();
             PrintKitchen();
-            //PrintChefs();
             Console.ReadKey();
             Console.Clear();
         }
 
         void PrintKitchen() //Börja gärna här
+
         {
+            Console.WriteLine("KITCHEN");
+            Console.WriteLine();
             Console.WriteLine("Chefs: ");
-            foreach (Chef chef in Kitchen.ChefList)
-                Console.WriteLine("Name: " + chef.Name + "Available? " + chef.Busy );
+            foreach (Chef chef in this.ChefList)
+            {
+                Console.WriteLine("Name: " + chef.Name + " Busy? " + chef.Busy + " Preparing ");
+                    foreach( Dish dish in chef.Preparing)
+                {
+                    Console.WriteLine("Dish: " + dish.NameOfDish + "Table: " + dish.DestinationTable);
+                }
+            }
             Console.WriteLine("Orders: ");
             foreach(Dish order in Kitchen.Orders)
             {
-                Console.WriteLine(order);
+                Console.WriteLine("Guest: " + order.NameOfGuest+ " Dish: " + order.NameOfDish + "Table: " + order.DestinationTable);
             }
+            Console.WriteLine();
+
         }
+     
         void PrintTables()
         {
 
             foreach (Table table in this.TableList)
             {
-                Console.WriteLine("Tablenumber: " + table.TableNumber + " Seats " + table.Seats + " Available? " + table.IsAvailable+ " Waiting for food?   " + table.WaitingForFood);
+                Console.WriteLine("Tablenumber: " + table.TableNumber + " Seats " + table.Seats + " Available? " + table.IsAvailable+ " Waiting for food? " + table.WaitingForFood);
                 if (table.IsAvailable == false)
                 {
                     Console.WriteLine("Company: ");
@@ -120,20 +130,9 @@ namespace RestaurantKrustyKrab.Restaurant
                     Console.WriteLine("-----------------------------------");
                 }
 
-
-
             }
 
         } //Klar
-
-        //void PrintChefs()
-        //{
-        //    foreach (Chef chef in this.ChefList)
-        //    {
-        //        Console.WriteLine(chef.Name);
-        //    }
-
-        //}
 
         void PrintCompanies()
         {
@@ -173,13 +172,15 @@ namespace RestaurantKrustyKrab.Restaurant
             for (int i = 0; i < 5; i++)
             {
                 tableList.Add(new Table(2, 0, 24, top, true, tablenumber, false));
-                tablenumber++; top = top + 30;
+                tablenumber++; 
+                top = top + 30;
             }
             top = 12;
             for (int i = 0; i < 5; i++)
             {
                 tableList.Add(new Table(4, 0, 40, top, true, tablenumber, false));
-                tablenumber++; top = top + 30;
+                tablenumber++; 
+                top = top + 30;
             }
             return tableList;
 
@@ -204,15 +205,16 @@ namespace RestaurantKrustyKrab.Restaurant
         internal void GenerateChefs()
 
         {
-            for (int i = 1; i < 4; i++)
-                this.ChefList.Add(new Chef("Chef: " + i, 0, 0,0));
+            for (int i = 1; i < 6; i++)
+                ChefList.Add(new Chef("Chef: " + i, 0, 0,0));
         }
 
         internal void Work()
         {
+
             foreach (Waiter waiter in WaiterList)
             {
-
+                Chef_take_Order_and_Prepare();
                 if (waiter.Busy == false)
                 {
 
@@ -220,43 +222,23 @@ namespace RestaurantKrustyKrab.Restaurant
                     {
                         waiter.Busy = true;
                         greet_guest(waiter);
+
                         Sequence2(waiter);
+                        
                     }
                 }
                 
             }
-            foreach (Chef chef in ChefList)
-            {
-                ChefPrepare();
+           
 
-                void ChefPrepare()
-                {
-                    if (chef.Busy == false)
-                    {
-
-                        if (this.Kitchen.Orders.Count > 0)
-                        {
-                            chef.Busy = true;
-                            chef.Preparing.Add(this.Kitchen.Orders.Dequeue());
-                            foreach (Dish dish in this.Kitchen.Orders)
-                                if (dish.DestinationTable == chef.Preparing[0].DestinationTable)
-                                    this.Kitchen.Orders.Dequeue();
-                            {
-
-                            }
-                        }
-                    }
-                }
-            }
-
-
-            void greet_guest(Waiter waiter)
+        }
+        void greet_guest(Waiter waiter)
             {
                 waiter.CompanyProperty = CompanyWaitingList.Dequeue();
 
             }
 
-            void Sequence2(Waiter waiter)
+        void Sequence2(Waiter waiter)
             {
                 foreach (Table table in TableList)
                 {
@@ -265,6 +247,7 @@ namespace RestaurantKrustyKrab.Restaurant
                         table.BookedSeats.Add(waiter.CompanyProperty);
                         table.IsAvailable = false;
                         table.WaitingForFood = true;
+
                         Take_Order();
                         Give_Kitchen_Order();
                         break;
@@ -294,8 +277,34 @@ namespace RestaurantKrustyKrab.Restaurant
                         
                     }
                 }
+        void Chef_take_Order_and_Prepare()
+        {
+            foreach (Chef chef in ChefList)
+            {
+                {
+                    if (chef.Busy == false)
+                    {
+
+                        if (this.Kitchen.Orders.Count > 0)
+                        {
+                            chef.Busy = true;
+                            chef.Preparing.Add(this.Kitchen.Orders.Dequeue());
+                            if (Kitchen.Orders.Count > 0)
+                            {
+                                foreach (Dish dish in this.Kitchen.Orders.ToList())
+                                    if (dish.DestinationTable == chef.Preparing[0].DestinationTable)
+                                        this.Kitchen.Orders.Dequeue();
+                            }
+                            break;
+
+                        }
+                    }
+                }
+                
             }
         }
     }
+        }
+    
         
     
