@@ -8,7 +8,7 @@ namespace RestaurantKrustyKrab.Restaurant
         internal List<Chef> ChefList { get; set; }
      
         internal bool FoodIsReady { get; set; }
-        internal List<Dish> Order { get; set; }
+        internal Queue<Dish> Orders { get; set; }
 
         public Kitchen(bool foodIsReady, int positionX, int positionY)
         {
@@ -17,7 +17,9 @@ namespace RestaurantKrustyKrab.Restaurant
             PositionX = positionX;
             PositionY = positionY;
             FoodIsReady = foodIsReady;
-            Order = new List<Dish>();
+            Orders = new Queue<Dish>();
+
         }
+
     }
 }

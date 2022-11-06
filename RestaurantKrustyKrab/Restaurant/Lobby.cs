@@ -58,14 +58,21 @@ namespace RestaurantKrustyKrab.Restaurant
             PrintWaiters();
             PrintTables();
             PrintKitchen();
-            PrintChefs();
+            //PrintChefs();
             Console.ReadKey();
             Console.Clear();
         }
 
         void PrintKitchen() //Börja gärna här
         {
-
+            Console.WriteLine("Chefs: ");
+            foreach (Chef chef in Kitchen.ChefList)
+                Console.WriteLine("Name: " + chef.Name + "Available? " + chef.Busy );
+            Console.WriteLine("Orders: ");
+            foreach(Dish order in Kitchen.Orders)
+            {
+                Console.WriteLine(order);
+            }
         }
         void PrintTables()
         {
@@ -119,14 +126,14 @@ namespace RestaurantKrustyKrab.Restaurant
 
         } //Klar
 
-        void PrintChefs()
-        {
-            foreach (Chef chef in this.ChefList)
-            {
-                Console.WriteLine(chef.Name);
-            }
+        //void PrintChefs()
+        //{
+        //    foreach (Chef chef in this.ChefList)
+        //    {
+        //        Console.WriteLine(chef.Name);
+        //    }
 
-        }
+        //}
 
         void PrintCompanies()
         {
@@ -214,10 +221,32 @@ namespace RestaurantKrustyKrab.Restaurant
                         waiter.Busy = true;
                         greet_guest(waiter);
                         Sequence2(waiter);
-
                     }
                 }
                 
+            }
+            foreach (Chef chef in ChefList)
+            {
+                ChefPrepare();
+
+                void ChefPrepare()
+                {
+                    if (chef.Busy == false)
+                    {
+
+                        if (this.Kitchen.Orders.Count > 0)
+                        {
+                            chef.Busy = true;
+                            chef.Preparing.Add(this.Kitchen.Orders.Dequeue());
+                            foreach (Dish dish in this.Kitchen.Orders)
+                                if (dish.DestinationTable == chef.Preparing[0].DestinationTable)
+                                    this.Kitchen.Orders.Dequeue();
+                            {
+
+                            }
+                        }
+                    }
+                }
             }
 
 
@@ -254,18 +283,19 @@ namespace RestaurantKrustyKrab.Restaurant
                         {
                             foreach(Dish dish in waiter.Order)
                             {
-                                this.Kitchen.Order.Add(dish); //kitchen.order is a list of dishes
+                                this.Kitchen.Orders.Enqueue(dish); //kitchen.order is a list of dishes
                             }
+
+                            waiter.Order.Clear();
+                            waiter.CompanyProperty.Guests.Clear();
+                            waiter.Busy = false;
                              
                         }
                         
                     }
-
                 }
             }
-            
         }
-
     }
         
     
