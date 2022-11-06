@@ -7,7 +7,7 @@ namespace RestaurantKrustyKrab.Restaurant
   
         internal List<Guest> WashingBears { get; set; }
 
-        public DishStation(int positionX, int positionY)
+        public DishStation(int positionX, int positionY) : base(positionX, positionY)
         {
             this.Frame = new string[8, 25];
             PositionX = positionX;

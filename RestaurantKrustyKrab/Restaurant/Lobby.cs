@@ -86,9 +86,9 @@ namespace RestaurantKrustyKrab.Restaurant
             }
         }
 
-        private void work()
+        private void work(List<Waiter> waiterlist)
         {
-            foreach (Waiter waiter in WaiterList.ToList())
+            foreach (Waiter waiter in waiterlist)
             {
                 while (waiter.Busy == false)
                 {
@@ -127,7 +127,7 @@ namespace RestaurantKrustyKrab.Restaurant
                     //}
                     waiter.PositionX = 110;
                     waiter.PositionY = 3;
-                    WaiterList.Add(waiter);
+                    //WaiterList.Add(waiter);
                     waiter.Busy = true;
                     Console.Write(waiter.Name);
                 }

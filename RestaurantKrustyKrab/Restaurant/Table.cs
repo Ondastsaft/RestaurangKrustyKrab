@@ -13,7 +13,7 @@ namespace RestaurantKrustyKrab.Restaurant
         internal Waiter WaiterAtTable { get; set; }
 
 
-        public Table(int seats, int quality, int positionX, int positionY, bool isAvailable, int tableNumber)
+        public Table(int seats, int quality, int positionX, int positionY, bool isAvailable, int tableNumber) : base(positionX, positionY)
         {
             this.Frame = new string[4, 20];
             Seats = seats;
