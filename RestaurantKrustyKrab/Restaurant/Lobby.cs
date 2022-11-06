@@ -22,7 +22,7 @@ namespace RestaurantKrustyKrab.Restaurant
         internal DishStation DishStation { get; set; }
         internal Reception Reception { get; set; }
         internal WC WC { get; set; }
-        public int Time { get; set; }
+        
 
 
         public Lobby()
@@ -46,11 +46,17 @@ namespace RestaurantKrustyKrab.Restaurant
 
         internal void LobbyRun()
         {
+            Check_if_food_is_eaten();
+            PrintAll();
+            GlobalTimer++;
             Addguests();
             PrintAll();
-            Sequence1();
+            GlobalTimer++;
+            Sequence1(); //chefs takes orders and cooks, waiters greets guests, shows them a table, takes their order, and gives it to the kitchen
             PrintAll();
-            Sequence2();
+            GlobalTimer++;
+            Sequence2(); //chefs places their ready orders in "ReadyOrders", waiter takes the order from the kitchen and hands it to the right table
+            PrintAll();
             GlobalTimer++;
         }
 
@@ -71,23 +77,26 @@ namespace RestaurantKrustyKrab.Restaurant
             Console.WriteLine("KITCHEN");
             Console.WriteLine();
             Console.WriteLine("Chefs: ");
+            Console.WriteLine();
 
             foreach (Chef chef in ChefList)
             {
                 Console.WriteLine("Name: " + chef.Name + " Busy? " + chef.Busy);
                 if (chef.Busy == true)
                 {
+                    Console.WriteLine("Time:" + chef.TimeStart);
                     Console.WriteLine("Preparing: ");
-
                     foreach (Dish dish in chef.Preparing)
                     {
                         Console.WriteLine("Dish: " + dish.NameOfDish + "Table: " + dish.DestinationTable);
                     }
                 }
+                Console.WriteLine();
             }
-
+            Console.WriteLine();
             Console.WriteLine("Orders: ");
-            if (this.Kitchen.Orders.Count > 0)
+            Console.WriteLine();
+            if (Kitchen.Orders.Count > 0)
             {
                 foreach (Dish order in this.Kitchen.Orders)
                 {
@@ -165,7 +174,7 @@ namespace RestaurantKrustyKrab.Restaurant
                     }
                     Console.WriteLine("-----------------------------------");
                 }
-
+                Console.WriteLine();
             }
 
         } 
@@ -187,7 +196,7 @@ namespace RestaurantKrustyKrab.Restaurant
             }
 
 
-        } //Klar
+        } 
 
         internal void Generate()
         {
@@ -311,9 +320,9 @@ namespace RestaurantKrustyKrab.Restaurant
                                 chef.Preparing.Add(Kitchen.Orders.Dequeue());
                                 if (Kitchen.Orders.Count > 0)
                                 {
-                                    foreach (Dish dish in Kitchen.Orders.ToList())
-                                        if (dish.DestinationTable == chef.Preparing[0].DestinationTable)
-                                            Kitchen.Orders.Dequeue();
+                                foreach (Dish dish in Kitchen.Orders.ToList())
+                                    if (dish.DestinationTable == chef.Preparing[0].DestinationTable)
+                                        chef.Preparing.Add(Kitchen.Orders.Dequeue());
                                 }
                                 chef.TimeStart = GlobalTimer;
                                 break;
@@ -332,8 +341,15 @@ namespace RestaurantKrustyKrab.Restaurant
 
             foreach (Waiter waiter in WaiterList)
             {
-                Take_order_from_kitchen(waiter);
-                Give_food_to_table(waiter);
+                if (waiter.Busy == false)
+                {
+                    waiter.Busy = true;
+                    Take_order_from_kitchen(waiter);
+                    Give_food_to_table(waiter);
+                    waiter.Busy = false;
+                    break;
+                }
+               
             }
 
 
@@ -359,6 +375,7 @@ namespace RestaurantKrustyKrab.Restaurant
                         if (dish.DestinationTable == waiter.Order[0].DestinationTable)
                             Kitchen.Orders.Dequeue();
                 }
+                
             }
             void Give_food_to_table(Waiter waiter)
             {
@@ -379,26 +396,44 @@ namespace RestaurantKrustyKrab.Restaurant
             }
         }
 
+        internal void Sequence3()  //not done
+        {
+            foreach(Waiter waiter in WaiterList)
+            {
+                if (waiter.Busy == false)
+                {
+                    waiter.Busy = true;
+                    foreach (Table table in TableList)
+
+                        if (table.Finished_Eating == true)
+                        {
+                            tableReset(table);
+                            waiter.WipeTimer = GlobalTimer;
+                            table.Clean = false;
+                            table.WipedBy.Add(waiter);
+                            break;
+
+                        }
+                }
+            }
+                    
+
+            static void tableReset(Table table)
+            {
+                table.WaitingForFood = false;
+                table.IsAvailable = true;
+                table.EatTimer = -21;
+                table.Orders.Clear();
+            }
+        }
         internal void Check_if_food_is_eaten()
         {
             foreach (Table table in TableList)
             {
                 if (table.EatTimer == (GlobalTimer - 20))
-                    {
-                    table.Finished_Eating = true;
-                    }
-            }
-        }
-
-        internal void Sequence3()
-        {
-            foreach(Table table in TableList)
-            {
-                if (table.Finished_Eating == true)
                 {
-
+                    table.Finished_Eating = true;
                 }
-
             }
         }
 
