@@ -9,15 +9,17 @@ namespace RestaurantKrustyKrab.Restaurant
      
         internal bool FoodIsReady { get; set; }
         internal Queue<Dish> Orders { get; set; }
+        internal Queue<Dish> ReadyOrders { get; set; }
 
         public Kitchen(bool foodIsReady, int positionX, int positionY)
         {
-            this.Frame = new string[12, 45];
-            this.ChefList = new List<Chef>();
+            Frame = new string[12, 45];
+            ChefList = new List<Chef>();
             PositionX = positionX;
             PositionY = positionY;
             FoodIsReady = foodIsReady;
             Orders = new Queue<Dish>();
+            ReadyOrders = new Queue<Dish>();
 
         }
 
