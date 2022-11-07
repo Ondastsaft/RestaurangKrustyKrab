@@ -14,7 +14,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
         internal int CounterRestaurant { get; set; }
 
-        public int Time { get; set; }
+        public int Time { get; set; } 
 
 
         public Lobby()
