@@ -33,6 +33,7 @@ namespace RestaurantKrustyKrab.Restaurant
             this.FromLeft = 2;
             this.Time = 0;
         }
+        //LoopMetoder
         public void LobbyRun()
         {
             Window.OurDraw(this.Name, this.FromTop, this.FromLeft, this.MyDrawing);
@@ -47,11 +48,130 @@ namespace RestaurantKrustyKrab.Restaurant
         }
         public void LoopRestaurant()
         {
-            EraseAllAreas();
+
             CompanyArrivalRandomizer();
             work();
-            PrintAllAreas();
+
         }
+
+        private void CompanyArrivalRandomizer()
+        {
+            Random random = new Random();
+            int number = random.Next(0, 100);
+            if (number < 50 && MyRestaurantAreas["Reception"].CompaniesAtArea.Count < 10)
+            {
+                (MyRestaurantAreas["Reception"] as Reception).CompanyWaitingQueue.Enqueue(new Company((MyRestaurantAreas["Reception"] as Reception).CompanyWaitingQueue.Count));
+                PrintList((MyRestaurantAreas["Reception"] as Reception).CompanyWaitingQueue);
+                Thread.Sleep(2000);
+            }
+            //if (number > 50 && MyRestaurantAreas["Reception"].CompaniesAtArea.Count > 0)   //Här någonstans kan vi ha en bool som en waiter styr när vi dequeuear
+            //{
+            //    foreach (Company company in MyRestaurantAreas["Reception"].CompaniesAtArea)
+            //    {
+            //        company.Guests[0].FromLeft = (company.Guests[0].FromLeft - 1);
+            //    }
+
+            //}
+        }
+        //Servitörens LoopMetoder
+        private void work()
+        {
+            foreach (var kvp in MyRestaurantAreas)
+            {
+                for (int i = 0; i < kvp.Value.WaitersAtArea.Count; i++)
+                {
+                    bool continueLoop = true;
+                    if (!kvp.Value.WaitersAtArea[i].Busy)
+                        while (continueLoop)
+                        {
+
+                            continueLoop = (MyRestaurantAreas["Reception"] as Reception).CompanyWaitingQueue.Count > 0 ? continueLoop = GreetCompany(kvp.Key, i) : continueLoop;
+
+
+
+                            //continueLoop == true? continueLoop = ge_meny(kvp.Value.WaitersAtArea[i], kvp.Key, i) : continueLoop=true;
+                            ////{
+
+                            ////}
+
+                            //void ta_Beställning()
+                            //{
+
+                            //}
+
+                            //void hämta_mat()
+                            //{
+
+                            //}
+                            //void servera_mat()
+                            //{
+
+                            //}
+                            //void ta_Emot_Pengar()
+                            //{
+
+                            //}
+
+                            //void duka_undan()
+                            //{
+
+                            //}
+
+                            //WaiterList.Add(waiter);
+
+                            break;
+                        }
+                }
+            }
+
+        }
+        private bool GreetCompany(string key, int index)
+        {
+            bool continueLoop = true;
+            int startRow = (MyRestaurantAreas["Reception"] as Reception).WaitersAtArea.Count;
+            foreach (Waiter waiter in (MyRestaurantAreas["Reception"] as Reception).WaitersAtArea)
+            {
+                startRow = waiter.Company.Guests.Count + startRow;
+                startRow++;
+
+            }
+
+            //Sparar Company på waitern som returneras och suddar samt skriver ut receptionen igen
+            MyRestaurantAreas[key].WaitersAtArea[index].Busy = true;
+            MyRestaurantAreas[key].WaitersAtArea[index].Company = (MyRestaurantAreas["Reception"] as Reception).CompanyWaitingQueue.Dequeue();
+            Thread.Sleep(2000);
+            EraseList((MyRestaurantAreas["Reception"] as Reception).CompanyWaitingQueue);
+            Thread.Sleep(2000);
+            PrintList((MyRestaurantAreas["Reception"] as Reception).CompanyWaitingQueue);
+
+            // Lägger till Waitern som nu har Companyt med sig i listan i receptionen, tar bort den från listan den kom ifrån
+            // samt suddar den printningen och skriver ut den igen
+
+            EraseList(MyRestaurantAreas[key].WaitersAtArea);
+            (MyRestaurantAreas["Reception"] as Reception).WaitersAtArea.Add(MyRestaurantAreas[key].WaitersAtArea[index]);
+            MyRestaurantAreas[key].WaitersAtArea.RemoveAt(index);
+            PrintList(MyRestaurantAreas[key].WaitersAtArea);
+
+            //Skapar en offset nedåt som är lika med antalet Waiters i Receptionen + antalet gäster i samtliga Companies i receptionen
+
+            //Skriver ut 
+            Console.SetCursorPosition((MyRestaurantAreas["Reception"] as Reception).FromLeft - 15, (MyRestaurantAreas["Reception"] as Reception).FromTop + startRow);
+            Console.Write(MyRestaurantAreas["Reception"].WaitersAtArea[MyRestaurantAreas["Reception"].WaitersAtArea.Count - 1].Name);
+
+            int row = 1;
+            foreach (Guest guest in MyRestaurantAreas["Reception"].WaitersAtArea[MyRestaurantAreas["Reception"].WaitersAtArea.Count - 1].Company.Guests)
+            {
+                Console.SetCursorPosition((MyRestaurantAreas["Reception"] as Reception).FromLeft - 15, (MyRestaurantAreas["Reception"] as Reception).FromTop + startRow + row);
+                Console.Write(guest.Name);
+                row++;
+            }
+
+
+            continueLoop = false;
+
+            return continueLoop;
+        }
+        //RitMetoder
         public void PrintAllAreas()
         {
             foreach (var restaurantArea in MyRestaurantAreas)
@@ -74,72 +194,6 @@ namespace RestaurantKrustyKrab.Restaurant
             }
             EraseList((MyRestaurantAreas["Reception"] as Reception).CompanyWaitingQueue);
         }
-        private void CompanyArrivalRandomizer()
-        {
-            Random random = new Random();
-            int number = random.Next(0, 100);
-            if (number < 50 && MyRestaurantAreas["Reception"].CompaniesAtArea.Count < 10)
-            {
-                (MyRestaurantAreas["Reception"] as Reception).CompanyWaitingQueue.Enqueue(new Company((MyRestaurantAreas["Reception"] as Reception).CompanyWaitingQueue.Count));
-            }
-            if (number > 50 && MyRestaurantAreas["Reception"].CompaniesAtArea.Count > 0)   //Här någonstans kan vi ha en bool som en waiter styr när vi dequeuear
-            {
-                foreach (Company company in MyRestaurantAreas["Reception"].CompaniesAtArea)
-                {
-                    company.Guests[0].FromLeft = (company.Guests[0].FromLeft - 1);
-                }
-            }
-        }
-
-        private void work()
-        {
-            foreach (var kvp in MyRestaurantAreas)
-            {
-                for (int i = 0; i < kvp.Value.WaitersAtArea.Count - 1; i++)
-                {
-                    bool continueLoop = true;
-                    kvp.Value.WaitersAtArea[i].Busy = false;
-                    while (continueLoop)
-                    {
-
-                        continueLoop = GreetCompany(kvp.Value.WaitersAtArea[i], kvp.Key, i);
-
-                        //continueLoop == true? continueLoop = ge_meny(kvp.Value.WaitersAtArea[i], kvp.Key, i) : continueLoop=true;
-                        ////{
-
-                        ////}
-
-                        //void ta_Beställning()
-                        //{
-
-                        //}
-
-                        //void hämta_mat()
-                        //{
-
-                        //}
-                        //void servera_mat()
-                        //{
-
-                        //}
-                        //void ta_Emot_Pengar()
-                        //{
-
-                        //}
-
-                        //void duka_undan()
-                        //{
-
-                        //}
-
-                        //WaiterList.Add(waiter);
-
-                        break;
-                    }
-                }
-            }
-
-        }
         private void PrintRestaurantArea(RestaurantArea restaurantArea)
         {
             PrintList(restaurantArea.GuestsAtArea);
@@ -155,34 +209,6 @@ namespace RestaurantKrustyKrab.Restaurant
             EraseList(restaurantArea.WaitersAtArea);
             EraseList(restaurantArea.ChefsAtArea);
         }
-        private bool GreetCompany(Waiter waiter, string key, int index)
-        {
-            bool continueLoop = true;
-            if ((MyRestaurantAreas["Reception"] as Reception).CompanyWaitingQueue.Count > 0)
-            {
-
-                waiter.Company = (MyRestaurantAreas["Reception"] as Reception).CompanyWaitingQueue.Dequeue();
-                (MyRestaurantAreas["Reception"] as Reception).WaitersAtArea.Add(waiter);
-                waiter.Busy = true;
-                waiter.FromLeft = 20;
-                waiter.FromTop = 5;
-                Console.SetCursorPosition(waiter.FromLeft, waiter.FromTop);
-                Console.Write(waiter.Name);
-                Console.SetCursorPosition(waiter.FromLeft, waiter.FromTop + 1);
-                int row = 0;
-                foreach (Guest guest in waiter.Company.Guests)
-                {
-                    Console.SetCursorPosition(waiter.FromLeft, waiter.FromTop + row);
-                    Console.Write(guest.Name);
-                    row++;
-                }
-                MyRestaurantAreas[key].WaitersAtArea.RemoveAt(index);
-                continueLoop = false;
-            }
-            return continueLoop;
-        }
-
-
         public void ErasePosition(Person person)
         {
 
@@ -232,14 +258,11 @@ namespace RestaurantKrustyKrab.Restaurant
                 row++;
             }
         }
-
-
-
         public static void TimeCounter()
         {
 
         }
-
+        //Initieringsmetoder
         public Dictionary<string, RestaurantArea> GenerateTables(Dictionary<string, RestaurantArea> restaurantAreas)
         {
             int fromTop = 24;
@@ -260,8 +283,6 @@ namespace RestaurantKrustyKrab.Restaurant
             }
             return restaurantAreas;
         }
-
-
         public void Draw()
         {
 
@@ -270,6 +291,5 @@ namespace RestaurantKrustyKrab.Restaurant
                 Window.OurDraw(restaurantArea.Value as RestaurantArea);
             }
         }
-
     }
 }
