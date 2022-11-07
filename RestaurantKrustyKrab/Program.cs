@@ -14,10 +14,8 @@ namespace RestaurantKrustyKrab
             while (true)
                 
             {
-                MyLobby.ChefTimer();
-                MyLobby.Check_if_food_is_ready();
-                MyLobby.Check_if_food_is_eaten();
-                MyLobby.Check_if_table_has_been_wiped();
+               
+               
                 MyLobby.LobbyRun();
             }
         

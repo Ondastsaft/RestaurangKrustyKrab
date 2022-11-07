@@ -106,7 +106,7 @@ namespace RestaurantKrustyKrab.Restaurant
             if (Kitchen.ReadyOrders.Count > 0)
             {
                 foreach (Dish order in Kitchen.ReadyOrders)
-                    Console.WriteLine(order);
+                    Console.WriteLine("Dish: " + order.NameOfDish + "Table: " + order.DestinationTable + " Guest Name: " + order.NameOfGuest);
             }
             Console.WriteLine();
         } //Chefs are here
@@ -174,7 +174,6 @@ namespace RestaurantKrustyKrab.Restaurant
                 }
                 Console.WriteLine();
             }
-
         }
 
         void PrintCompanies()
@@ -192,8 +191,6 @@ namespace RestaurantKrustyKrab.Restaurant
                     Console.WriteLine(company.Guests[j].Name);
                 Console.WriteLine("-----------------------------------");
             }
-
-
         }
 
         internal void Generate()
@@ -254,51 +251,50 @@ namespace RestaurantKrustyKrab.Restaurant
 
         internal void Sequence() // resten finns i program
         {
-            PrintAll();
-            GlobalTimer++;
 
+            
+            void background_methods()
+            {
+                ChefTimer();
+                GlobalTimer++;
+                Check_if_food_is_ready();
+                Check_if_food_is_eaten();
+                Check_if_table_has_been_wiped();
+                PrintAll();
+
+            }
 
             GreetGuest();
-            PrintAll();
-            GlobalTimer++;
+            background_methods();
 
             Lead_To_table();
-            PrintAll();
-            GlobalTimer++;
+            background_methods();
 
             Take_Order();
-            PrintAll();
-            GlobalTimer++;
+            background_methods();
 
             Give_Kitchen_Order();
-            PrintAll();
-            GlobalTimer++;
-
+            background_methods();
 
             Chef_take_order();
-            PrintAll();
-            GlobalTimer++;
+            background_methods();
 
             Chef_Prepare();
-            PrintAll();
-            GlobalTimer++;
-
+            background_methods();
 
             Take_order_from_kitchen();
-            PrintAll();
-            GlobalTimer++;
+            background_methods();
 
             Give_food_to_table();
-            PrintAll();
-            GlobalTimer++;
+            background_methods();
 
             //waiter take payment
 
             Waiter_start_cleaning();
-            PrintAll();
-            GlobalTimer++;
+            background_methods();
 
         }
+
         internal void Check_if_food_is_eaten()
         {
             foreach (Table table in TableList)
@@ -461,7 +457,7 @@ namespace RestaurantKrustyKrab.Restaurant
         {
             foreach (Chef chef in ChefList)
             {
-                if (chef.TimeStart ==  chef.TimeEnd)
+                if (chef.TimeStart == chef.TimeEnd)
                 {
                     foreach (Dish dish in chef.Preparing)
                     {
@@ -497,7 +493,7 @@ namespace RestaurantKrustyKrab.Restaurant
                 }
 
             }
-        } //deletes the waiter 
+        } //deletes the waiter from table and adds it back to waiterlist
 
         internal void Waiter_start_cleaning()  //not done
         {
