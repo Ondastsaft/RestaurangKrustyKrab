@@ -10,7 +10,7 @@ namespace RestaurantKrustyKrab.Restaurant
         internal int PositionX { get; set; }
         internal int PositionY { get; set; }
 
-        internal List<RestaurantArea> MyRestaurantArea { get; set; }
+        internal List<RestaurantArea> MyRestaurantAreas { get; set; }
         public List<Table> TableList { get; set; }
         internal List<Waiter> WaiterList { get; set; }
         internal int CounterRestaurant { get; set; }
@@ -24,13 +24,13 @@ namespace RestaurantKrustyKrab.Restaurant
 
         public Lobby()
         {
-            this.MyRestaurantArea = new List<RestaurantArea>();
-            MyRestaurantArea.Add(new Kitchen(3, 157));
-            MyRestaurantArea = GenerateTables(MyRestaurantArea);
-            MyRestaurantArea.Add(new Reception(3,31));
-            MyRestaurantArea.Add(new WC(25, 188));
-            MyRestaurantArea.Add(new WaiterWaitingArea(110, 3));
-            MyRestaurantArea.Add(new DishStation(3,128));
+            this.MyRestaurantAreas = new List<RestaurantArea>();
+            MyRestaurantAreas.Add(new Kitchen(3, 157));
+            MyRestaurantAreas = GenerateTables(MyRestaurantAreas);
+            MyRestaurantAreas.Add(new Reception(3,31));
+            MyRestaurantAreas.Add(new WC(25, 188));
+            MyRestaurantAreas.Add(new WaiterWaitingArea(110, 3));
+            MyRestaurantAreas.Add(new DishStation(3,128));
 
             this.MyDrawing = new string[50, 200];
             this.Name = "Krusty Krab";
@@ -41,17 +41,17 @@ namespace RestaurantKrustyKrab.Restaurant
         public void LobbyRun()
         {
             Window.OurDraw(this.Name, this.PositionX, this.PositionY, this.MyDrawing);
-            PrintAllAreas();
+            //PrintAllAreas();
             Draw();
-            while (true)
-            {
-                LoopRestaurant();
-                Console.ReadKey();
-            }
+            //while (true)
+            //{
+            //    LoopRestaurant();
+            //    Console.ReadKey();
+            //}
         }
         public void LoopRestaurant()
         {
-            LoopQueue();
+            //LoopQueue();
             PrintWaitingCompanies();
             Thread.Sleep(2000);
             PrintList(WaiterList);
@@ -63,7 +63,7 @@ namespace RestaurantKrustyKrab.Restaurant
         }
         public void PrintAllAreas()
         {
-            foreach(RestaurantArea area in MyRestaurantArea)
+            foreach(RestaurantArea area in MyRestaurantAreas)
             {
                 PrintRestaurantArea(area);
             }
@@ -273,14 +273,10 @@ namespace RestaurantKrustyKrab.Restaurant
 
         public void Draw()
         {
-            foreach (Table table in TableList)
+            foreach (RestaurantArea restaurantArea in MyRestaurantAreas)
             {
-                Window.OurDraw("Bord " + table.TableNumber, table.PositionY, table.PositionX, table.Frame);
+                Window.OurDraw(restaurantArea.Name, restaurantArea.PositionY, restaurantArea.PositionX, restaurantArea.Frame);
             }
-            Window.OurDraw("Kitchen", Kitchen.PositionY, Kitchen.PositionX, Kitchen.Frame);
-            Window.OurDraw("Dish Station", DishStation.PositionY, DishStation.PositionX, DishStation.Frame);
-            Window.OurDraw("Reception", Reception.PositionY, Reception.PositionX, Reception.Frame);
-            Window.OurDraw("WC", WC.PositionY, WC.PositionX, WC.Frame);
         }
         public Company GenerateCompany()
         {

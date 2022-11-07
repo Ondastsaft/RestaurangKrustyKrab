@@ -21,6 +21,8 @@ namespace RestaurantKrustyKrab.Restaurant
 
         public RestaurantArea(int positionX, int positionY)
         {
+            Frame = new string[1, 1];
+            Name = "X";
             PositionX = positionX;
             PositionY = positionY;
         }
