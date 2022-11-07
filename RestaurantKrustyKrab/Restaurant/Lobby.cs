@@ -1,7 +1,11 @@
 ﻿using RestaurantKrustyKrab.GUI;
 using RestaurantKrustyKrab.People;
 using System.Collections;
+using RestaurantKrustyKrab.Restaurant.Dishes;
 using System.Xml.Linq;
+using RestaurantKrustyKrab.Restaurant.Dishes.Fish;
+using RestaurantKrustyKrab.Restaurant.Dishes.Meat;
+using RestaurantKrustyKrab.Restaurant.Dishes.Vegetarian;
 
 namespace RestaurantKrustyKrab.Restaurant
 {
@@ -98,7 +102,7 @@ namespace RestaurantKrustyKrab.Restaurant
                     Console.WriteLine("Preparing: ");
                     foreach (Dish dish in chef.Preparing)
                     {
-                        Console.WriteLine("Dish: " + dish.NameOfDish + "Table: " + dish.DestinationTable);
+                        Console.WriteLine("Dish: " + dish.Name + "Table: " + dish.DestinationTable, "Guest:" + dish.Guest);
                     }
                     if (chef.TimeStart > 0)
                     {
@@ -116,7 +120,7 @@ namespace RestaurantKrustyKrab.Restaurant
             {
                 foreach (Dish order in Kitchen.Orders)
                 {
-                    Console.WriteLine("Guest: " + order.NameOfGuest + " Dish: " + order.NameOfDish + "Table: " + order.DestinationTable);
+                    Console.WriteLine("Guest: " + order.Guest + " Dish: " + order.Name + "Table: " + order.DestinationTable);
                 }
                 Console.WriteLine();
             }
@@ -124,7 +128,7 @@ namespace RestaurantKrustyKrab.Restaurant
             if (Kitchen.ReadyOrders.Count > 0)
             {
                 foreach (Dish order in Kitchen.ReadyOrders)
-                    Console.WriteLine("Dish: " + order.NameOfDish + "Table: " + order.DestinationTable + " Guest Name: " + order.NameOfGuest);
+                    Console.WriteLine("Dish: " + order.Name + "Table: " + order.DestinationTable + " Guest Name: " + order.Guest);
             }
             Console.WriteLine();
         } //Chefs are here
@@ -171,7 +175,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
                     foreach (DictionaryEntry de in table.Orders)
                     {
-                        Console.WriteLine("Guest: " + de.Key + " Dish: " + de.Value);
+                        Console.WriteLine("Guest: " + de.Key + " Dish: " + de.Value.GetType().Name);
                     }
 
                     Console.WriteLine();
@@ -354,15 +358,67 @@ namespace RestaurantKrustyKrab.Restaurant
         void Take_Order()
 
         {
+
             foreach (Waiter waiter in WaiterList)
             {
                 if (waiter.Busy == true && waiter.CompanyProperty.Guests.Count > 0)
                 {
                     foreach (Guest guest in waiter.CompanyProperty.Guests)
                     {
-                        waiter.Order.Add(new Dish( waiter.ServingTable, guest.Name));
-                        TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, "Placeholder");  //orders är en hashtable
+                        template(waiter,guest,TableList,guest.Prefered_dish);
                     }
+                }
+            }
+            static void template(Waiter waiter, Guest guest, List<Table> TableList, int prefered_dish)
+            {
+
+                switch (prefered_dish)
+
+                {
+                    case 1:
+                        waiter.Order.Add(new Cod(waiter.ServingTable, guest.Name));
+                        TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, new Cod(waiter.ServingTable, guest.Name));
+                            break;
+                    case 2:
+                        waiter.Order.Add(new SalmonPie(waiter.ServingTable, guest.Name));
+                        TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, new SalmonPie(waiter.ServingTable, guest.Name));
+                        break;
+                    case 3:
+                        waiter.Order.Add(new Sushi(waiter.ServingTable, guest.Name));
+                        TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, new Sushi(waiter.ServingTable, guest.Name));
+                        break;
+
+                    case 4:
+                        waiter.Order.Add(new Curry(waiter.ServingTable, guest.Name));
+                        TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, new Curry(waiter.ServingTable, guest.Name));
+                        break;
+
+                    case 5:
+                        waiter.Order.Add(new Ribs(waiter.ServingTable, guest.Name));
+                        TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, new Ribs(waiter.ServingTable, guest.Name));
+                        break;
+
+                    case 6:
+                        waiter.Order.Add(new Steak(waiter.ServingTable, guest.Name));
+                        TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, new Steak(waiter.ServingTable, guest.Name));
+                        break;
+
+                    case 7:
+                        waiter.Order.Add(new Falafel(waiter.ServingTable, guest.Name));
+                        TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, new Falafel(waiter.ServingTable, guest.Name));
+                        break;
+
+                    case 8:
+                        waiter.Order.Add(new Pasta(waiter.ServingTable, guest.Name));
+                        TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, new Pasta(waiter.ServingTable, guest.Name));
+                        break;
+
+                    case 9:
+                        waiter.Order.Add(new Salad(waiter.ServingTable, guest.Name));
+                        TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, new Salad(waiter.ServingTable, guest.Name));
+                        break;
+
+
                 }
             }
         }

@@ -11,7 +11,7 @@ namespace RestaurantKrustyKrab.Restaurant.Dishes.Vegetarian
 {
     internal class Salad : Dish
     {
-        public Salad(int price, int destinationTable, string guest) : base(price, destinationTable, guest)
+        public Salad(int destinationTable, string guest) : base(destinationTable, guest)
         {
             Name = "Salad";
             Price = 70;

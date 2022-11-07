@@ -11,11 +11,11 @@ namespace RestaurantKrustyKrab.Restaurant.Dishes.Meat
 {
     internal class Steak : Dish
     {
-        public Steak(int price, int destinationTable, string guest) : base(price, destinationTable, guest)
+        public Steak(int destinationTable, string guest) : base(destinationTable, guest)
         {
             Name = "Steak";
             Price = 100;
-            Quality = quality;
+            Quality = 0;
             DestinationTable = destinationTable;
             Guest = guest;
         }

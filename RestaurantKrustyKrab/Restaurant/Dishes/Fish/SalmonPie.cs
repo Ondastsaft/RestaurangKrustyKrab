@@ -9,11 +9,11 @@ namespace RestaurantKrustyKrab.Restaurant.Dishes.Fish
 {
     internal class SalmonPie : Dish
     {
-        public SalmonPie(int price, int destinationTable, string guest) : base(price, destinationTable, guest)
+        public SalmonPie(int destinationTable, string guest) : base(destinationTable, guest)
         {
             Name = "SalmonPie";
             Price = 140;
-            Quality = quality;
+            Quality = 0;
             DestinationTable = destinationTable;
             Guest = guest;
         }
