@@ -18,8 +18,9 @@ namespace RestaurantKrustyKrab.Restaurant
         internal bool Finished_Eating { get; set; }
         internal bool Clean { get; set; }
         internal List<Waiter> WipedBy { get; set; }
+        internal int WipeTimer { get; set; }
 
-    public Table(int seats, int quality, int positionX, int positionY, bool isAvailable, int tableNumber, bool waitingForFood)
+        public Table(int seats, int quality, int positionX, int positionY, bool isAvailable, int tableNumber, bool waitingForFood)
         {
             Frame = new string[4, 20];
             Seats = seats;
@@ -36,6 +37,7 @@ namespace RestaurantKrustyKrab.Restaurant
             Finished_Eating = false;
             Clean = true;
             WipedBy = new List<Waiter>();
+            WipeTimer = -4;
         }
 
 
