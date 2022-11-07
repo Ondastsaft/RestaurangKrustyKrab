@@ -6,12 +6,13 @@ namespace RestaurantKrustyKrab.People
         static internal Random random = new Random();
         internal int Prefered_dish { get; set; }
         internal int Money { get; set; }
-         
+        internal List<Dish> Order { get; set; }
+
         public Guest(string name, int money , int PositionX, int PositionY) : base(name, PositionX, PositionY)
         {
             Name = name;
             Money = money;
-
+            Order = new List<Dish>();
             Prefered_dish = random.Next(1, 10);
         }
     }
