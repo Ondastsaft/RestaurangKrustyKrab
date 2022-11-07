@@ -19,6 +19,7 @@ namespace RestaurantKrustyKrab.Restaurant
         internal bool Clean { get; set; }
         internal List<Waiter> WipedBy { get; set; }
         internal int WipeTimer { get; set; }
+        internal int TimeEnd { get; set; }
 
         public Table(int seats, int quality, int positionX, int positionY, bool isAvailable, int tableNumber, bool waitingForFood)
         {
