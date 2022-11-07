@@ -16,6 +16,7 @@ namespace RestaurantKrustyKrab.Restaurant
         internal List<Chef> ChefsAtArea = new List<Chef>();
         internal List<Company> CompaniesAtArea = new List<Company>();
         internal List<Guest> GuestsAtArea = new List<Guest>();
+        internal List<Table> TableList = new List<Table>();
         internal int FromTop { get; set; }
         internal int FromLeft { get; set; }
 
