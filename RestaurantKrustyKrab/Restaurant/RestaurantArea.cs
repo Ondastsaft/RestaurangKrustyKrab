@@ -23,7 +23,6 @@ namespace RestaurantKrustyKrab.Restaurant
             CompaniesAtArea = new List<Company>();
             GuestsAtArea = new List<Guest>();
             Frame = new string[1, 1];
-            Name = "X";
             FromTop = fromTop;
             FromLeft = fromLeft;
         }

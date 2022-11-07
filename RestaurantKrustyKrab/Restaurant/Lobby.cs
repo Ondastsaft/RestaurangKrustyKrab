@@ -21,24 +21,25 @@ namespace RestaurantKrustyKrab.Restaurant
         public Lobby()
         {
             MyRestaurantAreas = new Dictionary<string, RestaurantArea>();
-            MyRestaurantAreas.Add("Kitchen", new Kitchen("Kitchen", 3, 157));
+            MyRestaurantAreas.Add("Kitchen", new Kitchen("Kitchen", 3, 155));
             MyRestaurantAreas = GenerateTables(MyRestaurantAreas);
             MyRestaurantAreas.Add("Reception", new Reception("Reception", 3, 31));
             MyRestaurantAreas.Add("WC", new WC("WC", 25, 188));
-            MyRestaurantAreas.Add("WaiterWaitingArea", new WaiterWaitingArea("Waiters",110, 3));
-            MyRestaurantAreas.Add("DishStation", new DishStation("Washing Bears", 3, 128));
+            MyRestaurantAreas.Add("WaiterWaitingArea", new WaiterWaitingArea("Waiters",3, 105));
+            MyRestaurantAreas.Add("DishStation", new DishStation("Washing Bears", 3, 125));
 
             this.MyDrawing = new string[50, 200];
             this.Name = "Krusty Krab";
-            this.FromTop = 4;
+            this.FromTop = 2;
             this.FromLeft = 2;
             this.Time = 0;
         }
         public void LobbyRun()
         {
             Window.OurDraw(this.Name, this.FromTop, this.FromLeft, this.MyDrawing);
+            Draw();
             PrintAllAreas();
-            //Draw();
+            
             //while (true)
             //{
             //    LoopRestaurant();
@@ -186,14 +187,14 @@ namespace RestaurantKrustyKrab.Restaurant
         }
 
 
-        //public void Draw()
-        //{
+        public void Draw()
+        {
 
-        //    foreach (var restaurantArea in MyRestaurantAreas)
-        //    {
-        //        Window.OurDraw();
-        //    }
-        //}
+            foreach (var restaurantArea in MyRestaurantAreas)
+            {
+                Window.OurDraw(restaurantArea.Value as RestaurantArea);
+            }
+        }
 
     }
 }

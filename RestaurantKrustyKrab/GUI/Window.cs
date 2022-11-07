@@ -1,8 +1,8 @@
-﻿namespace RestaurantKrustyKrab.GUI
+﻿using RestaurantKrustyKrab.Restaurant;
+namespace RestaurantKrustyKrab.GUI
 {
     internal class Window
     {
-
         public static void OurDraw(string header, int fromLeft, int fromTop, string[,] graphics)
         {
             Console.SetCursorPosition(fromTop, fromLeft);
@@ -19,6 +19,24 @@
             }
             Console.SetCursorPosition(fromTop, fromLeft + graphics.GetLength(0) + 1);
             Console.Write('└' + new String('─', graphics.GetLength(1) + 2) + '┘');
+        }
+
+        public static void OurDraw(RestaurantArea restaurantArea)
+        {
+            Console.SetCursorPosition(restaurantArea.FromLeft, restaurantArea.FromTop);
+            Console.Write('┌' + " ");
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.Write(restaurantArea.Name);
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(" " + new String('─', restaurantArea.Frame.GetLength(1) - restaurantArea.Name.Length) + '┐');
+            Console.WriteLine();
+            for (int i = 0; i < restaurantArea.Frame.GetLength(0); i++)
+            {
+                Console.SetCursorPosition(restaurantArea.FromLeft, restaurantArea.FromTop + i + 1);
+                Console.Write('│' + " " + new string(' ', restaurantArea.Frame.GetLength(1)) + " " + '│');
+            }
+            Console.SetCursorPosition(restaurantArea.FromLeft, restaurantArea.FromTop + restaurantArea.Frame.GetLength(0) + 1);
+            Console.Write('└' + new String('─', restaurantArea.Frame.GetLength(1) + 2) + '┘');
         }
 
 
