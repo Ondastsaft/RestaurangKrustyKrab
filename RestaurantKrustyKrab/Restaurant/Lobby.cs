@@ -360,7 +360,7 @@ namespace RestaurantKrustyKrab.Restaurant
                 {
                     foreach (Guest guest in waiter.CompanyProperty.Guests)
                     {
-                        waiter.Order.Add(new Dish("Placeholder ", 0, 0, waiter.ServingTable, guest.Name));
+                        waiter.Order.Add(new Dish( waiter.ServingTable, guest.Name));
                         TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, "Placeholder");  //orders är en hashtable
                     }
                 }
@@ -417,10 +417,7 @@ namespace RestaurantKrustyKrab.Restaurant
                     chef.TimeEnd = chef.TimeStart + 10;
                     chef.Cooking = true;
                 }
-
             }
-
-
         }
 
         void Take_order_from_kitchen()

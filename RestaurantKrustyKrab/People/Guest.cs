@@ -2,13 +2,17 @@
 namespace RestaurantKrustyKrab.People
 {
     internal class Guest : Person
-    {
-        internal Dish Prefered_Dish { get; set; }
-        public Guest(string name, int PositionX, int PositionY) : base(name, PositionX, PositionY)
+        {
+        static internal Random random = new Random();
+        internal int Prefered_dish { get; set; }
+        internal int Money { get; set; }
+         
+        public Guest(string name, int money , int PositionX, int PositionY) : base(name, PositionX, PositionY)
         {
             Name = name;
-            Prefered_Dish = new Dish();
+            Money = money;
 
+            Prefered_dish = random.Next(1, 10);
         }
     }
 }

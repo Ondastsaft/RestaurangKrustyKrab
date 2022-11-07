@@ -2,19 +2,20 @@
 {
     internal class Dish
     {
-        internal string NameOfDish { get; set; }
+        internal string Name { get; set; }
         internal int Price { get; set; }
         internal int Quality { get; set; }
         internal int DestinationTable { get; set; }
-        internal string NameOfGuest { get; set; }
+        internal string Guest { get; set; }
 
-        public Dish(string nameofdish, int price, int quality, int destinationTable, string nameOfGuest)
+
+        public Dish(int destinationTable, string guest)
         {
-            NameOfDish = nameofdish;
-            Price = price;
-            Quality = quality;
+            Name = "";
+            Quality = 0;
             DestinationTable = destinationTable;
-            NameOfGuest = nameOfGuest;
+            Guest = guest;
+
         }
 
     }

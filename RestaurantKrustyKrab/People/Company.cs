@@ -23,21 +23,22 @@ namespace RestaurantKrustyKrab.People
 {
     internal class Company
     {
+        
         internal List<Guest> Guests { get; set; }
-        internal int timeWaiting { get; set; }
+
+        internal int TimeWaiting { get; set; }
 
         static internal Random random = new Random();
 
         public Company(int offSetRow)
         {
             int guests = random.Next(1, 5);   
-            this.Guests = new List<Guest>();
+            Guests = new List<Guest>();
             for(int i = 0; i < guests; i++)
             {
-                
-                Guests.Add(new Guest(GetName(), 32, 4+i+offSetRow));
+                Guests.Add(new Guest(GetName(),random.Next(70, 151), 32, 4+i+offSetRow));
             }
-            this.timeWaiting = 0;
+            TimeWaiting = 0;
         }
         public string GetName()
         {
