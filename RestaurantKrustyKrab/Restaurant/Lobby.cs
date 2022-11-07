@@ -136,7 +136,9 @@ namespace RestaurantKrustyKrab.Restaurant
 
                 if (table.Clean == false)
                 {
-                    Console.WriteLine("This table is being wiped by " + table.WipedBy[0].Name);
+                    Console.WriteLine("Tablenumber: " + table.TableNumber +  " This table is being wiped by " + table.WipedBy[0].Name);
+                    Console.WriteLine("Wipetimer: " + table.WipeTimer);
+                    Console.WriteLine("WipeEnd: " +table.WipeEnd);
                 }
 
                 else
@@ -300,6 +302,7 @@ namespace RestaurantKrustyKrab.Restaurant
             {
                 TableTimer();
                 ChefTimer();
+                Wipetimer();
 
                 GlobalTimer++;
                 Chef_readies_an_order();
@@ -502,6 +505,7 @@ namespace RestaurantKrustyKrab.Restaurant
                     chef.Preparing.Clear();
                     chef.Busy = false;
                     chef.TimeStart = -11;
+                    chef.Cooking = false;
                     Kitchen.FoodIsReady = true;
 
                 }
@@ -520,15 +524,15 @@ namespace RestaurantKrustyKrab.Restaurant
         internal void Check_if_table_has_been_wiped() // also removes the waiter from table.WipedBy 
         {
             foreach (Table table in TableList)
-            {
-                if (table.WipeTimer >= (table.WipeEnd))
-                {
-                    table.Clean = true;
-                    WaiterList.Add(table.WipedBy[0]);
-                    table.WipedBy.Clear();
-                }
-
-            }
+                if (table.Clean == false)
+                    {
+                        if (table.WipeTimer >= table.WipeEnd)
+                        {
+                            table.Clean = true;
+                            WaiterList.Add(table.WipedBy[0]);
+                            table.WipedBy.Clear();
+                        }
+                    }
         }
 
 
@@ -559,7 +563,10 @@ namespace RestaurantKrustyKrab.Restaurant
                     {
                         table.WaitingForFood = false;
                         table.IsAvailable = true;
+                        table.RecievedOrder = false;
+                        table.Finished_Eating = false;
                         table.EatTimer = -21;
+
                         table.Orders.Clear();
                     }
                 }
