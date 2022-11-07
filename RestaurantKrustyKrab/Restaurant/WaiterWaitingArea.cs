@@ -13,7 +13,7 @@ namespace RestaurantKrustyKrab.Restaurant
             for (int i = 0; i < 3; i++)
             {
                 string waiterName = "Waiter " + (i + 1);
-                WaitersAtArea.Add(new Waiter(waiterName, 0, false, 110, 5));
+                WaitersAtArea.Add(new Waiter(waiterName, 0, false, FromTop + 1, FromLeft + 2));
             }
 
         }

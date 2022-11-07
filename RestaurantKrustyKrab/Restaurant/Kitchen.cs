@@ -15,7 +15,7 @@ namespace RestaurantKrustyKrab.Restaurant
             for (int i = 0; i < 5; i++)
             {
                 string chefName = "Chef " + (i + 1);
-                ChefsAtArea.Add(new Chef(chefName, 0, this.FromTop, this.FromLeft));
+                ChefsAtArea.Add(new Chef(chefName, 0, FromTop + 1, FromLeft + 2));
             }
         }
     }

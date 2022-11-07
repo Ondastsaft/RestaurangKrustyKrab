@@ -1,6 +1,5 @@
 ﻿using RestaurantKrustyKrab.GUI;
 using RestaurantKrustyKrab.People;
-using System.Collections;
 
 namespace RestaurantKrustyKrab.Restaurant
 {
@@ -25,7 +24,7 @@ namespace RestaurantKrustyKrab.Restaurant
             MyRestaurantAreas = GenerateTables(MyRestaurantAreas);
             MyRestaurantAreas.Add("Reception", new Reception("Reception", 3, 31));
             MyRestaurantAreas.Add("WC", new WC("WC", 25, 188));
-            MyRestaurantAreas.Add("WaiterWaitingArea", new WaiterWaitingArea("Waiters",3, 105));
+            MyRestaurantAreas.Add("WaiterWaitingArea", new WaiterWaitingArea("Waiters", 3, 105));
             MyRestaurantAreas.Add("DishStation", new DishStation("Washing Bears", 3, 125));
 
             this.MyDrawing = new string[50, 200];
@@ -39,7 +38,7 @@ namespace RestaurantKrustyKrab.Restaurant
             Window.OurDraw(this.Name, this.FromTop, this.FromLeft, this.MyDrawing);
             Draw();
             PrintAllAreas();
-            
+
             //while (true)
             //{
             //    LoopRestaurant();
@@ -53,7 +52,7 @@ namespace RestaurantKrustyKrab.Restaurant
         public void PrintAllAreas()
         {
             foreach (var restaurantArea in MyRestaurantAreas)
-            {             
+            {
                 PrintRestaurantArea(restaurantArea.Value as RestaurantArea);
             }
         }
@@ -152,7 +151,7 @@ namespace RestaurantKrustyKrab.Restaurant
             int row = 0;
             foreach (T person in personList)
             {
-                Console.SetCursorPosition((person as Person).FromTop, ((person as Person).FromLeft + row));
+                Console.SetCursorPosition((person as Person).FromLeft, ((person as Person).FromTop + row));
                 Console.Write((person as Person).Name);
                 row++;
             }
@@ -172,16 +171,16 @@ namespace RestaurantKrustyKrab.Restaurant
 
             for (int i = 0; i < 10; i++)
             {
-                
+
                 int seats = i < 4 ? 2 : 4;
                 int quality = i == 4 ? 1 : 2;
-                quality = i ==  9 ? 1 : 2;
-           
-                restaurantAreas.Add("Table " + i+1, new Table($"Table {i+1} ", fromTop, fromLeft, seats, quality, i+1));
-                fromLeft = i == 4? 12 : fromLeft + 30;
+                quality = i == 9 ? 1 : 2;
 
-                fromTop =  i== 4? fromTop+16: fromTop;
-                
+                restaurantAreas.Add("Table " + i + 1, new Table($"Table {i + 1} ", fromTop, fromLeft, seats, quality, i + 1));
+                fromLeft = i == 4 ? 12 : fromLeft + 30;
+
+                fromTop = i == 4 ? fromTop + 16 : fromTop;
+
             }
             return restaurantAreas;
         }
