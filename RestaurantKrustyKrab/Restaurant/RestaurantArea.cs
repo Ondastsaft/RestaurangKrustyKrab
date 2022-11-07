@@ -16,15 +16,15 @@ namespace RestaurantKrustyKrab.Restaurant
         internal List<Chef> ChefsAtArea = new List<Chef>();
         internal List<Company> CompaniesAtArea = new List<Company>();
         internal List<Guest> GuestsAtArea = new List<Guest>();
-        internal int PositionX { get; set; }
-        internal int PositionY { get; set; }
+        internal int FromTop { get; set; }
+        internal int FromLeft { get; set; }
 
-        public RestaurantArea(int positionX, int positionY)
+        public RestaurantArea(int fromTop, int fromLeft)
         {
             Frame = new string[1, 1];
             Name = "X";
-            PositionX = positionX;
-            PositionY = positionY;
+            FromTop = fromTop;
+            FromLeft = fromLeft;
         }
     }
 }

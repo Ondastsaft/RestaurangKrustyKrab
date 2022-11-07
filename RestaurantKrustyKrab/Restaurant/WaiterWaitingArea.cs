@@ -4,10 +4,10 @@ namespace RestaurantKrustyKrab.Restaurant
 {
     internal class WaiterWaitingArea : RestaurantArea
     {
-        public WaiterWaitingArea(int positionX, int positionY) : base(positionX, positionY)
+        public WaiterWaitingArea(int fromTop, int fromLeft) : base(fromTop, fromLeft)
         {
-            PositionX = positionX;
-            PositionY = positionY;
+            FromTop = fromTop;
+            FromLeft = fromLeft;
 
             for (int i = 0; i < 3; i++)
             {

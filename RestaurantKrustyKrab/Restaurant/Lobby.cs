@@ -7,8 +7,8 @@ namespace RestaurantKrustyKrab.Restaurant
     {
         internal string[,] MyDrawing { get; set; }
         internal string Name { get; set; }
-        internal int PositionX { get; set; }
-        internal int PositionY { get; set; }
+        internal int FromTop { get; set; }
+        internal int FromLeft { get; set; }
 
         internal List<RestaurantArea> MyRestaurantAreas { get; set; }
         public List<Table> TableList { get; set; }
@@ -34,13 +34,13 @@ namespace RestaurantKrustyKrab.Restaurant
 
             this.MyDrawing = new string[50, 200];
             this.Name = "Krusty Krab";
-            this.PositionX = 4;
-            this.PositionY = 2;
+            this.FromTop = 4;
+            this.FromLeft = 2;
             this.Time = 0;
         }
         public void LobbyRun()
         {
-            Window.OurDraw(this.Name, this.PositionX, this.PositionY, this.MyDrawing);
+            Window.OurDraw(this.Name, this.FromTop, this.FromLeft, this.MyDrawing);
             //PrintAllAreas();
             Draw();
             //while (true)
@@ -72,7 +72,7 @@ namespace RestaurantKrustyKrab.Restaurant
         {
             foreach (Waiter waiter in WaiterList)
             {
-                Console.SetCursorPosition(waiter.PositionX, waiter.PositionY);
+                Console.SetCursorPosition(waiter.FromTop, waiter.FromLeft);
                 if (waiter.Company != null)
                     Console.Write(waiter.Name + " " + waiter.Company.Guests[0]);
             }
@@ -89,7 +89,7 @@ namespace RestaurantKrustyKrab.Restaurant
             {
                 foreach (Company company in Reception.CompanyWaitingQueue)
                 {
-                    company.Guests[0].PositionY = (company.Guests[0].PositionY - 1);
+                    company.Guests[0].FromLeft = (company.Guests[0].FromLeft - 1);
                 }
             }
         }
@@ -133,8 +133,8 @@ namespace RestaurantKrustyKrab.Restaurant
                     //{
 
                     //}
-                    waiter.PositionX = 110;
-                    waiter.PositionY = 3;
+                    waiter.FromTop = 110;
+                    waiter.FromLeft = 3;
                     //WaiterList.Add(waiter);
                     waiter.Busy = true;
                     Console.Write(waiter.Name);
@@ -162,10 +162,10 @@ namespace RestaurantKrustyKrab.Restaurant
             if (Reception.CompanyWaitingQueue.Count > 0)
             {
                 ErasePosition(waiter);                
-                waiter.PositionX = 10;
-                waiter.PositionY = 21;
+                waiter.FromTop = 10;
+                waiter.FromLeft = 21;
                 WaitersAtReception.Add(waiter);
-                Console.SetCursorPosition((waiter.PositionX), waiter.PositionY);
+                Console.SetCursorPosition((waiter.FromTop), waiter.FromLeft);
                 waiter.Company = Reception.CompanyWaitingQueue.Dequeue();
 
                 busy = true;
@@ -190,9 +190,9 @@ namespace RestaurantKrustyKrab.Restaurant
         public void ErasePosition(Person person)
         {
 
-            Console.SetCursorPosition(person.PositionX, person.PositionY);
+            Console.SetCursorPosition(person.FromTop, person.FromLeft);
             Console.WriteLine("              ");
-            Console.SetCursorPosition(person.PositionX, person.PositionY);
+            Console.SetCursorPosition(person.FromTop, person.FromLeft);
 
         }
         public void EraseList<T>(List<T> personList)
@@ -200,7 +200,7 @@ namespace RestaurantKrustyKrab.Restaurant
             int row = 0;
             foreach (T person in personList)
             {
-                Console.SetCursorPosition((person as Person).PositionY, ((person as Person).PositionX + row));
+                Console.SetCursorPosition((person as Person).FromLeft, ((person as Person).FromTop + row));
                 Console.Write(new string(' ', (person as Person).Name.Length));
                 row++;
             }
@@ -211,7 +211,7 @@ namespace RestaurantKrustyKrab.Restaurant
             int row = 0;
             foreach (T person in personList)
             {
-                Console.SetCursorPosition((person as Person).PositionX, ((person as Person).PositionY + row));
+                Console.SetCursorPosition((person as Person).FromTop, ((person as Person).FromLeft + row));
                 Console.Write((person as Person).Name);
                 row++;
             }
@@ -224,11 +224,11 @@ namespace RestaurantKrustyKrab.Restaurant
                 if (j < 10)
                 {
                     j++;
-                    Console.SetCursorPosition(company.Guests[0].PositionX, company.Guests[0].PositionY);
+                    Console.SetCursorPosition(company.Guests[0].FromTop, company.Guests[0].FromLeft);
                     Console.Write("                          ");   //Rensar raden innan den skriver ut sällskapet
                     if (Reception.CompanyWaitingQueue.Count > j)
                     {
-                        Console.SetCursorPosition(company.Guests[0].PositionX, company.Guests[0].PositionY);
+                        Console.SetCursorPosition(company.Guests[0].FromTop, company.Guests[0].FromLeft);
                         if (company.Guests.Count == 1)
                         {
                             Console.Write("Company" + " " + j + ": " + company.Guests[0].Name); //Skriver endast ut sitt eget namn om sällskapet enbart är en person
@@ -239,7 +239,7 @@ namespace RestaurantKrustyKrab.Restaurant
                         }
                         else
                         {
-                            Console.SetCursorPosition(company.Guests[0].PositionX, company.Guests[0].PositionY);
+                            Console.SetCursorPosition(company.Guests[0].FromTop, company.Guests[0].FromLeft);
                             Console.Write("                          ");
                         }
                     }
@@ -275,7 +275,7 @@ namespace RestaurantKrustyKrab.Restaurant
         {
             foreach (RestaurantArea restaurantArea in MyRestaurantAreas)
             {
-                Window.OurDraw(restaurantArea.Name, restaurantArea.PositionY, restaurantArea.PositionX, restaurantArea.Frame);
+                Window.OurDraw(restaurantArea.Name, restaurantArea.FromLeft, restaurantArea.FromTop, restaurantArea.Frame);
             }
         }
         public Company GenerateCompany()

@@ -3,13 +3,13 @@
     public abstract class Person
     {
         public string Name { get; set; }
-        internal int PositionX { get; set; }
-        internal int PositionY { get; set; }
-        public Person(string name, int positionX, int positionY)
+        internal int FromTop { get; set; }
+        internal int FromLeft { get; set; }
+        public Person(string name, int fromTop, int fromLeft)
         {
             Name = name;
-            PositionX = positionX;
-            PositionY = positionY;
+            FromTop = fromTop;
+            FromLeft = fromLeft;
         }
     }
 }

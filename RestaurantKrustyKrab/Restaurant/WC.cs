@@ -6,11 +6,11 @@ namespace RestaurantKrustyKrab.Restaurant
     internal class WC : RestaurantArea
     {
    
-        public WC(int positionX, int positionY) : base(positionX, positionY)
+        public WC(int fromTop, int fromLeft) : base(fromTop, fromLeft)
         {
             Frame = new string[13, 12];
-            PositionX = positionX;
-            PositionY = positionY;
+            FromTop = fromTop;
+            FromLeft = fromLeft;
         }
     }
 }

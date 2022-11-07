@@ -4,11 +4,11 @@ namespace RestaurantKrustyKrab.Restaurant
 {
     internal class DishStation : RestaurantArea
     {
-        public DishStation(int positionX, int positionY) : base(positionX, positionY)
+        public DishStation(int fromTop, int fromLeft) : base(fromTop, fromLeft)
         {
             Frame = new string[8, 25];
-            PositionX = positionX;
-            PositionY = positionY;
+            FromTop = fromTop;
+            FromLeft = fromLeft;
         }
     }
 }

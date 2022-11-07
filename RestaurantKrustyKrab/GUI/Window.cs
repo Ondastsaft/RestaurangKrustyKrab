@@ -5,7 +5,7 @@
 
         public static void OurDraw(string header, int fromLeft, int fromTop, string[,] graphics)
         {
-            Console.SetCursorPosition(fromLeft, fromTop);
+            Console.SetCursorPosition(fromTop, fromLeft);
             Console.Write('┌' + " ");
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.Write(header);
@@ -14,10 +14,10 @@
             Console.WriteLine();
             for (int i = 0; i < graphics.GetLength(0); i++)
             {
-                Console.SetCursorPosition(fromLeft, fromTop + i + 1);
+                Console.SetCursorPosition(fromTop, fromLeft + i + 1);
                 Console.Write('│' + " " + new string(' ', graphics.GetLength(1)) + " " + '│');
             }
-            Console.SetCursorPosition(fromLeft, fromTop + graphics.GetLength(0) + 1);
+            Console.SetCursorPosition(fromTop, fromLeft + graphics.GetLength(0) + 1);
             Console.Write('└' + new String('─', graphics.GetLength(1) + 2) + '┘');
         }
 
@@ -38,7 +38,7 @@
             //if (width < header.Length + 4)
             //{ width = header.Length + 4; };
 
-            //Console.SetCursorPosition(fromLeft, fromTop);
+            //Console.SetCursorPosition(FromLeft, FromTop);
             //if (header != "")
             //{
             //    Console.Write('┌' + " ");
@@ -55,11 +55,11 @@
             //int maxRows = 0;
             //for (int j = 0; j < graphics.Length; j++)
             //{
-            //    Console.SetCursorPosition(fromLeft, fromTop + j + 1);
+            //    Console.SetCursorPosition(FromLeft, FromTop + j + 1);
             //    Console.WriteLine('│' + " " + graphics[j] + new String(' ', width - graphics[j].Length + 1) + '│');
             //    maxRows = j;
             //}
-            //Console.SetCursorPosition(fromLeft, fromTop + maxRows + 2);
+            //Console.SetCursorPosition(FromLeft, FromTop + maxRows + 2);
             //Console.Write('└' + new String('─', width + 2) + '┘');
 
         }

@@ -6,11 +6,11 @@ namespace RestaurantKrustyKrab.Restaurant
     {
         internal Queue<Company> CompanyWaitingQueue = new Queue<Company>();
 
-        public Reception(int positionX, int positionY) : base(positionX,positionY)
+        public Reception(int fromTop, int fromLeft) : base(fromTop, fromLeft)
         {
             Frame = new string[13, 25];
-            PositionX = positionX;
-            PositionY = positionY;
+            FromTop = fromTop;
+            FromLeft = fromLeft;
         }
     }
 }
