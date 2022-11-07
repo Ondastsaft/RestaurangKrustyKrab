@@ -11,6 +11,7 @@ namespace RestaurantKrustyKrab.People
         internal List<Dish> Menu { get; set; }
         internal List<Dish> Order { get; set; }
         internal int WipeTimer { get; set; }
+        internal int ServingTable { get; set; }
         public Waiter(string name, int serviceLevel, bool busy, int PositionX, int PositionY) : base(name, PositionX, PositionY)
         {
             Name = name;
@@ -18,6 +19,8 @@ namespace RestaurantKrustyKrab.People
             Busy = busy;
             Order = new List<Dish>();
             WipeTimer = -4;
+            ServingTable = -1;
+
 
         }
 

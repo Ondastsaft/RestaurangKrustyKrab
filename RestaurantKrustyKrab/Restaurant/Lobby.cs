@@ -22,7 +22,7 @@ namespace RestaurantKrustyKrab.Restaurant
         internal DishStation DishStation { get; set; }
         internal Reception Reception { get; set; }
         internal WC WC { get; set; }
-        
+
 
 
         public Lobby()
@@ -46,18 +46,11 @@ namespace RestaurantKrustyKrab.Restaurant
 
         internal void LobbyRun()
         {
-            Check_if_food_is_eaten();
-            PrintAll();
-            GlobalTimer++;
             Addguests();
-            PrintAll();
-            GlobalTimer++;
-            Sequence1(); //chefs takes orders and cooks, waiters greets guests, shows them a table, takes their order, and gives it to the kitchen
-            PrintAll();
-            GlobalTimer++;
-            Sequence2(); //chefs places their ready orders in "ReadyOrders", waiter takes the order from the kitchen and hands it to the right table
-            PrintAll();
-            GlobalTimer++;
+            Addguests();
+            Addguests();
+
+            Sequence();
         }
 
         internal void PrintAll()
@@ -84,12 +77,14 @@ namespace RestaurantKrustyKrab.Restaurant
                 Console.WriteLine("Name: " + chef.Name + " Busy? " + chef.Busy);
                 if (chef.Busy == true)
                 {
-                    Console.WriteLine("Time:" + chef.TimeStart);
+
                     Console.WriteLine("Preparing: ");
                     foreach (Dish dish in chef.Preparing)
                     {
                         Console.WriteLine("Dish: " + dish.NameOfDish + "Table: " + dish.DestinationTable);
                     }
+                    if (chef.TimeStart > 0)
+                        Console.WriteLine("Time:" + chef.TimeStart);
                 }
                 Console.WriteLine();
             }
@@ -98,16 +93,16 @@ namespace RestaurantKrustyKrab.Restaurant
             Console.WriteLine();
             if (Kitchen.Orders.Count > 0)
             {
-                foreach (Dish order in this.Kitchen.Orders)
+                foreach (Dish order in Kitchen.Orders)
                 {
                     Console.WriteLine("Guest: " + order.NameOfGuest + " Dish: " + order.NameOfDish + "Table: " + order.DestinationTable);
                 }
                 Console.WriteLine();
             }
             Console.WriteLine("Ready for delivery: ");
-            if (this.Kitchen.ReadyOrders.Count > 0)
+            if (Kitchen.ReadyOrders.Count > 0)
             {
-                foreach (Dish order in this.Kitchen.ReadyOrders)
+                foreach (Dish order in Kitchen.ReadyOrders)
                     Console.WriteLine(order);
             }
             Console.WriteLine();
@@ -153,9 +148,9 @@ namespace RestaurantKrustyKrab.Restaurant
                     }
 
                     Console.WriteLine();
-                }  
+                }
             }
-        } 
+        }
 
         void PrintWaiters()
         {
@@ -177,7 +172,7 @@ namespace RestaurantKrustyKrab.Restaurant
                 Console.WriteLine();
             }
 
-        } 
+        }
 
         void PrintCompanies()
         {
@@ -196,7 +191,7 @@ namespace RestaurantKrustyKrab.Restaurant
             }
 
 
-        } 
+        }
 
         internal void Generate()
         {
@@ -254,193 +249,267 @@ namespace RestaurantKrustyKrab.Restaurant
                 ChefList.Add(new Chef("Chef: " + i, 0, 0, 0));
         }
 
-        internal void Sequence1()
+        internal void Sequence()
         {
-            foreach (Chef chef in ChefList)
-            {
-                Chef_take_Order_from_kitchen_and_Prepare();
-            }
-            foreach (Waiter waiter in WaiterList)
-            {
-                Lead_guest_to_table_and_take_order_and_give_it_to_kitchen(waiter);
-            }
+            PrintAll();
+            GlobalTimer++;
 
-            void Lead_guest_to_table_and_take_order_and_give_it_to_kitchen(Waiter waiter)
-            {
+
+            GreetGuest();
+            PrintAll();
+            GlobalTimer++;
+
+            Lead_To_table();
+            PrintAll();
+            GlobalTimer++;
+
+            Take_Order();
+            PrintAll();
+            GlobalTimer++;
+
+            Give_Kitchen_Order();
+            PrintAll();
+            GlobalTimer++;
+
+
+            Chef_take_order();
+            PrintAll();
+            GlobalTimer++;
+
+            Chef_Prepare();
+            PrintAll();
+            GlobalTimer++;
+
+            Take_order_from_kitchen();
+            PrintAll();
+            GlobalTimer++;
+
+
+
+
+        }
+
+
+        void GreetGuest()
+        {
+            foreach (Waiter waiter in WaiterList)
                 if (waiter.Busy == false)
                 {
                     if (CompanyWaitingList.Count > 0)
                     {
                         waiter.Busy = true;
                         waiter.CompanyProperty = CompanyWaitingList.Dequeue();
-                        foreach (Table table in TableList)
-                        {
-                            if (table.Seats >= waiter.CompanyProperty.Guests.Count && table.IsAvailable == true)
-                            {
-                                table.BookedSeats.Add(waiter.CompanyProperty);
-                                table.IsAvailable = false;
-                                table.WaitingForFood = true;
-
-                                Take_Order();
-                                Give_Kitchen_Order();
-                                break;
-                            }
-                            void Take_Order()
-                            {
-                                foreach (Guest guest in waiter.CompanyProperty.Guests)
-                                {
-                                    waiter.Order.Add(new Dish("Placeholder ", 0, 0, table.TableNumber, guest.Name));
-                                    table.Orders.Add(guest.Name, "Placeholder");  //orders är en hashtable
-                                }
-                            }
-                            void Give_Kitchen_Order()
-                            {
-                                foreach (Dish dish in waiter.Order)
-                                {
-                                    this.Kitchen.Orders.Enqueue(dish); //kitchen.order is a list of dishes
-                                }
-                                waiter.Order.Clear();
-                                waiter.CompanyProperty.Guests.Clear();
-                                waiter.Busy = false;
-                            }
-                        }
                     }
                 }
+        }
 
-            }
+        void Lead_To_table()
 
-            void Chef_take_Order_from_kitchen_and_Prepare()
+        {
+            foreach (Waiter waiter in WaiterList)
             {
-                foreach (Chef chef in ChefList)
+                if (waiter.Busy == true && waiter.CompanyProperty.Guests.Count > 0)
                 {
+                    foreach (Table table in TableList)
                     {
-                        if (chef.Busy == false && Kitchen.Orders.Count > 0)
+                        if (table.Seats >= waiter.CompanyProperty.Guests.Count && table.IsAvailable == true && waiter.CompanyProperty.Guests.Count > 0)
                         {
-                                chef.Busy = true;
-                                chef.Preparing.Add(Kitchen.Orders.Dequeue());
-                                if (Kitchen.Orders.Count > 0)
-                                {
-                                foreach (Dish dish in Kitchen.Orders.ToList())
-                                    if (dish.DestinationTable == chef.Preparing[0].DestinationTable)
-                                        chef.Preparing.Add(Kitchen.Orders.Dequeue());
-                                }
-                                chef.TimeStart = GlobalTimer;
-                                break;
+                            waiter.ServingTable = table.TableNumber;
+                            table.BookedSeats.Add(waiter.CompanyProperty);
+                            table.IsAvailable = false;
+                            table.WaitingForFood = true;
+                            break;
                         }
                     }
                 }
             }
         }
 
-        internal void Sequence2()
+        void Take_Order()
+
+        {
+            foreach (Waiter waiter in WaiterList)
+            {
+                if (waiter.Busy == true && waiter.CompanyProperty.Guests.Count > 0)
+                {
+                    foreach (Guest guest in waiter.CompanyProperty.Guests)
+                    {
+                        waiter.Order.Add(new Dish("Placeholder ", 0, 0, waiter.ServingTable, guest.Name));
+                        TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, "Placeholder");  //orders är en hashtable
+                    }
+
+
+                }
+            }
+        }
+
+        void Give_Kitchen_Order()
+
+        {
+            foreach (Waiter waiter in WaiterList)
+            {
+                if (waiter.Order.Count > 0)
+                {
+                    foreach (Dish dish in waiter.Order)
+                    {
+                        Kitchen.Orders.Enqueue(dish); //kitchen.order is a list of dishes
+                    }
+                    waiter.Order.Clear();
+                    waiter.CompanyProperty.Guests.Clear();
+                    waiter.Busy = false;
+                }
+
+            }
+
+        }
+
+        void Chef_take_order()
+
         {
             foreach (Chef chef in ChefList)
             {
-                Chef_Order_Made(chef);
-            }
-
-            foreach (Waiter waiter in WaiterList)
-            {
-                if (waiter.Busy == false)
+                if (chef.Busy == false && Kitchen.Orders.Count > 0)
                 {
-                    waiter.Busy = true;
-                    Take_order_from_kitchen(waiter);
-                    Give_food_to_table(waiter);
-                    waiter.Busy = false;
-                    break;
-                }
-               
-            }
+                    chef.Busy = true;
+                    chef.Preparing.Add(Kitchen.Orders.Dequeue());
 
-
-            void Chef_Order_Made(Chef chef)
-            {
-                if (chef.TimeStart == (GlobalTimer - 10))
-                {
-                    foreach (Dish dish in chef.Preparing)
+                    if (Kitchen.Orders.Count > 0)
                     {
-                        Kitchen.ReadyOrders.Enqueue(dish);
+                        foreach (Dish dish in Kitchen.Orders.ToList())
+                            if (dish.DestinationTable == chef.Preparing[0].DestinationTable)
+                                chef.Preparing.Add(Kitchen.Orders.Dequeue());
                     }
-                    chef.Preparing.Clear();
-                    chef.Busy = false;
-                    chef.TimeStart = -11;
                 }
             }
-            void Take_order_from_kitchen(Waiter waiter)
+
+        }
+
+        void Chef_Prepare()
+        {
+            foreach (Chef chef in ChefList)
             {
-                if (Kitchen.ReadyOrders.Count > 0)
+                if (chef.Preparing.Count > 0 && chef.Busy == true)
+                    chef.TimeStart = GlobalTimer;
+            }
+
+
+        }
+
+        void Take_order_from_kitchen()
+        {
+            foreach (Waiter waiter in WaiterList)
+
+                if (Kitchen.ReadyOrders.Count > 0 && waiter.Busy == false)
                 {
                     waiter.Order.Add(Kitchen.ReadyOrders.Dequeue());
                     foreach (Dish dish in Kitchen.ReadyOrders.ToList())
                         if (dish.DestinationTable == waiter.Order[0].DestinationTable)
                             Kitchen.Orders.Dequeue();
                 }
-                
-            }
-            void Give_food_to_table(Waiter waiter)
-            {
-                foreach(Table table in TableList)
-                {
-                    if (waiter.Order.Count > 0)
-                    {
-                        if (waiter.Order[0].DestinationTable == table.TableNumber)
-                        {
-                            table.RecievedOrder = true;
-                            waiter.Order.Clear();
-                            waiter.Busy = false;
-                            table.EatTimer = GlobalTimer;
-                            break;
-                        }
-                    }  
-                }
-            }
+
         }
-
-        internal void Sequence3()  //not done
-        {
-            foreach(Waiter waiter in WaiterList)
-            {
-                if (waiter.Busy == false)
-                {
-                    waiter.Busy = true;
-                    foreach (Table table in TableList)
-
-                        if (table.Finished_Eating == true)
-                        {
-                            tableReset(table);
-                            waiter.WipeTimer = GlobalTimer;
-                            table.Clean = false;
-                            table.WipedBy.Add(waiter);
-                            break;
-
-                        }
-                }
-            }
-                    
-
-            static void tableReset(Table table)
-            {
-                table.WaitingForFood = false;
-                table.IsAvailable = true;
-                table.EatTimer = -21;
-                table.Orders.Clear();
-            }
-        }
-        internal void Check_if_food_is_eaten()
-        {
-            foreach (Table table in TableList)
-            {
-                if (table.EatTimer == (GlobalTimer - 20))
-                {
-                    table.Finished_Eating = true;
-                }
-            }
-        }
-
     }
 }
 
 
-    
-        
-    
+//internal void Sequence2()
+//{
+//    foreach (Chef chef in ChefList)
+//    {
+//        Chef_Order_Made(chef);
+//    }
+
+//    foreach (Waiter waiter in WaiterList)
+//    {
+//        if (waiter.Busy == false)
+//        {
+//            waiter.Busy = true;
+//            Take_order_from_kitchen(waiter);
+//            Give_food_to_table(waiter);
+//            waiter.Busy = false;
+//            break;
+//        }
+
+//    }
+
+
+//    void Chef_Order_Made(Chef chef)
+//    {
+//        if (chef.TimeStart == (GlobalTimer - 10))
+//        {
+//            foreach (Dish dish in chef.Preparing)
+//            {
+//                Kitchen.ReadyOrders.Enqueue(dish);
+//            }
+//            chef.Preparing.Clear();
+//            chef.Busy = false;
+//            chef.TimeStart = -11;
+//        }
+//    }
+  
+//    void Give_food_to_table(Waiter waiter)
+//    {
+//        foreach (Table table in TableList)
+//        {
+//            if (waiter.Order.Count > 0)
+//            {
+//                if (waiter.Order[0].DestinationTable == table.TableNumber)
+//                {
+//                    table.RecievedOrder = true;
+//                    waiter.Order.Clear();
+//                    waiter.Busy = false;
+//                    table.EatTimer = GlobalTimer;
+//                    break;
+//                }
+//            }
+//        }
+//    }
+//}
+
+//internal void Sequence3()  //not done
+//{
+//    foreach (Waiter waiter in WaiterList)
+//    {
+//        if (waiter.Busy == false)
+//        {
+//            waiter.Busy = true;
+//            foreach (Table table in TableList)
+
+//                if (table.Finished_Eating == true)
+//                {
+//                    tableReset(table);
+//                    waiter.WipeTimer = GlobalTimer;
+//                    table.Clean = false;
+//                    table.WipedBy.Add(waiter);
+//                    break;
+
+//                }
+//        }
+//    }
+
+
+//    static void tableReset(Table table)
+//    {
+//        table.WaitingForFood = false;
+//        table.IsAvailable = true;
+//        table.EatTimer = -21;
+//        table.Orders.Clear();
+//    }
+//}
+//internal void Check_if_food_is_eaten()
+//{
+//    foreach (Table table in TableList)
+//    {
+//        if (table.EatTimer == (GlobalTimer - 20))
+//        {
+//            table.Finished_Eating = true;
+//        }
+//    }
+//}
+
+
+
+
+
+
+
