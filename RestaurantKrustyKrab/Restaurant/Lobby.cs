@@ -133,6 +133,7 @@ namespace RestaurantKrustyKrab.Restaurant
         {
 
             foreach (Table table in TableList)
+
                 if (table.Clean == false)
                 {
                     Console.WriteLine("This table is being wiped by " + table.WipedBy[0].Name);
@@ -234,7 +235,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
         internal Company GenerateCompany()
         {
-            Company company = new Company(this.CompanyWaitingList.Count); //Skapar ett nytt company objekt med offset som inparameter, vilket är storleken på sällskapet
+            Company company = new Company(this.CompanyWaitingList.Count);
             return company;
         }
 
@@ -255,7 +256,7 @@ namespace RestaurantKrustyKrab.Restaurant
                 ChefList.Add(new Chef("Chef: " + i, 0, 0, 0));
         }
 
-        internal void Sequence() // resten finns i program
+        internal void Sequence() 
         {
             foreach (Waiter waiter in WaiterList)
                 waiter.Busy = false;
@@ -273,7 +274,7 @@ namespace RestaurantKrustyKrab.Restaurant
                 Give_food_to_table();
                 background_methods();
 
-            } //Kollar ifall det finns färdig mat i köket
+            } 
 
             GreetGuest();
             background_methods();
@@ -299,11 +300,12 @@ namespace RestaurantKrustyKrab.Restaurant
             {
                 TableTimer();
                 ChefTimer();
+
                 GlobalTimer++;
                 Chef_readies_an_order();
                 Check_if_food_has_been_eaten();
                 Waiter_start_cleaning();
-                //Check_if_table_has_been_wiped();
+                Check_if_table_has_been_wiped();
                 PrintAll();
 
             }
@@ -358,8 +360,6 @@ namespace RestaurantKrustyKrab.Restaurant
                         waiter.Order.Add(new Dish("Placeholder ", 0, 0, waiter.ServingTable, guest.Name));
                         TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, "Placeholder");  //orders är en hashtable
                     }
-
-
                 }
             }
         }
@@ -458,6 +458,36 @@ namespace RestaurantKrustyKrab.Restaurant
             }
         }
 
+        
+        internal void Wipetimer()
+        {
+            foreach (Table table in TableList)
+            {
+                if (table.Clean == false)
+                    table.WipeTimer++;
+            }
+        }
+        internal void TableTimer()
+        {
+            foreach (Table table in TableList)
+            {
+                if (table.RecievedOrder == true)
+                    table.EatTimer = table.EatTimer +10;
+            }
+
+        }
+
+        internal void ChefTimer()
+        {
+            foreach (Chef chef in ChefList)
+            {
+                if (chef.Preparing.Count > 0 && chef.Busy == true)
+                {
+                    chef.TimeStart = chef.TimeStart + 5;
+                }
+            }
+        }
+
         internal void Chef_readies_an_order()
 
         {
@@ -478,27 +508,6 @@ namespace RestaurantKrustyKrab.Restaurant
             }
         }
 
-        internal void TableTimer()
-        {
-            foreach (Table table in TableList)
-            {
-                if (table.RecievedOrder == true)
-                    table.EatTimer= table.EatTimer +10;
-            }
-
-        }
-
-        internal void ChefTimer()
-        {
-            foreach (Chef chef in ChefList)
-            {
-                if (chef.Preparing.Count > 0 && chef.Busy == true)
-                {
-                    chef.TimeStart++;
-                }
-            }
-        }
-
         internal void Check_if_food_has_been_eaten()
         {
             foreach (Table table in TableList)
@@ -508,19 +517,19 @@ namespace RestaurantKrustyKrab.Restaurant
             }
         }
 
-        //internal void Check_if_table_has_been_wiped()
-        //{
-        //    foreach (Table table in TableList)
-        //    {
-        //        if (table.WipeTimer == (GlobalTimer - 3))
-        //        {
-        //            table.Clean = true;
-        //            WaiterList.Add(table.WipedBy[0]);
-        //            table.WipedBy.Clear();
-        //        }
+        internal void Check_if_table_has_been_wiped() // also removes the waiter from table.WipedBy 
+        {
+            foreach (Table table in TableList)
+            {
+                if (table.WipeTimer >= (table.WipeEnd))
+                {
+                    table.Clean = true;
+                    WaiterList.Add(table.WipedBy[0]);
+                    table.WipedBy.Clear();
+                }
 
-        //    }
-        //}
+            }
+        }
 
 
 
@@ -536,7 +545,8 @@ namespace RestaurantKrustyKrab.Restaurant
                         {
                             waiter.Busy = true;
                             tableReset(table);
-                            waiter.WipeTimer = GlobalTimer;
+                            table.WipeTimer = GlobalTimer;
+                            table.WipeEnd = table.WipeTimer + 3;
                             table.Clean = false;
                             table.WipedBy.Add(waiter);
                             WaiterList.Remove(waiter);
