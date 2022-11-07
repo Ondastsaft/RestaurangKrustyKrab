@@ -20,7 +20,7 @@ namespace RestaurantKrustyKrab
         //    }
         //}
 
-        //private void LoopQueue()
+        //private void CompanyArrivalRandomizer()
         //{
         //    Random random = new Random();
         //    int number = random.Next(0, 100);

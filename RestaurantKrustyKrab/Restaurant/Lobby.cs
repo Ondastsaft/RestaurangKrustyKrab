@@ -39,21 +39,39 @@ namespace RestaurantKrustyKrab.Restaurant
             Draw();
             PrintAllAreas();
 
-            //while (true)
-            //{
-            //    LoopRestaurant();
-            Console.ReadKey();
-            //}
+            while (true)
+            {
+                LoopRestaurant();
+                Console.ReadKey();
+            }
         }
         public void LoopRestaurant()
         {
-
+            CompanyArrivalRandomizer();
+            PrintAllAreas();
         }
         public void PrintAllAreas()
         {
             foreach (var restaurantArea in MyRestaurantAreas)
             {
                 PrintRestaurantArea(restaurantArea.Value as RestaurantArea);
+            }
+            PrintList((MyRestaurantAreas["Reception"] as Reception).CompanyWaitingQueue);
+        }
+        private void CompanyArrivalRandomizer()
+        {
+            Random random = new Random();
+            int number = random.Next(0, 100);
+            if (number < 50 && MyRestaurantAreas["Reception"].CompaniesAtArea.Count < 10)
+            {
+                (MyRestaurantAreas["Reception"] as Reception).CompanyWaitingQueue.Enqueue(new Company((MyRestaurantAreas["Reception"] as Reception).CompanyWaitingQueue.Count));
+            }
+            if (number > 50 && MyRestaurantAreas["Reception"].CompaniesAtArea.Count > 0)   //Här någonstans kan vi ha en bool som en waiter styr när vi dequeuear
+            {
+                foreach (Company company in MyRestaurantAreas["Reception"].CompaniesAtArea)
+                {
+                    company.Guests[0].FromLeft = (company.Guests[0].FromLeft - 1);
+                }
             }
         }
 
@@ -110,6 +128,7 @@ namespace RestaurantKrustyKrab.Restaurant
             PrintList(restaurantArea.CompaniesAtArea);
             PrintList(restaurantArea.WaitersAtArea);
             PrintList(restaurantArea.ChefsAtArea);
+            
         }
         private void EraseRestaurantArea(RestaurantArea restaurantArea)
         {
@@ -145,7 +164,16 @@ namespace RestaurantKrustyKrab.Restaurant
                 row++;
             }
         }
-
+        public void PrintList<T>(Queue<T> companyList)
+        {
+            int row = 0;
+            foreach (T company in companyList)
+            {
+                Console.SetCursorPosition((company as Company).Guests[0].FromTop, ((company as Company).Guests[0].FromLeft + row));
+                Console.Write((company as Company).Guests[0].Name);
+                //row++;
+            }
+        }
         public void PrintList<T>(List<T> personList)
         {
             int row = 0;
