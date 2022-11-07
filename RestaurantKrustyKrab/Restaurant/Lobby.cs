@@ -378,6 +378,7 @@ namespace RestaurantKrustyKrab.Restaurant
                     case 1:
                         waiter.Order.Add(new Cod(waiter.ServingTable, guest.Name));
                         TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, new Cod(waiter.ServingTable, guest.Name));
+                        guest.Order.Add(new Cod(waiter.ServingTable, guest.Name));
                             break;
                     case 2:
                         waiter.Order.Add(new SalmonPie(waiter.ServingTable, guest.Name));
