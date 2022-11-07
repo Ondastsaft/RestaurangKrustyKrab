@@ -1,4 +1,5 @@
 ﻿using RestaurantKrustyKrab.People;
+using System.Xml.Linq;
 
 namespace RestaurantKrustyKrab.Restaurant
 {
@@ -14,7 +15,7 @@ namespace RestaurantKrustyKrab.Restaurant
         internal Waiter WaiterAtTable { get; set; }
 
 
-        public Table(int seats, int quality, int fromTop, int fromLeft, int tableNumber) : base(fromTop, fromLeft)
+        public Table(string name, int fromTop, int fromLeft, int seats, int quality, int tableNumber) : base(name, fromTop, fromLeft)
         {
             Frame = new string[4, 20];
             Seats = seats;

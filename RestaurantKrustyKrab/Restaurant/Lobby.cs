@@ -1,5 +1,6 @@
 ﻿using RestaurantKrustyKrab.GUI;
 using RestaurantKrustyKrab.People;
+using System.Collections;
 
 namespace RestaurantKrustyKrab.Restaurant
 {
@@ -10,7 +11,7 @@ namespace RestaurantKrustyKrab.Restaurant
         internal int FromTop { get; set; }
         internal int FromLeft { get; set; }
 
-        internal List<RestaurantArea> MyRestaurantAreas { get; set; }
+        internal Dictionary<string, RestaurantArea> MyRestaurantAreas { get; set; }
 
         internal int CounterRestaurant { get; set; }
 
@@ -19,13 +20,13 @@ namespace RestaurantKrustyKrab.Restaurant
 
         public Lobby()
         {
-            this.MyRestaurantAreas = new List<RestaurantArea>();
-            MyRestaurantAreas.Add(new Kitchen(3, 157));
+            MyRestaurantAreas = new Dictionary<string, RestaurantArea>();
+            MyRestaurantAreas.Add("Kitchen", new Kitchen("Kitchen", 3, 157));
             MyRestaurantAreas = GenerateTables(MyRestaurantAreas);
-            MyRestaurantAreas.Add(new Reception(3, 31));
-            MyRestaurantAreas.Add(new WC(25, 188));
-            MyRestaurantAreas.Add(new WaiterWaitingArea(110, 3));
-            MyRestaurantAreas.Add(new DishStation(3, 128));
+            MyRestaurantAreas.Add("Reception", new Reception("Reception", 3, 31));
+            MyRestaurantAreas.Add("WC", new WC("WC", 25, 188));
+            MyRestaurantAreas.Add("WaiterWaitingArea", new WaiterWaitingArea("Waiters",110, 3));
+            MyRestaurantAreas.Add("DishStation", new DishStation("Washing Bears", 3, 128));
 
             this.MyDrawing = new string[50, 200];
             this.Name = "Krusty Krab";
@@ -36,12 +37,12 @@ namespace RestaurantKrustyKrab.Restaurant
         public void LobbyRun()
         {
             Window.OurDraw(this.Name, this.FromTop, this.FromLeft, this.MyDrawing);
-            //PrintAllAreas();
-            Draw();
+            PrintAllAreas();
+            //Draw();
             //while (true)
             //{
             //    LoopRestaurant();
-            //    Console.ReadKey();
+            Console.ReadKey();
             //}
         }
         public void LoopRestaurant()
@@ -50,9 +51,9 @@ namespace RestaurantKrustyKrab.Restaurant
         }
         public void PrintAllAreas()
         {
-            foreach (RestaurantArea area in MyRestaurantAreas)
-            {
-                PrintRestaurantArea(area);
+            foreach (var restaurantArea in MyRestaurantAreas)
+            {             
+                PrintRestaurantArea(restaurantArea.Value as RestaurantArea);
             }
         }
 
@@ -125,7 +126,7 @@ namespace RestaurantKrustyKrab.Restaurant
             return busy;
         }
 
- 
+
         public void ErasePosition(Person person)
         {
 
@@ -157,38 +158,42 @@ namespace RestaurantKrustyKrab.Restaurant
         }
 
 
-    
-    public static void TimeCounter()
-    {
+
+        public static void TimeCounter()
+        {
+
+        }
+
+        public Dictionary<string, RestaurantArea> GenerateTables(Dictionary<string, RestaurantArea> restaurantAreas)
+        {
+            int fromTop = 24;
+            int fromLeft = 12;
+
+            for (int i = 0; i < 10; i++)
+            {
+                
+                int seats = i < 4 ? 2 : 4;
+                int quality = i == 4 ? 1 : 2;
+                quality = i ==  9 ? 1 : 2;
+           
+                restaurantAreas.Add("Table " + i+1, new Table($"Table {i+1} ", fromTop, fromLeft, seats, quality, i+1));
+                fromLeft = i == 4? 12 : fromLeft + 30;
+
+                fromTop =  i== 4? fromTop+16: fromTop;
+                
+            }
+            return restaurantAreas;
+        }
+
+
+        //public void Draw()
+        //{
+
+        //    foreach (var restaurantArea in MyRestaurantAreas)
+        //    {
+        //        Window.OurDraw();
+        //    }
+        //}
 
     }
-
-    public List<RestaurantArea> GenerateTables(List<RestaurantArea> restaurantAreaList)
-    {
-        int top = 12;
-        int tablenumber = 1;
-        for (int i = 0; i < 5; i++)
-        {
-            restaurantAreaList.Add(new Table(2, 0, 24, top, tablenumber));
-            tablenumber++; top = top + 30;
-        }
-        top = 12;
-        for (int i = 0; i < 5; i++)
-        {
-            restaurantAreaList.Add(new Table(2, 0, 40, top, tablenumber));
-            tablenumber++; top = top + 30;
-        }
-        return restaurantAreaList;
-
-    }
-
-    public void Draw()
-    {
-        foreach (RestaurantArea restaurantArea in MyRestaurantAreas)
-        {
-            Window.OurDraw(restaurantArea.Name, restaurantArea.FromLeft, restaurantArea.FromTop, restaurantArea.Frame);
-        }
-    }
-   
-}
 }

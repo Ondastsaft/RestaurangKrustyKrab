@@ -6,7 +6,7 @@ namespace RestaurantKrustyKrab.Restaurant
     {
         internal bool FoodIsReady = true;
 
-        public Kitchen(int fromTop, int fromLeft) : base(fromTop, fromLeft)
+        public Kitchen(string name, int fromTop, int fromLeft) : base(name, fromTop, fromLeft)
         {
             Frame = new string[12, 45];
             FromTop = fromTop;
@@ -14,8 +14,8 @@ namespace RestaurantKrustyKrab.Restaurant
 
             for (int i = 0; i < 5; i++)
             {
-                string name = "Chef " + (i + 1);
-                ChefsAtArea.Add(new Chef(name, 0, this.FromTop, this.FromLeft));
+                string chefName = "Chef " + (i + 1);
+                ChefsAtArea.Add(new Chef(chefName, 0, this.FromTop, this.FromLeft));
             }
         }
     }

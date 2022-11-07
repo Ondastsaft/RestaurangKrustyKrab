@@ -1,9 +1,4 @@
-﻿using System;
-using RestaurantKrustyKrab.People;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RestaurantKrustyKrab.People;
 
 namespace RestaurantKrustyKrab.Restaurant
 {
@@ -12,16 +7,21 @@ namespace RestaurantKrustyKrab.Restaurant
         internal string[,] Frame { get; set; }
         //internal Dictionary<string, RestaurantArea> Area { get; set; }
         internal string Name { get; set; }
-        internal List<Waiter> WaitersAtArea = new List<Waiter>();
-        internal List<Chef> ChefsAtArea = new List<Chef>();
-        internal List<Company> CompaniesAtArea = new List<Company>();
-        internal List<Guest> GuestsAtArea = new List<Guest>();
-        internal List<Table> TableList = new List<Table>();
+        internal List<Waiter> WaitersAtArea { get; set; }
+        internal List<Chef> ChefsAtArea { get; set; }
+        internal List<Company> CompaniesAtArea { get; set; }
+        internal List<Guest> GuestsAtArea { get; set; }
+
         internal int FromTop { get; set; }
         internal int FromLeft { get; set; }
 
-        public RestaurantArea(int fromTop, int fromLeft)
+        public RestaurantArea(string name, int fromTop, int fromLeft)
         {
+            Name = name;
+            WaitersAtArea = new List<Waiter>();
+            ChefsAtArea = new List<Chef>();
+            CompaniesAtArea = new List<Company>();
+            GuestsAtArea = new List<Guest>();
             Frame = new string[1, 1];
             Name = "X";
             FromTop = fromTop;

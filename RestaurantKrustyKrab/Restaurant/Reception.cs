@@ -6,7 +6,7 @@ namespace RestaurantKrustyKrab.Restaurant
     {
         internal Queue<Company> CompanyWaitingQueue = new Queue<Company>();
 
-        public Reception(int fromTop, int fromLeft) : base(fromTop, fromLeft)
+        public Reception(string name, int fromTop, int fromLeft) : base(name, fromTop, fromLeft)
         {
             Frame = new string[13, 25];
             FromTop = fromTop;
