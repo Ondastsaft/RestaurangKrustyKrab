@@ -31,7 +31,7 @@ namespace RestaurantKrustyKrab.Restaurant
             TableNumber = tableNumber;
             BookedSeats = new List<Company>();
             Orders = new Hashtable();
-            WaitingForFood = waitingForFood;
+            WaitingForFood = false;
             RecievedOrder = false;
             EatTimer = -21;
             Finished_Eating = false;

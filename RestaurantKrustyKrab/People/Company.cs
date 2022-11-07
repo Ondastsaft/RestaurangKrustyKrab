@@ -13,6 +13,7 @@
             this.Guests = new List<Guest>();
             for(int i = 0; i < guests; i++)
             {
+                
                 Guests.Add(new Guest(GetName(), 32, 4+i+offSetRow));
             }
             this.timeWaiting = 0;

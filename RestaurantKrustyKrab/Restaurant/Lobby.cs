@@ -64,6 +64,24 @@ namespace RestaurantKrustyKrab.Restaurant
             Console.ReadKey();
         }
 
+        void PrintCompanies()
+        {
+            int i = 1;
+            Console.WriteLine("QUEUE");
+
+            foreach (Company company in this.CompanyWaitingList)
+            {
+
+                Console.WriteLine("Company: " + i);
+
+                i++;
+                for (int j = 0; j < company.Guests.Count; j++)
+
+                    Console.WriteLine(company.Guests[j].Name);
+                Console.WriteLine("-----------------------------------");
+            }
+        }
+
         void PrintKitchen()
 
         {
@@ -87,7 +105,7 @@ namespace RestaurantKrustyKrab.Restaurant
                         Console.WriteLine("Time:" + chef.TimeStart);
                         Console.WriteLine("TimeEnd: " + chef.TimeEnd);
                     }
-                        
+
                 }
                 Console.WriteLine();
             }
@@ -116,20 +134,14 @@ namespace RestaurantKrustyKrab.Restaurant
 
             foreach (Table table in TableList)
             {
-                Console.Write("Tablenumber: " + table.TableNumber + " Seats " + table.Seats + " Available? " + table.IsAvailable + " Waiting for food? " + table.WaitingForFood);
+                Console.Write("Tablenumber: " + table.TableNumber + " Seats " + table.Seats + " Available? " + table.IsAvailable + " Waiting for food? " + table.WaitingForFood + " Recieved order " + table.RecievedOrder);
                 Console.WriteLine(" Finished eating? " + table.Finished_Eating);
 
 
                 if (table.EatTimer == (GlobalTimer - 20))
                     table.Finished_Eating = true;
 
-                if (table.RecievedOrder == true)
-                {
-                    foreach (DictionaryEntry de in table.Orders)
-                    {
-                        Console.WriteLine("Guest: " + de.Key + " Dish: " + de.Value);
-                    }
-                }
+               
                 else
                 {
                     if (table.IsAvailable == false)
@@ -176,22 +188,7 @@ namespace RestaurantKrustyKrab.Restaurant
             }
         }
 
-        void PrintCompanies()
-        {
-            int i = 1;
-
-            foreach (Company company in this.CompanyWaitingList)
-            {
-
-                Console.WriteLine("Company: " + i);
-
-                i++;
-                for (int j = 0; j < company.Guests.Count; j++)
-
-                    Console.WriteLine(company.Guests[j].Name);
-                Console.WriteLine("-----------------------------------");
-            }
-        }
+        
 
         internal void Generate()
         {
@@ -251,18 +248,22 @@ namespace RestaurantKrustyKrab.Restaurant
 
         internal void Sequence() // resten finns i program
         {
+            foreach (Waiter waiter in WaiterList)
+                waiter.Busy = false;
 
-            
-            void background_methods()
+            background_methods();
+
+            if (Kitchen.Orders.Count > 0)
             {
-                ChefTimer();
-                GlobalTimer++;
-                Check_if_food_is_ready();
-                Check_if_food_is_eaten();
-                Check_if_table_has_been_wiped();
-                PrintAll();
+                background_methods();
 
-            }
+                Take_order_from_kitchen();
+                background_methods();
+
+                Give_food_to_table();
+                background_methods();
+
+            } //Kollar ifall det finns färdig mat i köket
 
             GreetGuest();
             background_methods();
@@ -282,17 +283,19 @@ namespace RestaurantKrustyKrab.Restaurant
             Chef_Prepare();
             background_methods();
 
-            Take_order_from_kitchen();
-            background_methods();
+            //Waiter_start_cleaning();
+            //background_methods();
 
-            Give_food_to_table();
-            background_methods();
+            void background_methods()
+            {
+                ChefTimer();
+                GlobalTimer++;
+                Chef_readies_an_order();
+                Check_if_food_is_eaten();
+                Check_if_table_has_been_wiped();
+                PrintAll();
 
-            //waiter take payment
-
-            Waiter_start_cleaning();
-            background_methods();
-
+            }
         }
 
         internal void Check_if_food_is_eaten()
@@ -364,7 +367,7 @@ namespace RestaurantKrustyKrab.Restaurant
         {
             foreach (Waiter waiter in WaiterList)
             {
-                if (waiter.Order.Count > 0)
+                if (waiter.Busy = true && waiter.Order.Count > 0)
                 {
                     foreach (Dish dish in waiter.Order)
                     {
@@ -374,9 +377,7 @@ namespace RestaurantKrustyKrab.Restaurant
                     waiter.CompanyProperty.Guests.Clear();
                     waiter.Busy = false;
                 }
-
             }
-
         }
 
         void Chef_take_order()
@@ -402,7 +403,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
         void Chef_Prepare()
         {
-            
+
             foreach (Chef chef in ChefList)
             {
                 if (chef.Preparing.Count > 0 && chef.Busy == true && chef.Cooking == false)
@@ -411,7 +412,7 @@ namespace RestaurantKrustyKrab.Restaurant
                     chef.TimeEnd = chef.TimeStart + 10;
                     chef.Cooking = true;
                 }
-                    
+
             }
 
 
@@ -421,15 +422,16 @@ namespace RestaurantKrustyKrab.Restaurant
         {
             foreach (Waiter waiter in WaiterList)
 
-                if (Kitchen.ReadyOrders.Count > 0 && waiter.Busy == false)
+                if (Kitchen.ReadyOrders.Count > 0)
                 {
                     waiter.Busy = true;
                     waiter.Order.Add(Kitchen.ReadyOrders.Dequeue());
                     foreach (Dish dish in Kitchen.ReadyOrders.ToList())
                         if (dish.DestinationTable == waiter.Order[0].DestinationTable)
-                            Kitchen.Orders.Dequeue();
+                            Kitchen.ReadyOrders.Dequeue();
                 }
         }
+
         void Give_food_to_table()
 
         {
@@ -441,6 +443,7 @@ namespace RestaurantKrustyKrab.Restaurant
                     {
                         if (waiter.Order[0].DestinationTable == table.TableNumber)
                         {
+                            table.WaitingForFood = false;
                             table.RecievedOrder = true;
                             waiter.Order.Clear();
                             waiter.Busy = false;
@@ -452,7 +455,7 @@ namespace RestaurantKrustyKrab.Restaurant
             }
         }
 
-        internal void Check_if_food_is_ready()
+        internal void Chef_readies_an_order()
 
         {
             foreach (Chef chef in ChefList)
@@ -465,12 +468,13 @@ namespace RestaurantKrustyKrab.Restaurant
                     }
                     chef.Preparing.Clear();
                     chef.Busy = false;
-                    
+                    Kitchen.FoodIsReady = true;
+
                 }
             }
         }
 
-        internal void ChefTimer ()
+        internal void ChefTimer()
         {
             foreach (Chef chef in ChefList)
             {
@@ -495,39 +499,36 @@ namespace RestaurantKrustyKrab.Restaurant
             }
         } //deletes the waiter from table and adds it back to waiterlist
 
-        internal void Waiter_start_cleaning()  //not done
-        {
-            foreach (Waiter waiter in WaiterList)
-            {
-                if (waiter.Busy == false)
-                {
-                    waiter.Busy = true;
-                    foreach (Table table in TableList)
+        //internal void Waiter_start_cleaning()  //not done
+        //{
+        //    foreach (Table table in TableList)
 
-                        if (table.Finished_Eating == true)
-                        {
-                            tableReset(table);
-                            waiter.WipeTimer = GlobalTimer;
-                            table.Clean = false;
-                            table.WipedBy.Add(waiter);
-                            WaiterList.Remove(waiter);
-                            break;
-                        }
-                }
-            }
+        //        if (table.Finished_Eating == true)
+        //        {
+        //            foreach(Waiter waiter in WaiterList)
+        //            {
+        //                if (waiter.Busy == false)
+                        
+        //            }
+        //            tableReset(table);
+        //            waiter.WipeTimer = GlobalTimer;
+        //            table.Clean = false;
+        //            table.WipedBy.Add(waiter);
+        //            WaiterList.Remove(waiter);
+        //            break;
+        //        }
 
-
-
-            static void tableReset(Table table)
-            {
-                table.WaitingForFood = false;
-                table.IsAvailable = true;
-                table.EatTimer = -21;
-                table.Orders.Clear();
-            }
-        }
+        //    static void tableReset(Table table)
+        //    {
+        //        table.WaitingForFood = false;
+        //        table.IsAvailable = true;
+        //        table.EatTimer = -21;
+        //        table.Orders.Clear();
+        //    }
+        //}
     }
 }
+    
 
 
 
