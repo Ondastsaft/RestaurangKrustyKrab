@@ -127,7 +127,7 @@ namespace RestaurantKrustyKrab.Restaurant
             PrintList(restaurantArea.GuestsAtArea);
             PrintList(restaurantArea.CompaniesAtArea);
             PrintList(restaurantArea.WaitersAtArea);
-            PrintList(restaurantArea.ChefsAtArea);
+            PrintList(restaurantArea.ChefsAtArea); 
             
         }
         private void EraseRestaurantArea(RestaurantArea restaurantArea)
