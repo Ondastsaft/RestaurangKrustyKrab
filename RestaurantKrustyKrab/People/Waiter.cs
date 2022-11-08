@@ -21,7 +21,7 @@ namespace RestaurantKrustyKrab.People
             CompanyProperty = new Company(0);
             CompanyProperty.Guests.Clear();
             WipeTimer = -4;
-            ServingTable = -1;
+            ServingTable = -1; //means not serving any table
 
 
         }

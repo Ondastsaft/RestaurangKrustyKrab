@@ -7,6 +7,7 @@ namespace RestaurantKrustyKrab.People
         internal int Prefered_dish { get; set; }
         internal int Money { get; set; }
         internal List<Dish> Order { get; set; }
+        internal int Satisfaction { get; set; }
 
         public Guest(string name, int money , int PositionX, int PositionY) : base(name, PositionX, PositionY)
         {
@@ -14,6 +15,7 @@ namespace RestaurantKrustyKrab.People
             Money = money;
             Order = new List<Dish>();
             Prefered_dish = random.Next(1, 10);
+            Satisfaction = 0;
         }
     }
 }

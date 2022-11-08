@@ -11,16 +11,17 @@ using System.Collections.Generic;
 namespace RestaurantKrustyKrab.Restaurant
 {
     internal class Lobby
-    { 
-        //internal DishStation DishStation { get; set; }
-        //internal Reception Reception { get; set; }
-        //internal int CounterRestaurant { get; set; }
+    {
+        //internal DishStation DishStation { get; set; }                                    //Quality 1 = Bad
+        //internal Reception Reception { get; set; }                                        //Quality 2 = Ok
+        //internal int CounterRestaurant { get; set; }                                      //Quality 3 = Good
         //internal WC WC { get; set; }
         //internal string[,] MyDrawing { get; set; }
         //internal string Name { get; set; }
         //internal int PositionX { get; set; }
         //internal int PositionY { get; set; }
 
+        internal static Random random = new Random();
         public List<Table> TableList { get; set; }
         internal List<Waiter> WaiterList { get; set; }
         internal Queue<Company> CompanyWaitingList { get; set; }
@@ -62,6 +63,8 @@ namespace RestaurantKrustyKrab.Restaurant
             if (Visited_Guests.Count < 80)
             {
                 Addguests();
+                Addguests();
+                Addguests();
             }
            
 
@@ -91,14 +94,14 @@ namespace RestaurantKrustyKrab.Restaurant
             int tablenumber = 1;
             for (int i = 0; i < 5; i++)
             {
-                tableList.Add(new Table(2, 0, 24, top, true, tablenumber, false));
+                tableList.Add(new Table(2, random.Next(1, 4), 24, top, true, tablenumber, false));
                 tablenumber++;
                 top = top + 30;
             }
             top = 12;
             for (int i = 0; i < 5; i++)
             {
-                tableList.Add(new Table(4, 0, 40, top, true, tablenumber, false));
+                tableList.Add(new Table(4, random.Next(1, 4), 40, top, true, tablenumber, false));
                 tablenumber++;
                 top = top + 30;
             }
@@ -117,7 +120,7 @@ namespace RestaurantKrustyKrab.Restaurant
             for (int i = 0; i < 3; i++)
             {
                 string name = "Waiter " + (i + 1);
-                this.WaiterList.Add(new Waiter(name, 0, false, 110, (3 + i + 1)));
+                WaiterList.Add(new Waiter(name, random.Next(1,4), false, 110, (3 + i + 1)));
             }
 
         }
@@ -126,7 +129,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
         {
             for (int i = 1; i < 6; i++)
-                ChefList.Add(new Chef("Chef: " + i, 0, 0, 0));
+                ChefList.Add(new Chef("Chef: " + i, random.Next(1, 4), 0, 0));
         }
 
         
@@ -135,7 +138,7 @@ namespace RestaurantKrustyKrab.Restaurant
         {
             PrintMethods printMethods = new PrintMethods();
             foreach (Waiter waiter in WaiterList)
-                waiter.Busy = false;
+                waiter.Busy = false;   //kommer ej att tvinga servitörer som dukar bord eftersom de försvinner från waiterlist
 
             foreach (Table table in TableList)
             {
@@ -170,31 +173,34 @@ namespace RestaurantKrustyKrab.Restaurant
             Give_Kitchen_Order();
             background_methods();
 
+            
             Chef_take_order();
             background_methods();
 
             Chef_Prepare();
             background_methods();
 
-          
-
             void background_methods()
             {
-                TableTimer();
-                ChefTimer();
-                Wipetimer();
-                GlobalTimer++;
+                AllTimers();
                 Chef_readies_an_order();
                 Check_if_food_has_been_eaten();
                 Check_if_table_has_been_wiped();
                 Check_if_Restaurant_is_full();
-               
                 printMethods.PrintAll(CompanyWaitingList, GlobalTimer, WaiterList, TableList, ChefList, Kitchen, PaidOrders, Visited_Guests);
 
             }
         }
 
-    
+        void AllTimers()
+        {
+            TableTimer();
+            ChefTimer();
+            Wipetimer();
+            GuestTimer();
+            GlobalTimer++;
+        }
+
         void GreetGuest()
         {
             foreach (Waiter waiter in WaiterList)
@@ -221,7 +227,11 @@ namespace RestaurantKrustyKrab.Restaurant
                         {
                             waiter.ServingTable = table.TableNumber;
                             foreach (Guest guest in waiter.CompanyProperty.Guests)
+                            {
+                                guest.Satisfaction = guest.Satisfaction + table.Quality + waiter.ServiceLevel;
                                 table.BookedSeats.Guests.Add(guest);
+                            }
+                               
 
                             table.IsAvailable = false;
                             table.WaitingForFood = true;
@@ -245,11 +255,9 @@ namespace RestaurantKrustyKrab.Restaurant
                         G.AddOrderTo_Table_Guest_Waiter(guest.Prefered_dish, waiter,guest,TableList);
 
                     }
-
-
                 }
             }
-            }
+        }
 
         void Give_Kitchen_Order()
 
@@ -265,6 +273,7 @@ namespace RestaurantKrustyKrab.Restaurant
                     waiter.Orders.Clear();
                     waiter.CompanyProperty.Guests.Clear();
                     waiter.Busy = false;
+                    waiter.ServingTable = -1;
                 }
             }
         }
@@ -300,6 +309,9 @@ namespace RestaurantKrustyKrab.Restaurant
                     chef.TimeStart = GlobalTimer;
                     chef.TimeEnd = chef.TimeStart + 10;
                     chef.Cooking = true;
+
+                    foreach (Dish dish in chef.Preparing)
+                        dish.Quality = chef.Competence;
                 }
             }
         }
@@ -315,6 +327,7 @@ namespace RestaurantKrustyKrab.Restaurant
                     foreach (Dish dish in Kitchen.ReadyOrders.ToList())
                         if (dish.DestinationTable == waiter.Orders[0].DestinationTable)
                             Kitchen.ReadyOrders.Dequeue();
+                    waiter.ServingTable = waiter.Orders[0].DestinationTable;
                 }
         }
 
@@ -335,16 +348,30 @@ namespace RestaurantKrustyKrab.Restaurant
                             foreach (Dish dish in waiter.Orders)
                                 foreach (Guest guest in table.BookedSeats.Guests)
                                     if (dish.Guest == guest.Name)
+                                    {
                                         guest.Order.Add(dish);
+                                        guest.Satisfaction = guest.Satisfaction + dish.Quality;
+                                        guest.Satisfaction = guest.Satisfaction + waiter.ServiceLevel;
+                                    }
+                                        
 
                             waiter.Orders.Clear();
                             waiter.Busy = false;
+                            waiter.ServingTable = -1; //Reset
                             table.EatTimer = GlobalTimer;
                             table.TimeEnd = table.EatTimer + 20;
                             break;
                         }
                     }
                 }
+            }
+        }
+
+        internal void GuestTimer()
+        {
+            foreach(Company company in CompanyWaitingList)
+            {
+                company.TimeWaiting++;
             }
         }
 
@@ -439,7 +466,6 @@ namespace RestaurantKrustyKrab.Restaurant
 
         }
 
-
         internal void Waiter_start_cleaning_And_Take_payment(Table table)  //not done
         {
                 {
@@ -473,17 +499,18 @@ namespace RestaurantKrustyKrab.Restaurant
                         {
 
                         if 
-                            (guest.Money >= guest.Order[0].Price)
-                            PaidOrders.Add(guest.Name + " ordered " + guest.Order[0].Name + " for " + guest.Order[0].Price + " and paid for it");
 
+                            (guest.Money >= guest.Order[0].Price)
+                            PaidOrders.Add(guest.Name + " ordered " + guest.Order[0].Name + " for " + guest.Order[0].Price + " and paid for it, they rate this restaurant "+ guest.Satisfaction + "/12" );
+                            
                         else
                         {
 
-                            PaidOrders.Add(guest.Name + " could not afford their " + guest.Order[0].Name + " was forced to help with the dishes");
+                            PaidOrders.Add(guest.Name + " could not afford their " + guest.Order[0].Name + " was forced to help with the dishes, they rate this restaurant " + guest.Satisfaction + "/12");
+
                         }
 
                     }
-                    Console.ReadKey();
                     waiter.CompanyProperty.Guests.Clear();
                     table.Orders.Clear();
                     table.BookedSeats.Guests.Clear();

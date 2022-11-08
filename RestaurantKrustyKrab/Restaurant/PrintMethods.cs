@@ -29,16 +29,17 @@ namespace RestaurantKrustyKrab.Restaurant
             {
                 int i = 1;
                 Console.WriteLine("QUEUE");
+                Console.WriteLine();
 
                 foreach (Company company in CompanyWaitingList)
                 {
-
+                    
                     Console.WriteLine("Company: " + i);
 
                     i++;
                     for (int j = 0; j < company.Guests.Count; j++)
-
                         Console.WriteLine(company.Guests[j].Name);
+                Console.WriteLine("Time waiting: " + company.TimeWaiting);
                     Console.WriteLine("-----------------------------------");
                 }
             }
@@ -48,17 +49,22 @@ namespace RestaurantKrustyKrab.Restaurant
 
                 foreach (Waiter waiter in WaiterList)
                 {
-                    Console.Write(waiter.Name + " Busy? " + waiter.Busy);
+                    Console.WriteLine(waiter.Name + " Busy? " + waiter.Busy);
+
                     if (waiter.Busy == true)
                     {
-                        Console.Write(" Serving:");
-
                         if (waiter.CompanyProperty.Guests.Count > 0)
                         {
-                            foreach (Guest guest in waiter.CompanyProperty.Guests)
+                            Console.Write("Company:");
+
+                        foreach (Guest guest in waiter.CompanyProperty.Guests)
+                                
                                 Console.Write(" " + guest.Name);
                         }
-                    }
+                    if (waiter.ServingTable > 0)
+                        Console.WriteLine("\nAt Table " + waiter.ServingTable);
+
+                }
                 Console.WriteLine();
                 }
             Console.WriteLine();
@@ -79,7 +85,7 @@ namespace RestaurantKrustyKrab.Restaurant
                     else
                     {
 
-                        Console.Write("Tablenumber: " + table.TableNumber + " Seats " + table.Seats + " Available? " + table.IsAvailable + " Waiting for food? " + table.WaitingForFood + " Recieved order " + table.RecievedOrder);
+                        Console.Write("Tablenumber: " + table.TableNumber + " Seats " + table.Seats + " Available? " + table.IsAvailable + " Waiting for food? " + table.WaitingForFood + " Quality: " + table.Quality);
                         Console.WriteLine(" Finished eating? " + table.Finished_Eating);
                         Console.WriteLine();
 
