@@ -358,71 +358,25 @@ namespace RestaurantKrustyKrab.Restaurant
         void Take_Order()
 
         {
-
+            GoodMethod G = new GoodMethod();
             foreach (Waiter waiter in WaiterList)
             {
                 if (waiter.Busy == true && waiter.CompanyProperty.Guests.Count > 0)
                 {
                     foreach (Guest guest in waiter.CompanyProperty.Guests)
                     {
-                        template(waiter,guest,TableList,guest.Prefered_dish);
+                        Get_values(waiter,guest,TableList,guest.Prefered_dish);
                     }
                 }
             }
-            static void template(Waiter waiter, Guest guest, List<Table> TableList, int prefered_dish)
+           
+             void Get_values(Waiter waiter, Guest guest, List<Table> TableList, int prefered_dish)
             {
 
-                switch (prefered_dish)
-
-                {
-                    case 1:
-                        waiter.Order.Add(new Cod(waiter.ServingTable, guest.Name));
-                        TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, new Cod(waiter.ServingTable, guest.Name));
-                        guest.Order.Add(new Cod(waiter.ServingTable, guest.Name));
-                            break;
-                    case 2:
-                        waiter.Order.Add(new SalmonPie(waiter.ServingTable, guest.Name));
-                        TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, new SalmonPie(waiter.ServingTable, guest.Name));
-                        break;
-                    case 3:
-                        waiter.Order.Add(new Sushi(waiter.ServingTable, guest.Name));
-                        TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, new Sushi(waiter.ServingTable, guest.Name));
-                        break;
-
-                    case 4:
-                        waiter.Order.Add(new Curry(waiter.ServingTable, guest.Name));
-                        TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, new Curry(waiter.ServingTable, guest.Name));
-                        break;
-
-                    case 5:
-                        waiter.Order.Add(new Ribs(waiter.ServingTable, guest.Name));
-                        TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, new Ribs(waiter.ServingTable, guest.Name));
-                        break;
-
-                    case 6:
-                        waiter.Order.Add(new Steak(waiter.ServingTable, guest.Name));
-                        TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, new Steak(waiter.ServingTable, guest.Name));
-                        break;
-
-                    case 7:
-                        waiter.Order.Add(new Falafel(waiter.ServingTable, guest.Name));
-                        TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, new Falafel(waiter.ServingTable, guest.Name));
-                        break;
-
-                    case 8:
-                        waiter.Order.Add(new Pasta(waiter.ServingTable, guest.Name));
-                        TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, new Pasta(waiter.ServingTable, guest.Name));
-                        break;
-
-                    case 9:
-                        waiter.Order.Add(new Salad(waiter.ServingTable, guest.Name));
-                        TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, new Salad(waiter.ServingTable, guest.Name));
-                        break;
-
-
+                G.AddOrderTo_Table_Guest_Waiter(prefered_dish, waiter, guest, TableList);                        
                 }
             }
-        }
+        
 
         void Give_Kitchen_Order()
 
