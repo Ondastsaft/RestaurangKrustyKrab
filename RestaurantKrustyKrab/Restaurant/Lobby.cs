@@ -68,11 +68,9 @@ namespace RestaurantKrustyKrab.Restaurant
             }
 
 
-            Draw draw = new Draw();
-            draw.draw(TableList, Kitchen, Reception, DishStation);
-            Console.ReadKey();
+            
 
-            //Sequence();
+            Sequence();
         }
  
         internal void Generate()
@@ -140,7 +138,13 @@ namespace RestaurantKrustyKrab.Restaurant
         internal void Sequence() 
 
         {
-            PrintMethods printMethods = new PrintMethods();
+            Draw draw = new Draw();
+            
+            Console.ReadKey();
+
+            //PrintMethods printMethods = new PrintMethods();
+
+
             foreach (Waiter waiter in WaiterList)
                 waiter.Busy = false;   //kommer ej att tvinga servitörer som dukar bord eftersom de försvinner från waiterlist
 
@@ -191,7 +195,9 @@ namespace RestaurantKrustyKrab.Restaurant
                 Check_if_food_has_been_eaten();
                 Check_if_table_has_been_wiped();
                 Check_if_Restaurant_is_full();
-                printMethods.PrintAll(CompanyWaitingList, GlobalTimer, WaiterList, TableList, ChefList, Kitchen, PaidOrders, Visited_Guests); //readkey finns i PrintAll
+                draw.draw(TableList, Kitchen, Reception, DishStation, WaiterList, CompanyWaitingList);
+
+                /*printMethods.PrintAll(CompanyWaitingList, GlobalTimer, WaiterList, TableList, ChefList, Kitchen, PaidOrders, Visited_Guests);*/ //readkey finns i PrintAll
 
             }
         }
