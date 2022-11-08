@@ -70,6 +70,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
             Draw draw = new Draw();
             draw.draw(TableList, Kitchen, Reception, DishStation);
+            Console.ReadKey();
 
             //Sequence();
         }

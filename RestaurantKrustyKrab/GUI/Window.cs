@@ -20,9 +20,10 @@
             Console.SetCursorPosition(fromLeft, fromTop + graphics.GetLength(0) + 1);
             Console.Write('└' + new String('─', graphics.GetLength(1) + 2) + '┘');
         }
+    }
 
 
         }
-    }
+    
 
 
