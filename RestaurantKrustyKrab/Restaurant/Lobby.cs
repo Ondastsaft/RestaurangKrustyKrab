@@ -86,10 +86,10 @@ namespace RestaurantKrustyKrab.Restaurant
 
                             //TakeOrder() - Gör om
                             continueLoop = (MyRestaurantAreas["Reception"] as Reception).WaitersAtArea.Count > 0 ? continueLoop = ShowTable(kvp.Key, i) : continueLoop;
-                            
-                            
-                            
-                            
+
+
+
+
                             ////{
 
                             ////}
@@ -208,14 +208,19 @@ namespace RestaurantKrustyKrab.Restaurant
             }
             return continueLoop;
         }
-        private bool TakeOrder(string key, int index)
+        private bool TakeOrder(string areaKey, int waiterIndex)
         {
             bool continueLoop = false;
+            Random random = new Random();
+            Dictionary<string, int> order = new Dictionary<string, int>();
+            foreach (Guest guest in MyRestaurantAreas[areaKey].GuestsAtArea)
+            {
+                int orderNumber = random.Next(1, 10);
+                order.Add(guest.Name, orderNumber);
 
-
-
-
-
+                guest.Name = (guest.Name + " " + (MyRestaurantAreas[areaKey] as Table).Dishes[orderNumber]);
+            }
+            MyRestaurantAreas[areaKey].WaitersAtArea[waiterIndex].Area_Order.Add(areaKey, order);
 
             return continueLoop;
         }

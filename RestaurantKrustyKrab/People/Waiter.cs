@@ -7,7 +7,8 @@ namespace RestaurantKrustyKrab.People
         internal int ServiceLevel { get; set; }
         internal Company Company { get; set; }
         internal List<Dish> Menu { get; set; }
-        internal List<Dish> Order { get; set; }
+        internal Dictionary<string, Dictionary<string, int>> Area_Order { get; set; }
+        internal Dictionary<string, int> Name_MenuIndex { get; set; }
         public Waiter(string name, int serviceLevel, bool busy, int fromTop, int fromLeft) : base(name, fromTop, fromLeft)
         {
             Name = name;
