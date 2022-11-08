@@ -7,7 +7,7 @@
         public int Quality { get; set; }
         public int DestinationTable { get; set; }
 
-        Dish(string name, int price, int quality, int destinationTable)
+        public Dish(string name, int price, int quality, int destinationTable)
         {
             Name = name;
             Price = price;

@@ -10,7 +10,6 @@ namespace RestaurantKrustyKrab
             Lobby MyLobby = new Lobby();
             MyLobby.LobbyRun();
             Console.ReadLine();
-            
         }
     }
 }

@@ -83,6 +83,13 @@ namespace RestaurantKrustyKrab.Restaurant
 
 
                             continueLoop = (MyRestaurantAreas["Reception"] as Reception).WaitersAtArea.Count > 0 ? continueLoop = ShowTable(kvp.Key, i) : continueLoop;
+
+                            //TakeOrder() - Gör om
+                            continueLoop = (MyRestaurantAreas["Reception"] as Reception).WaitersAtArea.Count > 0 ? continueLoop = ShowTable(kvp.Key, i) : continueLoop;
+                            
+                            
+                            
+                            
                             ////{
 
                             ////}
@@ -199,6 +206,17 @@ namespace RestaurantKrustyKrab.Restaurant
                     }
                 }
             }
+            return continueLoop;
+        }
+        private bool TakeOrder(string key, int index)
+        {
+            bool continueLoop = false;
+
+
+
+
+
+
             return continueLoop;
         }
         //RitMetoder
