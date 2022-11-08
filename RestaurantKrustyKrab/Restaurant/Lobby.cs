@@ -242,7 +242,6 @@ namespace RestaurantKrustyKrab.Restaurant
                                 table.BookedSeats.Guests.Add(guest);
                             }
                                
-
                             table.IsAvailable = false;
                             table.WaitingForFood = true;
                             break;
