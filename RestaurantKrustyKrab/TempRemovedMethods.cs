@@ -105,5 +105,13 @@ namespace RestaurantKrustyKrab
         //    return busy;
 
         //}
+        //if (number > 50 && MyRestaurantAreas["Reception"].CompaniesAtArea.Count > 0)   //Här någonstans kan vi ha en bool som en waiter styr när vi dequeuear
+        //{
+        //    foreach (Company company in MyRestaurantAreas["Reception"].CompaniesAtArea)
+        //    {
+        //        company.Guests[0].FromLeft = (company.Guests[0].FromLeft - 1);
+        //    }
+
+        //}
     }
 }
