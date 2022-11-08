@@ -8,7 +8,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
         internal int Seats { get; set; }
         internal int Quality { get; set; }
-        internal List<Company> BookedSeats { get; set; }
+        internal Company BookedSeats { get; set; }
         internal bool IsAvailable { get; set; }
         internal int TableNumber { get; set; }
         internal Hashtable Orders { get; set; }
@@ -32,7 +32,8 @@ namespace RestaurantKrustyKrab.Restaurant
             PositionY = positionY;
             IsAvailable = isAvailable;
             TableNumber = tableNumber;
-            BookedSeats = new List<Company>();
+            BookedSeats = new Company(0);
+            BookedSeats.Guests.Clear();
             Orders = new Hashtable();
             WaitingForFood = false;
             RecievedOrder = false;

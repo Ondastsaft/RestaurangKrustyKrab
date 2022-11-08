@@ -12,17 +12,13 @@ namespace RestaurantKrustyKrab.Restaurant
 {
     internal class GoodMethod
     {
+
         internal void AddOrderTo_Table_Guest_Waiter(int menuorder, Waiter waiter, Guest guest, List<Table> TableList)
         {
             Dish dish = new Dish(waiter.ServingTable, guest.Name);
 
-            void AddOrderToAll(Dish dish)
-                {
-                waiter.Order.Add(dish);
-                TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, dish);
-                guest.Order.Add(dish);
-            }
-            switch(menuorder)
+
+            switch (menuorder)
             {
                 case 1:
 
@@ -83,9 +79,15 @@ namespace RestaurantKrustyKrab.Restaurant
                     AddOrderToAll(dish);
                     break;
             }
+            void AddOrderToAll(Dish dish)
+            {
+                waiter.Orders.Add(dish);
+                TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, dish);
+                guest.Order.Add(dish);
+            }
 
-                         
-            
+
+
         }
     }
 }

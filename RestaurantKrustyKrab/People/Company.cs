@@ -36,7 +36,7 @@ namespace RestaurantKrustyKrab.People
             Guests = new List<Guest>();
             for(int i = 0; i < guests; i++)
             {
-                Guests.Add(new Guest(GetName(),random.Next(70, 151), 32, 4+i+offSetRow));
+                Guests.Add(new Guest(GetName(), random.Next(69,200), 32, 4+i+offSetRow));
             }
             TimeWaiting = 0;
         }
