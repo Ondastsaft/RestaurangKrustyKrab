@@ -24,7 +24,7 @@ namespace RestaurantKrustyKrab.Restaurant
                 Draw_Guests_AT_Tables(table);
             }
             DrawWaitersAtTables();
-
+            DrawWaitersAtKitchen();
 
             void DrawWaitersAtReception()
             {
@@ -87,6 +87,11 @@ namespace RestaurantKrustyKrab.Restaurant
                                 Console.SetCursorPosition(table.PositionY +1, table.PositionX - 1);
                                 Console.Write(waiter.Name);
                             }
+            }
+
+            void DrawWaitersAtKitchen()  //börja här
+            {
+
             }
 
             Console.ReadKey();

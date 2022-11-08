@@ -261,11 +261,13 @@ namespace RestaurantKrustyKrab.Restaurant
             {
                 if (waiter.Busy == true && waiter.CompanyProperty.Guests.Count > 0)
                 {
+
                     foreach (Guest guest in waiter.CompanyProperty.Guests)
                     {
                         G.AddOrderTo_Table_Guest_Waiter(guest.Prefered_dish, waiter,guest,TableList);
 
                     }
+                    
                 }
             }
         }
@@ -277,6 +279,9 @@ namespace RestaurantKrustyKrab.Restaurant
             {
                 if (waiter.Busy = true && waiter.Orders.Count > 0)
                 {
+                    waiter.Taking_or_Giving_Order_at_table = false;
+                    waiter.At_Kitchen = true;
+
                     foreach (Dish dish in waiter.Orders)
                     {
                         Kitchen.Orders.Enqueue(dish); //kitchen.order is a list of dishes

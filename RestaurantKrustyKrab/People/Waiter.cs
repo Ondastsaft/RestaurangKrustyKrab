@@ -14,6 +14,7 @@ namespace RestaurantKrustyKrab.People
         internal int ServingTable { get; set; }
         internal bool Taking_or_Giving_Order_at_table { get; set; }
         internal bool AT_Reception { get; set; }
+        internal bool At_Kitchen { get; set; }
 
         public Waiter(string name, int serviceLevel, bool busy, int PositionX, int PositionY) : base(name, PositionX, PositionY)
         {
@@ -27,7 +28,7 @@ namespace RestaurantKrustyKrab.People
             ServingTable = -1; //means not serving any table
             AT_Reception = true;
             Taking_or_Giving_Order_at_table = false;
-
+            At_Kitchen = false;
         }
 
          
