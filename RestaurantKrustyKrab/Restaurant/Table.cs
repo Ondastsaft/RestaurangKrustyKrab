@@ -12,9 +12,9 @@ namespace RestaurantKrustyKrab.Restaurant
         internal int TableNumber { get; set; }
 
 
-        public Table(int seats, int quality, int positionX, int positionY, bool isAvailable, int tableNumber)
+        public Table(int seats, int quality, int positionX, int positionY, bool isAvailable, int tableNumber, int length, int width)
         {
-            this.Frame = new string[4, 20];
+            Frame = new string[length, width];
             Seats = seats;
             Quality = quality;
             PositionX = positionX;
