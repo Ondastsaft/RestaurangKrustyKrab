@@ -33,16 +33,15 @@ namespace RestaurantKrustyKrab.Restaurant
 
         public Lobby()
         {
-            MyDrawing = new string[50, 200];
+            MyDrawing = new string[70, 305];
             Name = "Krusty Krab";
             PositionX = 4;
             PositionY = 2;
 
             DishStation = new DishStation(3, 128);
-            Reception = new Reception(3, 31);
-            //WC = new WC(25, 188);
+            Reception = new Reception(55, 31);
             TableList = new List<Table>();
-            Kitchen = new Kitchen(false, 3, 157);
+            Kitchen = new Kitchen(false, 3, 180);
             GlobalTimer = 0;
             CompanyWaitingList = new Queue<Company>();
             WaiterList = new List<Waiter>();
@@ -56,17 +55,23 @@ namespace RestaurantKrustyKrab.Restaurant
         }
 
 
-        internal void LobbyRun()
+        internal void LobbyRun()  //sitter i en while loop
+
         {
+
+
             if (Visited_Guests.Count < 80)
             {
                 Addguests();
                 Addguests();
                 Addguests();
             }
-           
 
-            Sequence();
+
+            Draw draw = new Draw();
+            draw.draw(TableList, Kitchen, Reception, DishStation);
+
+            //Sequence();
         }
  
         internal void Generate()
@@ -185,7 +190,7 @@ namespace RestaurantKrustyKrab.Restaurant
                 Check_if_food_has_been_eaten();
                 Check_if_table_has_been_wiped();
                 Check_if_Restaurant_is_full();
-                printMethods.PrintAll(CompanyWaitingList, GlobalTimer, WaiterList, TableList, ChefList, Kitchen, PaidOrders, Visited_Guests);
+                printMethods.PrintAll(CompanyWaitingList, GlobalTimer, WaiterList, TableList, ChefList, Kitchen, PaidOrders, Visited_Guests); //readkey finns i PrintAll
 
             }
         }
@@ -515,6 +520,7 @@ namespace RestaurantKrustyKrab.Restaurant
                     }
                 }
         }
+
     }
 }
     

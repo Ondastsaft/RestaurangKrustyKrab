@@ -1,5 +1,6 @@
 ﻿using RestaurantKrustyKrab.People;
 using System.Collections;
+using System.ComponentModel.DataAnnotations;
 
 namespace RestaurantKrustyKrab.Restaurant
 {
@@ -23,9 +24,9 @@ namespace RestaurantKrustyKrab.Restaurant
         internal int WipeEnd { get; set; }
 
 
-        public Table(int seats, int quality, int positionX, int positionY, bool isAvailable, int tableNumber, bool waitingForFood)
+        public Table(int seats, int quality, int positionX, int positionY, bool isAvailable, int tableNumber, bool waitingForFood, int length, int width)
         {
-            Frame = new string[4, 20];
+            Frame = new string[length, width];
             Seats = seats;
             Quality = quality;
             PositionX = positionX;
