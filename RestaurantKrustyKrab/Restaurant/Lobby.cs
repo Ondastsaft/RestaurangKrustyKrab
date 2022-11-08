@@ -12,14 +12,12 @@ namespace RestaurantKrustyKrab.Restaurant
 {
     internal class Lobby
     {
-        //internal DishStation DishStation { get; set; }                                    //Quality 1 = Bad
-        //internal Reception Reception { get; set; }                                        //Quality 2 = Ok
-        //internal int CounterRestaurant { get; set; }                                      //Quality 3 = Good
-        //internal WC WC { get; set; }
-        //internal string[,] MyDrawing { get; set; }
-        //internal string Name { get; set; }
-        //internal int PositionX { get; set; }
-        //internal int PositionY { get; set; }
+        internal DishStation DishStation { get; set; }                                 
+        internal Reception Reception { get; set; }                                       
+        internal string[,] MyDrawing { get; set; }
+        internal string Name { get; set; }
+        internal int PositionX { get; set; }
+        internal int PositionY { get; set; }
 
         internal static Random random = new Random();
         public List<Table> TableList { get; set; }
@@ -35,13 +33,13 @@ namespace RestaurantKrustyKrab.Restaurant
 
         public Lobby()
         {
-            //MyDrawing = new string[50, 200];
-            //Name = "Krusty Krab";
-            //PositionX = 4;
-            //PositionY = 2;
+            MyDrawing = new string[50, 200];
+            Name = "Krusty Krab";
+            PositionX = 4;
+            PositionY = 2;
 
-            //DishStation = new DishStation(3, 128);
-            //Reception = new Reception(3, 31);
+            DishStation = new DishStation(3, 128);
+            Reception = new Reception(3, 31);
             //WC = new WC(25, 188);
             TableList = new List<Table>();
             Kitchen = new Kitchen(false, 3, 157);
@@ -94,14 +92,14 @@ namespace RestaurantKrustyKrab.Restaurant
             int tablenumber = 1;
             for (int i = 0; i < 5; i++)
             {
-                tableList.Add(new Table(2, random.Next(1, 4), 24, top, true, tablenumber, false));
+                tableList.Add(new Table(2, random.Next(1, 4), 24, top, true, tablenumber, false, 4, 25));
                 tablenumber++;
                 top = top + 30;
             }
             top = 12;
             for (int i = 0; i < 5; i++)
             {
-                tableList.Add(new Table(4, random.Next(1, 4), 40, top, true, tablenumber, false));
+                tableList.Add(new Table(4, random.Next(1, 4), 40, top, true, tablenumber, false, 8, 25));
                 tablenumber++;
                 top = top + 30;
             }
