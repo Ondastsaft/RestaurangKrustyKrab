@@ -51,6 +51,8 @@ namespace RestaurantKrustyKrab.Restaurant
 
             CompanyArrivalRandomizer();
             work();
+            EraseAllAreas();
+            PrintAllAreas();
 
         }
 
@@ -110,7 +112,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
                             //WaiterList.Add(waiter);
 
-                            break;
+                            continueLoop = false;
                         }
                 }
             }
@@ -119,17 +121,17 @@ namespace RestaurantKrustyKrab.Restaurant
         private bool GreetCompany(string key, int index)
         {
             bool continueLoop = true;
+
             int startRow = (MyRestaurantAreas["Reception"] as Reception).WaitersAtArea.Count;
             foreach (Waiter waiter in (MyRestaurantAreas["Reception"] as Reception).WaitersAtArea)
             {
                 startRow = waiter.Company.Guests.Count + startRow;
                 startRow++;
-
             }
 
             //Sparar Company på waitern som returneras och suddar samt skriver ut receptionen igen
             MyRestaurantAreas[key].WaitersAtArea[index].Busy = true;
-                        EraseList((MyRestaurantAreas["Reception"] as Reception).CompanyWaitingQueue);
+            EraseList((MyRestaurantAreas["Reception"] as Reception).CompanyWaitingQueue);
             MyRestaurantAreas[key].WaitersAtArea[index].Company = (MyRestaurantAreas["Reception"] as Reception).CompanyWaitingQueue.Dequeue();
             PrintList((MyRestaurantAreas["Reception"] as Reception).CompanyWaitingQueue);
 
@@ -137,9 +139,10 @@ namespace RestaurantKrustyKrab.Restaurant
             // samt suddar den printningen och skriver ut den igen
 
             EraseList(MyRestaurantAreas[key].WaitersAtArea);
+            EraseList(MyRestaurantAreas["Reception"].WaitersAtArea);
             MyRestaurantAreas["Reception"].WaitersAtArea.Add(MyRestaurantAreas[key].WaitersAtArea[index]);
             MyRestaurantAreas[key].WaitersAtArea.RemoveAt(index);
-            PrintList(MyRestaurantAreas[key].WaitersAtArea);
+            PrintList(MyRestaurantAreas["Reception"].WaitersAtArea);
 
             //Skapar en offset nedåt som är lika med antalet Waiters i Receptionen + antalet gäster i samtliga Companies i receptionen
 
@@ -154,12 +157,12 @@ namespace RestaurantKrustyKrab.Restaurant
                 Console.Write(guest.Name);
                 row++;
             }
-            return continueLoop;
+            return false;
         }
         private bool ShowTable(string key, int index)
         {
             bool continueLoop = true;
-            if (key == "Reception" && MyRestaurantAreas[key].WaitersAtArea.Count > 0)
+            if (MyRestaurantAreas[key].WaitersAtArea.Count > 0 && MyRestaurantAreas[key].WaitersAtArea[MyRestaurantAreas[key].WaitersAtArea.Count].Company != null)
             {
                 Company company = MyRestaurantAreas[key].WaitersAtArea[index].Company;
                 Waiter waiter = MyRestaurantAreas[key].WaitersAtArea[index];
@@ -180,9 +183,9 @@ namespace RestaurantKrustyKrab.Restaurant
                                 continueLoop = false;
                             }
                         }
-                        else if(company.Guests.Count >= 3)
+                        else if (company.Guests.Count >= 3)
                         {
-                            if((kvp.Value as Table).IsAvailable && (kvp.Value as Table).Seats == 4)
+                            if ((kvp.Value as Table).IsAvailable && (kvp.Value as Table).Seats == 4)
                             {
                                 MyRestaurantAreas[kvp.Key].WaitersAtArea.Add(waiter);
                                 MyRestaurantAreas[kvp.Key].CompaniesAtArea.Add(company);
