@@ -62,8 +62,6 @@ namespace RestaurantKrustyKrab.Restaurant
             if (Visited_Guests.Count < 80)
             {
                 Addguests();
-                Addguests();
-                Addguests();
             }
            
 
@@ -464,10 +462,6 @@ namespace RestaurantKrustyKrab.Restaurant
 
                     void tableReset(Table table, Waiter waiter)
                     {
-
-                        Console.Clear();
-                        Console.WriteLine("Table Reset");
-
                         table.WaitingForFood = false;
                         table.IsAvailable = true;
                         table.RecievedOrder = false;
@@ -478,15 +472,13 @@ namespace RestaurantKrustyKrab.Restaurant
                         foreach(Guest guest in table.BookedSeats.Guests)
                         {
 
-                            Console.WriteLine("Name: " + guest.Name + " Orders: " + guest.Order.Count + " Order: " + guest.Order[0].Name + " Money: " +  guest.Money + "Price: " + guest.Order[0].Price);
-
                         if 
                             (guest.Money >= guest.Order[0].Price)
                             PaidOrders.Add(guest.Name + " ordered " + guest.Order[0].Name + " for " + guest.Order[0].Price + " and paid for it");
 
                         else
                         {
-                            Console.WriteLine(guest.Name + " was forced to help with the dishes");
+
                             PaidOrders.Add(guest.Name + " could not afford their " + guest.Order[0].Name + " was forced to help with the dishes");
                         }
 

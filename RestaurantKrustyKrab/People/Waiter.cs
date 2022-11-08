@@ -18,6 +18,8 @@ namespace RestaurantKrustyKrab.People
             ServiceLevel = serviceLevel;
             Busy = busy;
             Orders = new List<Dish>();
+            CompanyProperty = new Company(0);
+            CompanyProperty.Guests.Clear();
             WipeTimer = -4;
             ServingTable = -1;
 
