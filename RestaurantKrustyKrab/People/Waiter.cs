@@ -12,6 +12,9 @@ namespace RestaurantKrustyKrab.People
         internal List<Dish> Orders { get; set; }
         internal int WipeTimer { get; set; }
         internal int ServingTable { get; set; }
+        internal bool Taking_or_Giving_Order_at_table { get; set; }
+        internal bool AT_Reception { get; set; }
+
         public Waiter(string name, int serviceLevel, bool busy, int PositionX, int PositionY) : base(name, PositionX, PositionY)
         {
             Name = name;
@@ -22,7 +25,8 @@ namespace RestaurantKrustyKrab.People
             CompanyProperty.Guests.Clear();
             WipeTimer = -4;
             ServingTable = -1; //means not serving any table
-
+            AT_Reception = true;
+            Taking_or_Giving_Order_at_table = false;
 
         }
 

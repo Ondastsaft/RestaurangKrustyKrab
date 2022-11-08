@@ -235,13 +235,15 @@ namespace RestaurantKrustyKrab.Restaurant
                     {
                         if (table.Seats >= waiter.CompanyProperty.Guests.Count && table.IsAvailable == true && waiter.CompanyProperty.Guests.Count > 0)
                         {
+                            waiter.AT_Reception = false;
+                            waiter.Taking_or_Giving_Order_at_table = true;
+
                             waiter.ServingTable = table.TableNumber;
                             foreach (Guest guest in waiter.CompanyProperty.Guests)
                             {
                                 guest.Satisfaction = guest.Satisfaction + table.Quality + waiter.ServiceLevel;
                                 table.BookedSeats.Guests.Add(guest);
                             }
-                               
                             table.IsAvailable = false;
                             table.WaitingForFood = true;
                             break;

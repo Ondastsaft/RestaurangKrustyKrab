@@ -22,6 +22,7 @@ namespace RestaurantKrustyKrab.Restaurant
         internal List<Waiter> WipedBy { get; set; }
         internal int WipeTimer { get; set; }
         internal int WipeEnd { get; set; }
+        
 
 
         public Table(int seats, int quality, int positionX, int positionY, bool isAvailable, int tableNumber, bool waitingForFood, int length, int width)
@@ -43,6 +44,8 @@ namespace RestaurantKrustyKrab.Restaurant
             Clean = true;
             WipedBy = new List<Waiter>();
             WipeTimer = -4;
+
+
         }
     }
 }

@@ -23,7 +23,7 @@ namespace RestaurantKrustyKrab.Restaurant
                 {
                 Draw_Guests_AT_Tables(table);
             }
-
+            DrawWaitersAtTables();
 
 
             void DrawWaitersAtReception()
@@ -32,11 +32,16 @@ namespace RestaurantKrustyKrab.Restaurant
                 int X = 1;
                 foreach (Waiter waiter in WaiterList)
                 {
-                    Console.Write(waiter.Name);
-                    if (waiter.CompanyProperty.Guests.Count > 0)
-                        Console.WriteLine(" " + waiter.CompanyProperty.Guests[0].Name + " + " + waiter.CompanyProperty.Guests.Count);
-                    Console.SetCursorPosition(Reception.PositionY + 30, Reception.PositionX + X);
-                    X++;
+                    if (waiter.AT_Reception == true)
+                    {
+                        Console.Write(waiter.Name);
+                        if (waiter.CompanyProperty.Guests.Count > 0)
+                            Console.WriteLine(" " + waiter.CompanyProperty.Guests[0].Name + " + " + waiter.CompanyProperty.Guests.Count);
+                        Console.SetCursorPosition(Reception.PositionY + 30, Reception.PositionX + X);
+                        X++;
+                    }
+
+                    
                 }
             }
             
@@ -70,15 +75,22 @@ namespace RestaurantKrustyKrab.Restaurant
                         
 
                 }
-                    
             
-                
+
+            void DrawWaitersAtTables()
+            {
+                foreach(Waiter waiter in WaiterList)
+                    if (waiter.Taking_or_Giving_Order_at_table == true)
+                        foreach (Table table in TableList)
+                            if(waiter.ServingTable == table.TableNumber)
+                            {
+                                Console.SetCursorPosition(table.PositionY +1, table.PositionX - 1);
+                                Console.Write(waiter.Name);
+                            }
+            }
+
             Console.ReadKey();
             Console.Clear();
-                
-                
-
-            
                
         }
 
