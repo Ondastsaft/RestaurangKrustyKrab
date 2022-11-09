@@ -38,7 +38,7 @@ namespace RestaurantKrustyKrab.Restaurant
             while (true)
             {
                 LoopRestaurant();
-                //Console.ReadKey();
+                Console.ReadKey();
             }
         }
         public void LoopRestaurant()
@@ -69,73 +69,75 @@ namespace RestaurantKrustyKrab.Restaurant
         //Servitörens LoopMetoder
         private void WorkWaiter()
         {
-            foreach (var kvpAreaWithWaiter in MyRestaurantAreas)
+            for (int i = 0; i < (MyRestaurantAreas["WaiterWaitingArea"] as WaiterWaitingArea).WaitersAtArea.Count - 1; i++)
             {
-                for (int iWaitersIndex = 0; iWaitersIndex < kvpAreaWithWaiter.Value.WaitersAtArea.Count; iWaitersIndex++)
+
+                bool continueloop = true;
+
+
+                if ((MyRestaurantAreas["WaiterWaitingArea"] as WaiterWaitingArea).WaitersAtArea[i].Available && (MyRestaurantAreas["Reception"] as Reception).CompanyWaitingQueue.Count > 0)
                 {
-                    bool continueloop = true;
+                    continueloop = GreetCompany("WaiterWaitingArea", i);
+                }
+                EraseAllAreas();
+                PrintAllAreas();
+                Thread.Sleep(2000);
 
 
-                    if (kvpAreaWithWaiter.Value.WaitersAtArea[iWaitersIndex].Available && (MyRestaurantAreas["Reception"] as Reception).CompanyWaitingQueue.Count > 0)
-                        continueloop = GreetCompany(kvpAreaWithWaiter.Key, iWaitersIndex);
+            }
+            
+            for (int i = 0; i < (MyRestaurantAreas["Reception"] as Reception).WaitersAtArea.Count - 1; i++)
+            {
+                ShowTable("Reception", i);
+            }
 
-                    EraseAllAreas();
-                    PrintAllAreas();
-                    Thread.Sleep(2000);
+            EraseAllAreas();
+            PrintAllAreas();
+            Thread.Sleep(2000);
 
-                    if (continueloop == true && kvpAreaWithWaiter.Key == "Reception")
-                    {
-                        if (kvpAreaWithWaiter.Value.WaitersAtArea.Count > 0)
-                        {
-                            ShowTable(kvpAreaWithWaiter.Key, iWaitersIndex);
-                        }
-                    }
-                    if (continueloop == true && kvpAreaWithWaiter.Value is Table && (kvpAreaWithWaiter.Value as Table).HasOrdered == false)
-                    {
-                        if (kvpAreaWithWaiter.Value.WaitersAtArea.Count > 0)
-                        {
-                            TakeOrder(kvpAreaWithWaiter.Key, iWaitersIndex);
-                        }
-                    }
-                        //TakeOrder();
-                    // continueLoop = (MyRestaurantAreas["Reception"] as Reception).WaitersAtArea.Count > 0 ? continueLoop = ShowTable(kvp.Key, i) : continueLoop;
-
-
-
-
-                    ////{
-
-                    ////}
-
-                    //void ta_Beställning()
-                    //{
-
-                    //}
-
-                    //void hämta_mat()
-                    //{
-
-                    //}
-                    //void servera_mat()
-                    //{
-
-                    //}
-                    //void ta_Emot_Pengar()
-                    //{
-
-                    //}
-
-                    //void duka_undan()
-                    //{
-
-                    //}
-
-                    //WaiterList.Add(waiter);
-
-
+            foreach(var kvp in MyRestaurantAreas)
+            {
+                if(kvp.Value is Table)
+                {
+                    TakeOrder(kvp.Key);
                 }
             }
+            //TakeOrder();
+            // continueLoop = (MyRestaurantAreas["Reception"] as Reception).WaitersAtArea.Count > 0 ? continueLoop = ShowTable(kvp.Key, i) : continueLoop;
+
+            ////{
+
+            ////}
+
+            //void ta_Beställning()
+            //{
+
+            //}
+
+            //void hämta_mat()
+            //{
+
+            //}
+            //void servera_mat()
+            //{
+
+            //}
+            //void ta_Emot_Pengar()
+            //{
+
+            //}
+
+            //void duka_undan()
+            //{
+
+            //}
+
+            //WaiterList.Add(waiter);
+
+
+
         }
+
         private bool GreetCompany(string keyAreaContaingingWaiter, int indexOfWaiterInAreaWaiterList)
         {
             MyRestaurantAreas[keyAreaContaingingWaiter].WaitersAtArea[indexOfWaiterInAreaWaiterList].Available = false;
@@ -164,11 +166,11 @@ namespace RestaurantKrustyKrab.Restaurant
                                 MyRestaurantAreas[kvp.Key].CompanyAtArea = company;
                                 company.SeatedAtTable = true;
                                 MyRestaurantAreas[key].WaitersAtArea[index].Company = null;
-                                MyRestaurantAreas[kvp.Key].WaitersAtArea.Add(waiter);
+                                (MyRestaurantAreas[kvp.Key] as Table).WaiterAtTable = (waiter);
                                 MyRestaurantAreas[key].WaitersAtArea.RemoveAt(index);
                                 MyRestaurantAreas[kvp.Key].CompanyAtArea.SeatedAtTable = true;
-                                EraseAllAreas();                                
-                                PrintAllAreas();                               
+                                EraseAllAreas();
+                                PrintAllAreas();
                                 continueLoop = false;
                                 break;
                             }
@@ -180,7 +182,7 @@ namespace RestaurantKrustyKrab.Restaurant
                                 MyRestaurantAreas[kvp.Key].CompanyAtArea = company;
                                 company.SeatedAtTable = true;
                                 MyRestaurantAreas[key].WaitersAtArea[index].Company = null;
-                                MyRestaurantAreas[kvp.Key].WaitersAtArea.Add(waiter);
+                                (MyRestaurantAreas[kvp.Key] as Table).WaiterAtTable = (waiter);
                                 MyRestaurantAreas[kvp.Key].WaitersAtArea.RemoveAt(index);
                                 MyRestaurantAreas[kvp.Key].CompanyAtArea.SeatedAtTable = true;
                                 EraseAllAreas();
@@ -194,19 +196,23 @@ namespace RestaurantKrustyKrab.Restaurant
             }
             return continueLoop;
         }
-        private bool TakeOrder(string areaKey, int waiterIndex)
+        private bool TakeOrder(string areaKey)
         {
             bool continueLoop = false;
             Random random = new Random();
             Dictionary<string, int> order = new Dictionary<string, int>();
+            List<Guest> newGuestList = new List<Guest>();
             foreach (Guest guest in MyRestaurantAreas[areaKey].GuestsAtArea)
             {
                 int orderNumber = random.Next(1, 10);
                 order.Add(guest.Name, orderNumber);
-
                 guest.Name = (guest.Name + " " + (MyRestaurantAreas[areaKey] as Table).Dishes[orderNumber]);
+                guest.Activity = "Waiting for food";
+                newGuestList.Add(guest);
             }
-            MyRestaurantAreas[areaKey].WaitersAtArea[waiterIndex].Area_Order.Add(areaKey, order);
+            MyRestaurantAreas[areaKey].GuestsAtArea = newGuestList;
+            (MyRestaurantAreas[areaKey] as Table).WaiterAtTable.Area_Order.Add(areaKey, order);
+            (MyRestaurantAreas[areaKey] as Table).HasOrdered = true;
             return continueLoop;
         }
         //RitMetoder

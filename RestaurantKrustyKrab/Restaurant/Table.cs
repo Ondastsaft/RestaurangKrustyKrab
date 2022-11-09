@@ -14,6 +14,7 @@ namespace RestaurantKrustyKrab.Restaurant
         internal int TableNumber { get; set; }
         internal Hashtable Dishes { get; set; }
         internal bool HasOrdered { get; set; }
+        internal Waiter WaiterAtTable { get; set; }
 
 
         public Table(string name, int fromTop, int fromLeft, int seats, int quality, int tableNumber) : base(name, fromTop, fromLeft)
@@ -25,6 +26,7 @@ namespace RestaurantKrustyKrab.Restaurant
             FromLeft = fromLeft;
             TableNumber = tableNumber;
             HasOrdered = false;
+            WaiterAtTable = new Waiter("", 0, false, 0, 0);
 
             Dishes = new Hashtable();
             Dishes.Add(1, "Wagyu beef");
