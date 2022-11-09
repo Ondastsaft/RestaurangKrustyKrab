@@ -13,7 +13,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
         public Kitchen(bool foodIsReady, int positionX, int positionY)
         {
-            Frame = new string[12, 45];
+            Frame = new string[12, 50];
             ChefList = new List<Chef>();
             PositionX = positionX;
             PositionY = positionY;

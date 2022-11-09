@@ -96,16 +96,16 @@ namespace RestaurantKrustyKrab.Restaurant
             int tablenumber = 1;
             for (int i = 0; i < 5; i++)
             {
-                tableList.Add(new Table(2, random.Next(1, 4), 24, top, true, tablenumber, false, 4, 25));
+                tableList.Add(new Table(2, random.Next(1, 4), 24, top, true, tablenumber, false, 4, 30));
                 tablenumber++;
-                top = top + 30;
+                top = top + 33;
             }
             top = 12;
             for (int i = 0; i < 5; i++)
             {
-                tableList.Add(new Table(4, random.Next(1, 4), 40, top, true, tablenumber, false, 8, 25));
+                tableList.Add(new Table(4, random.Next(1, 4), 40, top, true, tablenumber, false, 8, 30));
                 tablenumber++;
-                top = top + 30;
+                top = top + 33;
             }
             return tableList;
 
@@ -145,7 +145,13 @@ namespace RestaurantKrustyKrab.Restaurant
 
 
             foreach (Waiter waiter in WaiterList)
+            {
                 waiter.Busy = false;   //kommer ej att tvinga servitörer som dukar bord eftersom de försvinner från waiterlist
+                waiter.At_Kitchen = false;
+                waiter.AT_Reception = true;
+            }
+               
+                
 
             foreach (Table table in TableList)
             {
@@ -194,7 +200,7 @@ namespace RestaurantKrustyKrab.Restaurant
                 Check_if_food_has_been_eaten();
                 Check_if_table_has_been_wiped();
                 Check_if_Restaurant_is_full();
-                draw.draw(TableList, Kitchen, Reception, DishStation, WaiterList, CompanyWaitingList);
+                draw.draw(TableList, Kitchen, Reception, DishStation, WaiterList, CompanyWaitingList, ChefList, GlobalTimer);
 
                 /*printMethods.PrintAll(CompanyWaitingList, GlobalTimer, WaiterList, TableList, ChefList, Kitchen, PaidOrders, Visited_Guests);*/ //readkey finns i PrintAll
 
@@ -289,6 +295,7 @@ namespace RestaurantKrustyKrab.Restaurant
                     waiter.CompanyProperty.Guests.Clear();
                     waiter.Busy = false;
                     waiter.ServingTable = -1;
+                    
                 }
             }
         }
@@ -301,6 +308,7 @@ namespace RestaurantKrustyKrab.Restaurant
                 if (chef.Busy == false && Kitchen.Orders.Count > 0)
                 {
                     chef.Busy = true;
+
                     chef.Preparing.Add(Kitchen.Orders.Dequeue());
 
                     if (Kitchen.Orders.Count > 0)
@@ -404,7 +412,7 @@ namespace RestaurantKrustyKrab.Restaurant
             foreach (Table table in TableList)
             {
                 if (table.RecievedOrder == true)
-                    table.EatTimer = table.EatTimer +10;
+                    table.EatTimer++;
             }
 
         }
@@ -415,7 +423,7 @@ namespace RestaurantKrustyKrab.Restaurant
             {
                 if (chef.Preparing.Count > 0 && chef.Busy == true)
                 {
-                    chef.TimeStart = chef.TimeStart + 5;
+                    chef.TimeStart++;
                 }
             }
         }

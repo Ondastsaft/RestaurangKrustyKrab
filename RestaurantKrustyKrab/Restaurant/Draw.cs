@@ -7,7 +7,7 @@ namespace RestaurantKrustyKrab.Restaurant
     internal class Draw
     {
 
-        public void draw(List<Table> TableList, Kitchen Kitchen, Reception Reception, DishStation DishStation, List<Waiter> WaiterList, Queue<Company> CompanyWaitingList)
+        public void draw(List<Table> TableList, Kitchen Kitchen, Reception Reception, DishStation DishStation, List<Waiter> WaiterList, Queue<Company> CompanyWaitingList, List<Chef> ChefList, int Globaltimer)
         {
             foreach (Table table in TableList)
             {
@@ -25,6 +25,9 @@ namespace RestaurantKrustyKrab.Restaurant
             }
             DrawWaitersAtTables();
             DrawWaitersAtKitchen();
+            DrawChefsAtKitchen();
+            DrawGlobalTimer(Globaltimer);
+            DrawOrders();
 
             void DrawWaitersAtReception()
             {
@@ -45,6 +48,7 @@ namespace RestaurantKrustyKrab.Restaurant
                 }
             }
             
+            
 
             void DrawGuestsAtReception()
             {
@@ -60,7 +64,6 @@ namespace RestaurantKrustyKrab.Restaurant
                 }
             }
             
-
             void Draw_Guests_AT_Tables(Table table)
             {
                 int Z = 1;
@@ -68,7 +71,9 @@ namespace RestaurantKrustyKrab.Restaurant
                 foreach (Guest guest in table.BookedSeats.Guests)
                 {
                     Console.SetCursorPosition(table.PositionY + 1, table.PositionX + Z);
-                    Console.WriteLine(guest.Name);
+                    Console.Write(guest.Name);
+                    if (guest.Order.Count > 0)
+                        Console.Write(" has ordered " + guest.Order[0].Name);
                     Z++;
 
                 }
@@ -76,7 +81,6 @@ namespace RestaurantKrustyKrab.Restaurant
 
                 }
             
-
             void DrawWaitersAtTables()
             {
                 foreach(Waiter waiter in WaiterList)
@@ -104,6 +108,51 @@ namespace RestaurantKrustyKrab.Restaurant
                 
                 }
             }
+
+            void DrawChefsAtKitchen()
+            {
+                int C = 2;
+                foreach (Chef chef in ChefList)
+                {
+                    Console.SetCursorPosition(Kitchen.PositionY + 10, Kitchen.PositionX + C);
+                    Console.Write(chef.Name);
+                    if(chef.Cooking == true && chef.Busy == true)
+                    {
+                        Console.Write(" Cooking for table " + chef.Preparing[0].DestinationTable + " Ready at: " + chef.TimeEnd);
+                    }
+                    else if(chef.Busy == true)
+                    {
+                        Console.WriteLine(" Grabbing orders");
+                    }
+
+                    C = C + 2;
+                }
+            }
+
+            void DrawGlobalTimer(int GlobalTimer)
+            {
+                Console.SetCursorPosition(200, 60);  //Y flyttar i sidled, X flyttar på höjden
+                Console.Write("Timer:" + GlobalTimer);
+
+            }
+
+            void DrawOrders()
+            {
+                Console.SetCursorPosition(Kitchen.PositionY + 3, Kitchen.PositionX + 15);
+                Console.Write("Unfinished Orders: ");
+                if (Kitchen.Orders.Count > 0)
+                
+                    Console.Write(Kitchen.Orders.Count);
+                
+
+                Console.SetCursorPosition(Kitchen.PositionY + 25, Kitchen.PositionX + 15);
+                Console.Write("Finished Orders: ");
+                if (Kitchen.ReadyOrders.Count > 0)
+                
+                    Console.WriteLine("Ready Orders " + Kitchen.ReadyOrders.Count);
+                
+            }
+             
 
             Console.ReadKey();
             Console.Clear();
