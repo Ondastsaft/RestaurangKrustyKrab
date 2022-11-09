@@ -200,7 +200,7 @@ namespace RestaurantKrustyKrab.Restaurant
                 Check_if_food_has_been_eaten();
                 Check_if_table_has_been_wiped();
                 Check_if_Restaurant_is_full();
-                draw.draw(TableList, Kitchen, Reception, DishStation, WaiterList, CompanyWaitingList, ChefList, GlobalTimer);
+                draw.draw(TableList, Kitchen, Reception, DishStation, WaiterList, CompanyWaitingList, ChefList, GlobalTimer, PaidOrders);
 
                 /*printMethods.PrintAll(CompanyWaitingList, GlobalTimer, WaiterList, TableList, ChefList, Kitchen, PaidOrders, Visited_Guests);*/ //readkey finns i PrintAll
 
@@ -372,6 +372,8 @@ namespace RestaurantKrustyKrab.Restaurant
                                 foreach (Guest guest in table.BookedSeats.Guests)
                                     if (dish.Guest == guest.Name)
                                     {
+                                        guest.Recieved_Order = true;
+                                        guest.Order.Clear();   //kanske fuckar upp
                                         guest.Order.Add(dish);
                                         guest.Satisfaction = guest.Satisfaction + dish.Quality;
                                         guest.Satisfaction = guest.Satisfaction + waiter.ServiceLevel;

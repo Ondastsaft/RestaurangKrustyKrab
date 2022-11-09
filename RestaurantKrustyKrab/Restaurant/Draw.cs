@@ -7,7 +7,8 @@ namespace RestaurantKrustyKrab.Restaurant
     internal class Draw
     {
 
-        public void draw(List<Table> TableList, Kitchen Kitchen, Reception Reception, DishStation DishStation, List<Waiter> WaiterList, Queue<Company> CompanyWaitingList, List<Chef> ChefList, int Globaltimer)
+        public void draw(List<Table> TableList, Kitchen Kitchen, Reception Reception, DishStation DishStation, List<Waiter> WaiterList, 
+                         Queue<Company> CompanyWaitingList, List<Chef> ChefList, int Globaltimer, List<string> PaidOrders)
         {
             foreach (Table table in TableList)
             {
@@ -28,6 +29,7 @@ namespace RestaurantKrustyKrab.Restaurant
             DrawChefsAtKitchen();
             DrawGlobalTimer(Globaltimer);
             DrawOrders();
+            DrawTransactions();
 
             void DrawWaitersAtReception()
             {
@@ -72,8 +74,13 @@ namespace RestaurantKrustyKrab.Restaurant
                 {
                     Console.SetCursorPosition(table.PositionY + 1, table.PositionX + Z);
                     Console.Write(guest.Name);
+
                     if (guest.Order.Count > 0)
-                        Console.Write(" has ordered " + guest.Order[0].Name);
+                        if (guest.Recieved_Order == true)
+                            Console.Write(" has recieved " + guest.Order[0].Name);
+
+                        else
+                            Console.Write(" has ordered " + guest.Order[0].Name);
                     Z++;
 
                 }
@@ -152,6 +159,24 @@ namespace RestaurantKrustyKrab.Restaurant
                     Console.WriteLine("Ready Orders " + Kitchen.ReadyOrders.Count);
                 
             }
+
+            void DrawTransactions()
+            {
+                
+                Console.SetCursorPosition(150, 60);  //Y flyttar i sidled, X flyttar på höjden
+                Console.WriteLine("EventLog:");
+                int X = 1;
+                if (PaidOrders.Count > 0)
+                {
+                    foreach (string Event in PaidOrders)
+                    {                        
+                            Console.WriteLine(Event);
+                            Console.SetCursorPosition(150, 60 + X);
+                            X++;
+                        }
+                    }
+                }
+                
              
 
             Console.ReadKey();
