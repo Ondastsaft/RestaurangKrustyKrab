@@ -165,8 +165,6 @@ namespace RestaurantKrustyKrab.People
                 }
             Busy = true;
             Activity = "Taking order";
-
-           
             }
 
         void Give_Kitchen_Order(Kitchen Kitchen)
@@ -247,10 +245,8 @@ namespace RestaurantKrustyKrab.People
                             }
                         }
                         break;
-                    }
-                    
+                    }                    
             }
-                
         }
             
 

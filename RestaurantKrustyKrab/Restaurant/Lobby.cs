@@ -63,9 +63,9 @@ namespace RestaurantKrustyKrab.Restaurant
 
         {
 
-            if (Visited_Guests.Count < 11)
+            if (Visited_Guests.Count < 80)
             {
-               
+                Addguests();
             }
 
             Sequence();
