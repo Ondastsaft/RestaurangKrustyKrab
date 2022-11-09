@@ -236,6 +236,7 @@ namespace RestaurantKrustyKrab.People
                             table.TimeEnd = table.EatTimer + 20;
                             foreach (Guest guest in table.BookedSeats.Guests)
                             {
+                                //if dish.guest == guest.name maybe maybe
                                 {
                                     guest.Recieved_Order = true;
                                     guest.Satisfaction = guest.Satisfaction + Orders[0].Quality;
