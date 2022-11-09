@@ -29,7 +29,9 @@ namespace RestaurantKrustyKrab.Restaurant
         internal List<Guest> Visited_Guests { get; set; }
         internal bool Full_Restaurant { get; set; }
         internal List<string> PaidOrders { get; set; }
-       
+
+        internal List<Guest> Dishers { get; set; }
+
 
         public Lobby()
         {
@@ -48,7 +50,10 @@ namespace RestaurantKrustyKrab.Restaurant
             ChefList = new List<Chef>();
             Visited_Guests = new List<Guest>();
             Full_Restaurant = false;
-            PaidOrders = new List<string>();
+            PaidOrders = new List<string>(new string[12]);
+            Dishers = new List<Guest>();
+            Dishers.Clear();
+
            
             Generate();
         }
@@ -62,6 +67,7 @@ namespace RestaurantKrustyKrab.Restaurant
                 Addguests();
                 Addguests();
                 Addguests();
+
             }
 
             Sequence();
@@ -132,10 +138,8 @@ namespace RestaurantKrustyKrab.Restaurant
 
         {
             Draw draw = new Draw();
-            
 
-            //PrintMethods printMethods = new PrintMethods();
-
+            background_methods();
 
             foreach (Waiter waiter in WaiterList)
             {
@@ -143,32 +147,28 @@ namespace RestaurantKrustyKrab.Restaurant
                 waiter.At_Kitchen = false;
                 waiter.AT_Reception = true;
                 waiter.Taking_or_Giving_Order_at_table = false;
-                waiter.ServingTable = -1;
                 
             }
                
-                
-
             foreach (Table table in TableList)
             {
                 if (table.Finished_Eating == true)
                     Waiter_start_cleaning_And_Take_payment(table);
             }
                 
-               background_methods();
+               
 
             if (Kitchen.ReadyOrders.Count > 0)
             {
-                
-                background_methods();
-
+               
                 Take_order_from_kitchen();
                 background_methods();
 
                 Give_food_to_table();
                 background_methods();
 
-            } 
+            }
+
             if (CompanyWaitingList.Count > 0)
             {
                 GreetGuest();
@@ -184,6 +184,7 @@ namespace RestaurantKrustyKrab.Restaurant
                 background_methods();
 
             }
+
             if (Kitchen.Orders.Count > 0)
             {
                 Chef_take_order();
@@ -201,6 +202,7 @@ namespace RestaurantKrustyKrab.Restaurant
                 Check_if_food_has_been_eaten();
                 Check_if_table_has_been_wiped();
                 Check_if_Restaurant_is_full();
+                Check_if_dishers_are_done();
                 draw.draw(TableList, Kitchen, Reception, DishStation, WaiterList, CompanyWaitingList, ChefList, GlobalTimer, PaidOrders, Visited_Guests);
 
                 /*printMethods.PrintAll(CompanyWaitingList, GlobalTimer, WaiterList, TableList, ChefList, Kitchen, PaidOrders, Visited_Guests);*/ //readkey finns i PrintAll
@@ -214,6 +216,7 @@ namespace RestaurantKrustyKrab.Restaurant
             ChefTimer();
             Wipetimer();
             GuestTimer();
+            DisherTimer();
             GlobalTimer++;
         }
 
@@ -354,6 +357,7 @@ namespace RestaurantKrustyKrab.Restaurant
                         if (dish.DestinationTable == waiter.Orders[0].DestinationTable)
                             Kitchen.ReadyOrders.Dequeue();
                     waiter.ServingTable = waiter.Orders[0].DestinationTable;
+
                 }
         }
 
@@ -431,6 +435,14 @@ namespace RestaurantKrustyKrab.Restaurant
             }
         }
 
+        internal void DisherTimer()
+        {
+            foreach (Guest guest in DishStation.Guests)
+            {
+                guest.Dishing_start++;
+            }
+        }
+
         internal void Chef_readies_an_order()
 
         {
@@ -492,6 +504,25 @@ namespace RestaurantKrustyKrab.Restaurant
 
         }
 
+        internal void Check_if_dishers_are_done()
+        {
+            
+            {
+                if (DishStation.Guests.Count > 0)
+
+                    foreach (Guest guest in DishStation.Guests)
+                        {
+                            if (guest.Dishing_start >= guest.Dishing_end)
+                        {
+                            DishStation.Guests.Clear();
+                            break;
+                        }
+                    }  
+                }
+            }
+           
+        
+
         internal void Waiter_start_cleaning_And_Take_payment(Table table)  //Also keeps the paidOrders List to max
         {
                 {
@@ -499,7 +530,6 @@ namespace RestaurantKrustyKrab.Restaurant
                     {
                         if (waiter.Busy == false)
                         {
-                            
                             waiter.Busy = true;
                             tableReset(table, waiter);
                             table.WipeTimer = GlobalTimer;
@@ -519,25 +549,24 @@ namespace RestaurantKrustyKrab.Restaurant
                         table.Finished_Eating = false;
                         table.EatTimer = -21;
                         
-                        
                         foreach(Guest guest in table.BookedSeats.Guests)
                         {
 
                         if (guest.Money >= guest.Order[0].Price)
                         {
                             PaidOrders.Add(guest.Name + " ordered " + guest.Order[0].Name + " for " + guest.Order[0].Price + " and paid for it, they rate this restaurant " + guest.Satisfaction + "/12");
-                            if (PaidOrders.Count > 12)
-                                PaidOrders.RemoveAt(-1);
                         }
                         else
                         {
                             PaidOrders.Add(guest.Name + " could not afford their " + guest.Order[0].Name + " was forced to help with the dishes, they rate this restaurant " + guest.Satisfaction + "/12");
-                            if (PaidOrders.Count > 12)
-                                PaidOrders.RemoveAt(-1);
+                            DishStation.Guests.Add(guest);
+                            guest.Dishing_start = GlobalTimer;
+                            guest.Dishing_end = GlobalTimer + 5;
                         }
                     }
                     
                     waiter.CompanyProperty.Guests.Clear();
+
                     table.Orders.Clear();
                     table.BookedSeats.Guests.Clear();
                     }
