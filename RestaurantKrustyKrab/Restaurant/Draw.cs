@@ -62,7 +62,7 @@ namespace RestaurantKrustyKrab.Restaurant
                 {
                     Y++;
                     Console.SetCursorPosition(Reception.PositionY + 2, Reception.PositionX + Y);
-                    Console.WriteLine("Company" + company.Guests[0].Name + " + " + company.Guests.Count);
+                    Console.WriteLine("Company " + company.Guests[0].Name + " + " + ( company.Guests.Count - 1));
                 }
             }
             
@@ -70,26 +70,46 @@ namespace RestaurantKrustyKrab.Restaurant
             {
                 int Z = 1;
 
+                if (table.Clean == false)
+                {
+                    Console.SetCursorPosition(table.PositionY + 1, table.PositionX + Z);
+                    Console.Write("Being wiped by: ");
+                    Console.SetCursorPosition(table.PositionY + 1, table.PositionX + Z+1);
+                    Console.Write(table.WipedBy[0].Name);
+                }
+
+
                 foreach (Guest guest in table.BookedSeats.Guests)
                 {
                     Console.SetCursorPosition(table.PositionY + 1, table.PositionX + Z);
                     Console.Write(guest.Name);
 
                     if (guest.Order.Count > 0)
+                    {
                         if (guest.Recieved_Order == true)
                             Console.Write(" has recieved " + guest.Order[0].Name);
 
                         else
                             Console.Write(" has ordered " + guest.Order[0].Name);
+                    }
                     Z++;
-
                 }
+                    if (table.RecievedOrder == true)
+                    {
+                        Console.SetCursorPosition(table.PositionY + 1, table.PositionX + Z+1);
+                        Console.Write("Done eating at " + table.TimeEnd); 
+                    }
                         
 
                 }
+
+                        
+
+                
             
             void DrawWaitersAtTables()
             {
+               
                 foreach(Waiter waiter in WaiterList)
                     if (waiter.Taking_or_Giving_Order_at_table == true)
                         foreach (Table table in TableList)
@@ -163,16 +183,17 @@ namespace RestaurantKrustyKrab.Restaurant
             void DrawTransactions()
             {
                 
-                Console.SetCursorPosition(150, 60);  //Y flyttar i sidled, X flyttar på höjden
+                Console.SetCursorPosition(90, 59);  //Y flyttar i sidled, X flyttar på höjden
                 Console.WriteLine("EventLog:");
                 int X = 1;
                 if (PaidOrders.Count > 0)
                 {
-                    foreach (string Event in PaidOrders)
-                    {                        
+
+                    foreach (string Event in PaidOrders.ToArray().Reverse())
+                    {
+                        X++;
+                            Console.SetCursorPosition(90, 60 + X);
                             Console.WriteLine(Event);
-                            Console.SetCursorPosition(150, 60 + X);
-                            X++;
                         }
                     }
                 }

@@ -82,7 +82,6 @@ namespace RestaurantKrustyKrab.Restaurant
             void AddOrderToAll(Dish dish)
             {
                 waiter.Orders.Add(dish);
-                TableList[(waiter.ServingTable - 1)].Orders.Add(guest.Name, dish);
                 guest.Order.Add(dish);
             }
 

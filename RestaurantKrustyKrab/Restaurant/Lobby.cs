@@ -149,6 +149,8 @@ namespace RestaurantKrustyKrab.Restaurant
                 waiter.Busy = false;   //kommer ej att tvinga servitörer som dukar bord eftersom de försvinner från waiterlist
                 waiter.At_Kitchen = false;
                 waiter.AT_Reception = true;
+                waiter.ServingTable = -1;
+                waiter.Taking_or_Giving_Order_at_table = false;
             }
                
                 
@@ -350,7 +352,9 @@ namespace RestaurantKrustyKrab.Restaurant
 
                 if (Kitchen.ReadyOrders.Count > 0)
                 {
+                    waiter.At_Kitchen = true;
                     waiter.Busy = true;
+                    waiter.AT_Reception = false;
                     waiter.Orders.Add(Kitchen.ReadyOrders.Dequeue());
                     foreach (Dish dish in Kitchen.ReadyOrders.ToList())
                         if (dish.DestinationTable == waiter.Orders[0].DestinationTable)
@@ -367,30 +371,28 @@ namespace RestaurantKrustyKrab.Restaurant
                 foreach (Table table in TableList)
                 {
                     if (waiter.Busy == true && waiter.Orders.Count > 0)
-                    {
-                        
+                    {   
                         if (waiter.Orders[0].DestinationTable == table.TableNumber)
                         {
+                            waiter.ServingTable = waiter.Orders[0].DestinationTable;
+                            waiter.At_Kitchen = false;
                             table.WaitingForFood = false;
+                            waiter.Taking_or_Giving_Order_at_table = true;
                             table.RecievedOrder = true;
+                            table.EatTimer = GlobalTimer;
+                            table.TimeEnd = table.EatTimer + 20;
                             foreach (Dish dish in waiter.Orders)
+                            {
                                 foreach (Guest guest in table.BookedSeats.Guests)
                                     if (dish.Guest == guest.Name)
                                     {
                                         guest.Recieved_Order = true;
-                                        guest.Order.Clear();   //kanske fuckar upp
+                                        guest.Order.Clear();
                                         guest.Order.Add(dish);
                                         guest.Satisfaction = guest.Satisfaction + dish.Quality;
                                         guest.Satisfaction = guest.Satisfaction + waiter.ServiceLevel;
                                     }
-                                        
-
-                            waiter.Orders.Clear();
-                            waiter.Busy = false;
-                            waiter.ServingTable = -1; //Reset
-                            table.EatTimer = GlobalTimer;
-                            table.TimeEnd = table.EatTimer + 20;
-                            break;
+                            }
                         }
                     }
                 }
@@ -541,6 +543,9 @@ namespace RestaurantKrustyKrab.Restaurant
                         }
 
                     }
+                    if (PaidOrders.Count > 12)
+                        PaidOrders.RemoveAt(-1);
+
                     waiter.CompanyProperty.Guests.Clear();
                     table.Orders.Clear();
                     table.BookedSeats.Guests.Clear();
