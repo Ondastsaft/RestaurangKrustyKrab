@@ -140,7 +140,6 @@ namespace RestaurantKrustyKrab.Restaurant
         {
             Draw draw = new Draw();
             
-            Console.ReadKey();
 
             //PrintMethods printMethods = new PrintMethods();
 

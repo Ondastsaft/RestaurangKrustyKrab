@@ -91,7 +91,18 @@ namespace RestaurantKrustyKrab.Restaurant
 
             void DrawWaitersAtKitchen()  //börja här
             {
-
+                
+                int K = 5;
+                foreach (Waiter waiter in WaiterList)
+                {
+                    if (waiter.At_Kitchen == true)
+                    {
+                        Console.SetCursorPosition(Kitchen.PositionY - 10, Kitchen.PositionX + K);
+                        Console.WriteLine(waiter.Name);
+                        K = K + 2;
+                    }
+                
+                }
             }
 
             Console.ReadKey();
