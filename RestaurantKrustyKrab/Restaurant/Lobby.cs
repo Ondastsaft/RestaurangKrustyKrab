@@ -50,7 +50,6 @@ namespace RestaurantKrustyKrab.Restaurant
             Full_Restaurant = false;
             PaidOrders = new List<string>();
            
-
             Generate();
         }
 
@@ -58,17 +57,12 @@ namespace RestaurantKrustyKrab.Restaurant
         internal void LobbyRun()  //sitter i en while loop
 
         {
-
-
             if (Visited_Guests.Count < 80)
             {
                 Addguests();
                 Addguests();
                 Addguests();
             }
-
-
-            
 
             Sequence();
         }
@@ -134,7 +128,6 @@ namespace RestaurantKrustyKrab.Restaurant
                 ChefList.Add(new Chef("Chef: " + i, random.Next(1, 4), 0, 0));
         }
 
-        
         internal void Sequence() 
 
         {
@@ -149,8 +142,9 @@ namespace RestaurantKrustyKrab.Restaurant
                 waiter.Busy = false;   //kommer ej att tvinga servitörer som dukar bord eftersom de försvinner från waiterlist
                 waiter.At_Kitchen = false;
                 waiter.AT_Reception = true;
-                waiter.ServingTable = -1;
                 waiter.Taking_or_Giving_Order_at_table = false;
+                waiter.ServingTable = -1;
+                
             }
                
                 
@@ -207,7 +201,7 @@ namespace RestaurantKrustyKrab.Restaurant
                 Check_if_food_has_been_eaten();
                 Check_if_table_has_been_wiped();
                 Check_if_Restaurant_is_full();
-                draw.draw(TableList, Kitchen, Reception, DishStation, WaiterList, CompanyWaitingList, ChefList, GlobalTimer, PaidOrders);
+                draw.draw(TableList, Kitchen, Reception, DishStation, WaiterList, CompanyWaitingList, ChefList, GlobalTimer, PaidOrders, Visited_Guests);
 
                 /*printMethods.PrintAll(CompanyWaitingList, GlobalTimer, WaiterList, TableList, ChefList, Kitchen, PaidOrders, Visited_Guests);*/ //readkey finns i PrintAll
 
@@ -498,7 +492,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
         }
 
-        internal void Waiter_start_cleaning_And_Take_payment(Table table)  //not done
+        internal void Waiter_start_cleaning_And_Take_payment(Table table)  //Also keeps the paidOrders List to max
         {
                 {
                     foreach (Waiter waiter in WaiterList)
@@ -515,7 +509,6 @@ namespace RestaurantKrustyKrab.Restaurant
                             WaiterList.Remove(waiter);
                             break;
                         }
-
                     }
 
                     void tableReset(Table table, Waiter waiter)
@@ -530,22 +523,20 @@ namespace RestaurantKrustyKrab.Restaurant
                         foreach(Guest guest in table.BookedSeats.Guests)
                         {
 
-                        if 
-
-                            (guest.Money >= guest.Order[0].Price)
-                            PaidOrders.Add(guest.Name + " ordered " + guest.Order[0].Name + " for " + guest.Order[0].Price + " and paid for it, they rate this restaurant "+ guest.Satisfaction + "/12" );
-                            
+                        if (guest.Money >= guest.Order[0].Price)
+                        {
+                            PaidOrders.Add(guest.Name + " ordered " + guest.Order[0].Name + " for " + guest.Order[0].Price + " and paid for it, they rate this restaurant " + guest.Satisfaction + "/12");
+                            if (PaidOrders.Count > 12)
+                                PaidOrders.RemoveAt(-1);
+                        }
                         else
                         {
-
                             PaidOrders.Add(guest.Name + " could not afford their " + guest.Order[0].Name + " was forced to help with the dishes, they rate this restaurant " + guest.Satisfaction + "/12");
-
+                            if (PaidOrders.Count > 12)
+                                PaidOrders.RemoveAt(-1);
                         }
-
                     }
-                    if (PaidOrders.Count > 12)
-                        PaidOrders.RemoveAt(-1);
-
+                    
                     waiter.CompanyProperty.Guests.Clear();
                     table.Orders.Clear();
                     table.BookedSeats.Guests.Clear();

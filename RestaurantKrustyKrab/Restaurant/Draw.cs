@@ -8,7 +8,7 @@ namespace RestaurantKrustyKrab.Restaurant
     {
 
         public void draw(List<Table> TableList, Kitchen Kitchen, Reception Reception, DishStation DishStation, List<Waiter> WaiterList, 
-                         Queue<Company> CompanyWaitingList, List<Chef> ChefList, int Globaltimer, List<string> PaidOrders)
+                         Queue<Company> CompanyWaitingList, List<Chef> ChefList, int Globaltimer, List<string> PaidOrders, List<Guest>Visited_Guests)
         {
             foreach (Table table in TableList)
             {
@@ -20,16 +20,14 @@ namespace RestaurantKrustyKrab.Restaurant
             Window.OurDraw("Reception", Reception.PositionY, Reception.PositionX, Reception.Frame);
             DrawWaitersAtReception();
             DrawGuestsAtReception();
-            foreach (Table table in TableList)
-                {
-                Draw_Guests_AT_Tables(table);
-            }
+            DrawTables();
             DrawWaitersAtTables();
             DrawWaitersAtKitchen();
             DrawChefsAtKitchen();
             DrawGlobalTimer(Globaltimer);
             DrawOrders();
             DrawTransactions();
+            Draw_Total_Number_Of_Guests();
 
             void DrawWaitersAtReception()
             {
@@ -45,13 +43,9 @@ namespace RestaurantKrustyKrab.Restaurant
                         Console.SetCursorPosition(Reception.PositionY + 30, Reception.PositionX + X);
                         X++;
                     }
-
-                    
                 }
             }
             
-            
-
             void DrawGuestsAtReception()
             {
                 int Y = 1;
@@ -65,8 +59,16 @@ namespace RestaurantKrustyKrab.Restaurant
                     Console.WriteLine("Company " + company.Guests[0].Name + " + " + ( company.Guests.Count - 1));
                 }
             }
-            
-            void Draw_Guests_AT_Tables(Table table)
+
+            void DrawTables()
+                {
+                    foreach (Table table in TableList)
+                    {
+                    Draw_Tables(table);
+                    }
+                }
+
+            void Draw_Tables(Table table)
             {
                 int Z = 1;
 
@@ -76,6 +78,8 @@ namespace RestaurantKrustyKrab.Restaurant
                     Console.Write("Being wiped by: ");
                     Console.SetCursorPosition(table.PositionY + 1, table.PositionX + Z+1);
                     Console.Write(table.WipedBy[0].Name);
+                    Console.SetCursorPosition(table.PositionY + 1, table.PositionX + Z + 1);
+                    Console.Write("Done at: " + table.WipeEnd);
                 }
 
 
@@ -99,14 +103,8 @@ namespace RestaurantKrustyKrab.Restaurant
                         Console.SetCursorPosition(table.PositionY + 1, table.PositionX + Z+1);
                         Console.Write("Done eating at " + table.TimeEnd); 
                     }
-                        
-
                 }
 
-                        
-
-                
-            
             void DrawWaitersAtTables()
             {
                
@@ -193,13 +191,17 @@ namespace RestaurantKrustyKrab.Restaurant
                     {
                         X++;
                             Console.SetCursorPosition(90, 60 + X);
-                            Console.WriteLine(Event);
+                            Console.WriteLine(Event);    
                         }
                     }
                 }
                 
+            void Draw_Total_Number_Of_Guests()
+            {
+                Console.SetCursorPosition(1, 1);
+                Console.WriteLine("Total visited guests " + Visited_Guests.Count);
+            }
              
-
             Console.ReadKey();
             Console.Clear();
                
