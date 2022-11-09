@@ -26,5 +26,19 @@ namespace RestaurantKrustyKrab.Restaurant
             FromTop = fromTop;
             FromLeft = fromLeft;
         }
+        public virtual void EraseMe()
+        {
+            for (int i = 0; i < Frame.GetLength(0); i++)
+            {
+                Console.SetCursorPosition(FromLeft + 1, FromTop + 1);
+                Console.Write(new string(' ', Frame.GetLength(1) - 2));
+            }
+
+        }
+
+        public virtual void PrintMe()
+        {
+
+        }
     }
 }

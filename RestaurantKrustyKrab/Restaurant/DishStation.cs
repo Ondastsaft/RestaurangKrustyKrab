@@ -1,6 +1,4 @@
-﻿using RestaurantKrustyKrab.People;
-
-namespace RestaurantKrustyKrab.Restaurant
+﻿namespace RestaurantKrustyKrab.Restaurant
 {
     internal class DishStation : RestaurantArea
     {

@@ -13,9 +13,34 @@ namespace RestaurantKrustyKrab.Restaurant
             for (int i = 0; i < 3; i++)
             {
                 string waiterName = "Waiter " + (i + 1);
-                WaitersAtArea.Add(new Waiter(waiterName, 0, false, FromTop + 1, FromLeft + 2));
+                WaitersAtArea.Add(new Waiter(waiterName, 0, true, FromTop + 1, FromLeft + 2));
             }
 
+        }
+        public override void PrintMe()
+        {
+            int row = 0;
+            foreach (var waiter in WaitersAtArea)
+            {
+                Console.SetCursorPosition(FromLeft + 1, FromTop + 1 + row);
+                Console.Write(waiter.Name);
+                row++;
+            }
+        }
+        public override void EraseMe()
+        {
+            for (int i = 0; i < Frame.GetLength(0) - 1; i++)
+            {
+                Console.SetCursorPosition(FromLeft + 1, FromTop + 1 + i);
+                Console.Write(new string(' ', Frame.GetLength(1) - 2));
+            }
+        }
+
+
+
+        public override string ToString()
+        {
+            return "WaitersWaitingArea".ToString();
         }
     }
 

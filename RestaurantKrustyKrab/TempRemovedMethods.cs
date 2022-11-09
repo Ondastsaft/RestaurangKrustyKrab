@@ -1,12 +1,4 @@
-﻿using RestaurantKrustyKrab.People;
-using RestaurantKrustyKrab.Restaurant;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RestaurantKrustyKrab
+﻿namespace RestaurantKrustyKrab
 {
     internal class TempRemovedMethods
     {
@@ -112,6 +104,69 @@ namespace RestaurantKrustyKrab
         //        company.Guests[0].FromLeft = (company.Guests[0].FromLeft - 1);
         //    }
 
+        //}
+        //private void PrintRestaurantArea(RestaurantArea restaurantArea)
+        //{
+        //    PrintList(restaurantArea.GuestsAtArea);
+        //    PrintList(restaurantArea.CompaniesAtArea);
+        //    PrintList(restaurantArea.WaitersAtArea);
+        //    PrintList(restaurantArea.ChefsAtArea);
+
+        //}
+        //private void EraseRestaurantArea(RestaurantArea restaurantArea)
+        //{
+        //    EraseList(restaurantArea.GuestsAtArea);
+        //    EraseList(restaurantArea.CompaniesAtArea);
+        //    EraseList(restaurantArea.WaitersAtArea);
+        //    EraseList(restaurantArea.ChefsAtArea);
+        //}
+        //public void ErasePosition(Person person)
+        //{
+
+        //    Console.SetCursorPosition(person.FromTop, person.FromLeft);
+        //    Console.WriteLine("              ");
+        //    Console.SetCursorPosition(person.FromTop, person.FromLeft);
+
+        //}
+        //public void EraseList<T>(List<T> personList)
+        //{
+        //    int row = 0;
+        //    foreach (T person in personList)
+        //    {
+        //        Console.SetCursorPosition((person as Person).FromLeft, ((person as Person).FromTop + row));
+        //        Console.Write(new string(' ', (person as Person).Name.Length));
+        //        row++;
+        //    }
+        //}
+        //public void EraseList<T>(Queue<T> companyList)
+        //{
+        //    int row = 0;
+        //    foreach (T company in companyList)
+        //    {
+        //        Console.SetCursorPosition((company as Company).Guests[0].FromTop, ((company as Company).Guests[0].FromLeft + row));
+        //        Console.Write(new string(' ', (company as Company).Guests[0].Name.Length));
+        //        row++;
+        //    }
+        //}
+        //public void PrintList<T>(Queue<T> companyList)
+        //{
+        //    int row = 0;
+        //    foreach (T company in companyList)
+        //    {
+        //        Console.SetCursorPosition((company as Company).Guests[0].FromTop, ((company as Company).Guests[0].FromLeft + row));
+        //        Console.Write((company as Company).Guests[0].Name);
+        //        //row++;
+        //    }
+        //}
+        //public void PrintList<T>(List<T> personList)
+        //{
+        //    int row = 0;
+        //    foreach (T person in personList)
+        //    {
+        //        Console.SetCursorPosition((person as Person).FromLeft, ((person as Person).FromTop + row));
+        //        Console.Write((person as Person).Name);
+        //        row++;
+        //    }
         //}
     }
 }
