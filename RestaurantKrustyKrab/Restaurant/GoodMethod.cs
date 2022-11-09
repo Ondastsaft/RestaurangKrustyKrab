@@ -13,7 +13,7 @@ namespace RestaurantKrustyKrab.Restaurant
     internal class GoodMethod
     {
 
-        internal void AddOrderTo_Table_Guest_Waiter(int menuorder, Waiter waiter, Guest guest, List<Table> TableList)
+        internal void AddOrderTo_Table_Guest_Waiter(int menuorder, Waiter waiter, Guest guest)
         {
             Dish dish = new Dish(waiter.ServingTable, guest.Name);
 

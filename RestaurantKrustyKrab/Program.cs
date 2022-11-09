@@ -11,6 +11,7 @@ namespace RestaurantKrustyKrab
         {
             Lobby MyLobby = new Lobby();
             Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
+            MyLobby.Addguests();
             while (true)
                 
             {

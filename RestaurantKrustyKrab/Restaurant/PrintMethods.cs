@@ -77,7 +77,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
                     if (table.Clean == false)
                     {
-                        Console.WriteLine("Tablenumber: " + table.TableNumber + " This table is being wiped by " + table.WipedBy[0].Name);
+                        Console.WriteLine("Tablenumber: " + table.TableNumber + " This table is being wiped by " + table.WipedBy);
                         Console.WriteLine("Wipetimer: " + table.WipeTimer);
                         Console.WriteLine("WipeEnd: " + table.WipeEnd);
                     }
@@ -108,12 +108,6 @@ namespace RestaurantKrustyKrab.Restaurant
 
                             Console.Write(" " + guest.Name);
 
-                        }
-                        Console.WriteLine();
-
-                        foreach (DictionaryEntry de in table.Orders)
-                        {
-                            Console.WriteLine(de.Key + " Ordered: " + de.Value.GetType().Name);
                         }
 
                         Console.WriteLine();

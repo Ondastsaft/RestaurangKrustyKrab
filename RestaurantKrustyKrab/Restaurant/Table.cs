@@ -19,9 +19,10 @@ namespace RestaurantKrustyKrab.Restaurant
         internal bool Finished_Eating { get; set; }
         internal int TimeEnd { get; set; }
         internal bool Clean { get; set; }
-        internal List<Waiter> WipedBy { get; set; }
+        internal string WipedBy { get; set; }
         internal int WipeTimer { get; set; }
         internal int WipeEnd { get; set; }
+        
         
 
 
@@ -42,8 +43,10 @@ namespace RestaurantKrustyKrab.Restaurant
             EatTimer = -21;
             Finished_Eating = false;
             Clean = true;
-            WipedBy = new List<Waiter>();
+
+            
             WipeTimer = -4;
+            
 
 
         }

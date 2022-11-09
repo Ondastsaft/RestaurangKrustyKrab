@@ -7,9 +7,11 @@ namespace RestaurantKrustyKrab.Restaurant
     internal class Draw
     {
 
+
         public void draw(List<Table> TableList, Kitchen Kitchen, Reception Reception, DishStation DishStation, List<Waiter> WaiterList, 
                          Queue<Company> CompanyWaitingList, List<Chef> ChefList, int Globaltimer, List<string> PaidOrders, List<Guest>Visited_Guests)
         {
+            Console.Clear();
             foreach (Table table in TableList)
             {
                 Window.OurDraw("Bord " + table.TableNumber, table.PositionY, table.PositionX, table.Frame);
@@ -17,7 +19,7 @@ namespace RestaurantKrustyKrab.Restaurant
             
             Window.OurDraw("Kitchen", Kitchen.PositionY, Kitchen.PositionX, Kitchen.Frame);
             Window.OurDraw("Dish Station", DishStation.PositionY, DishStation.PositionX, DishStation.Frame);
-            Window.OurDraw("Reception", Reception.PositionY, Reception.PositionX, Reception.Frame);
+            Window.OurDraw("Reception", Reception.PositionY, Reception.PositionX, Reception.Frame);  
             DrawWaitersAtReception();
             DrawGuestsAtReception();
             DrawTables();
@@ -37,7 +39,7 @@ namespace RestaurantKrustyKrab.Restaurant
                 foreach (Waiter waiter in WaiterList)
                 {
                     if (waiter.AT_Reception == true)
-                    {
+                    {  
                         Console.Write(waiter.Name);
                         if (waiter.CompanyProperty.Guests.Count > 0)
                             Console.WriteLine(" " + waiter.CompanyProperty.Guests[0].Name + " + " + waiter.CompanyProperty.Guests.Count);
@@ -78,7 +80,7 @@ namespace RestaurantKrustyKrab.Restaurant
                     Console.SetCursorPosition(table.PositionY + 1, table.PositionX + Z);
                     Console.Write("Being wiped by: ");
                     Console.SetCursorPosition(table.PositionY + 1, table.PositionX + Z+1);
-                    Console.Write(table.WipedBy[0].Name);
+                    Console.Write(table.WipedBy);
                     Console.SetCursorPosition(table.PositionY + 1, table.PositionX + Z + 2);
                     Console.Write("Done at: " + table.WipeEnd);
                 }
@@ -107,19 +109,24 @@ namespace RestaurantKrustyKrab.Restaurant
                 }
 
             void DrawWaitersAtTables()
-            {
+            { 
                
                 foreach(Waiter waiter in WaiterList)
-                    if (waiter.Taking_or_Giving_Order_at_table == true)
                         foreach (Table table in TableList)
                             if(waiter.ServingTable == table.TableNumber)
                             {
-                                Console.SetCursorPosition(table.PositionY +1, table.PositionX - 1);
-                                Console.Write(waiter.Name);
+                                Console.SetCursorPosition(table.PositionY + 1, table.PositionX - 1);
+                                Console.Write(waiter.Name  );
+                            if (waiter.Leading_to_table == true)
+                            {
+                                Console.Write("Leading to table"); 
+                            }
+                            if (waiter.Taking_order_at_table == true)
+                                Console.Write("Taking order");  
                             }
             }
 
-            void DrawWaitersAtKitchen()  //börja här
+            void DrawWaitersAtKitchen() 
             {
                 
                 int K = 5;
@@ -220,8 +227,9 @@ namespace RestaurantKrustyKrab.Restaurant
 
             }
             Console.ReadKey();
-            Console.Clear();
-               
+            Console.Clear(); 
+
+
         }
 
 
