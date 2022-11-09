@@ -117,7 +117,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
         internal void GenerateWaiter()
         {
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 3; i++)
             {
                 string name = "Waiter " + (i + 1);
                 WaiterList.Add(new Waiter(name, random.Next(1,4), false, 110, (3 + i + 1)));
@@ -141,18 +141,18 @@ namespace RestaurantKrustyKrab.Restaurant
             PrintMethods printMethods = new PrintMethods();
             Draw draw = new Draw();
 
-            background_methods();
             foreach (Waiter waiter in WaiterList)
             {
                 waiter.Work(CompanyWaitingList, Full_Restaurant, TableList, Kitchen, GlobalTimer, PaidOrders, DishStation);
 
             }
+            background_methods();
 
             if (Kitchen.Orders.Count > 0)
             {
                 Chef_take_order();
-                background_methods();
                 Chef_Prepare();
+                background_methods();
             }
 
             void background_methods()

@@ -38,9 +38,9 @@ namespace RestaurantKrustyKrab.Restaurant
                 int X = 1;
                 foreach (Waiter waiter in WaiterList)
                 {
-                    if (waiter.AT_Reception == true)
+                    if (waiter.Location == "Reception")
                     {  
-                        Console.Write(waiter.Name);
+                        Console.Write(waiter.Name + waiter.Activity  );
                         if (waiter.CompanyProperty.Guests.Count > 0)
                             Console.WriteLine(" " + waiter.CompanyProperty.Guests[0].Name + " + " + (waiter.CompanyProperty.Guests.Count -1));
                         Console.SetCursorPosition(Reception.PositionY + 30, Reception.PositionX + X);
@@ -109,21 +109,19 @@ namespace RestaurantKrustyKrab.Restaurant
                 }
 
             void DrawWaitersAtTables()
-            { 
-               
-                foreach(Waiter waiter in WaiterList)
-                        foreach (Table table in TableList)
-                            if(waiter.ServingTable == table.TableNumber)
-                            {
-                                Console.SetCursorPosition(table.PositionY + 1, table.PositionX - 1);
-                                Console.Write(waiter.Name  );
-                            if (waiter.Leading_to_table == true)
-                            {
-                                Console.Write("Leading to table"); 
-                            }
-                            if (waiter.Taking_order_at_table == true)
-                                Console.Write("Taking order");  
-                            }
+            {
+
+                foreach (Waiter waiter in WaiterList)
+                {
+                    foreach (Table table in TableList)
+
+                        if (waiter.ServingTable == table.TableNumber && waiter.Location == "Tables")
+                        {
+                            Console.SetCursorPosition(table.PositionY + 1, table.PositionX - 1);
+                            Console.Write(waiter.Name + waiter.Activity);
+                        }    
+                }
+                    
             }
 
             void DrawWaitersAtKitchen() 
@@ -132,10 +130,12 @@ namespace RestaurantKrustyKrab.Restaurant
                 int K = 5;
                 foreach (Waiter waiter in WaiterList)
                 {
-                    if (waiter.At_Kitchen == true)
+                    if (waiter.Location == "Kitchen")
                     {
                         Console.SetCursorPosition(Kitchen.PositionY - 10, Kitchen.PositionX + K);
-                        Console.WriteLine(waiter.Name);
+                        Console.Write(waiter.Name  );
+                        Console.SetCursorPosition(Kitchen.PositionY - 10, Kitchen.PositionX + K + 1);
+                        Console.Write(waiter.Activity);
                         K = K + 2;
                     }
                 
@@ -213,12 +213,13 @@ namespace RestaurantKrustyKrab.Restaurant
             void Draw_Dishers(DishStation DishStation)
             {
                 int X = 1;
-                Console.SetCursorPosition(DishStation.PositionY, DishStation.PositionX + 1);
+                Console.SetCursorPosition(DishStation.PositionY + 2, DishStation.PositionX +1);
+                Console.Write("Dishers: ");
                 if (DishStation.Guests.Count > 0)
                 {
                     foreach (Guest guest in DishStation.Guests)
                     {
-                        Console.SetCursorPosition(DishStation.PositionY, DishStation.PositionX + 1 + X);
+                        Console.SetCursorPosition(DishStation.PositionY + 2  , DishStation.PositionX    + 1 + X);
                         Console.Write(guest.Name + "Done at: " + guest.Dishing_end);
                         X++;
                     }
@@ -226,8 +227,7 @@ namespace RestaurantKrustyKrab.Restaurant
                
 
             }
-            Console.ReadKey();
-            Console.Clear(); 
+            Console.ReadKey(); 
 
 
         }
