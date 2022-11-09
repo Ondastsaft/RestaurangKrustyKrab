@@ -63,9 +63,9 @@ namespace RestaurantKrustyKrab.Restaurant
 
         {
 
-            if (Visited_Guests.Count < 80)
+            if (Visited_Guests.Count < 11)
             {
-
+               
             }
 
             Sequence();
@@ -136,7 +136,7 @@ namespace RestaurantKrustyKrab.Restaurant
       
             internal void Sequence() 
 
-        {
+            {
 
             PrintMethods printMethods = new PrintMethods();
             Draw draw = new Draw();
@@ -147,14 +147,12 @@ namespace RestaurantKrustyKrab.Restaurant
                 waiter.Work(CompanyWaitingList, Full_Restaurant, TableList, Kitchen, GlobalTimer, PaidOrders, DishStation);
 
             }
-            background_methods();
 
             if (Kitchen.Orders.Count > 0)
             {
                 Chef_take_order();
-                Chef_Prepare();
-
                 background_methods();
+                Chef_Prepare();
             }
 
             void background_methods()

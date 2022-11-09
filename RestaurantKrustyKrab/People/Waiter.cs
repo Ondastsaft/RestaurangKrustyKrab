@@ -189,23 +189,32 @@ namespace RestaurantKrustyKrab.People
                 }
             }
 
+
         void Take_order_from_kitchen(Kitchen Kitchen)
         {
-                if (Kitchen.ReadyOrders.Count > 0 && Busy == false && Kitchen.FoodIsReady == true)
-                {
-                    Taking_order_from_kitchen = true;
-                    At_Kitchen = true;
-                    Busy = true;
-                    AT_Reception = false;
-                    Orders.Add(Kitchen.ReadyOrders.Dequeue());
-                    foreach (Dish dish in Kitchen.ReadyOrders.ToList())
+            if (Kitchen.ReadyOrders.Count > 0 && Busy == false)
+            {
+                Taking_order_from_kitchen = true;
+                At_Kitchen = true;
+                Busy = true;
+                AT_Reception = false;
+                Orders.Add(Kitchen.ReadyOrders.Dequeue());
+                foreach (Dish dish in Kitchen.ReadyOrders.ToList())
                 {
                     if (dish.DestinationTable == Orders[0].DestinationTable)
                         Kitchen.ReadyOrders.Dequeue();
                 }
-                    ServingTable = Orders[0].DestinationTable;
+                ServingTable = Orders[0].DestinationTable;
 
-                }
+            }
+            else
+            {
+                Busy = false;
+                At_Kitchen = false;
+                AT_Reception = true;
+            }
+                
+
         }
 
         void Give_food_to_table(List<Table> TableList, int GlobalTimer)
@@ -227,16 +236,11 @@ namespace RestaurantKrustyKrab.People
                         table.RecievedOrder = true;
                         table.EatTimer = GlobalTimer;
                         table.TimeEnd = table.EatTimer + 20;
-                        foreach (Dish dish in Orders)
-                        {
                             foreach (Guest guest in table.BookedSeats.Guests)
                             {
-                                if (dish.Guest == guest.Name)
                                 {
                                     guest.Recieved_Order = true;
-                                    guest.Order.Clear();
-                                    guest.Order.Add(dish);
-                                    guest.Satisfaction = guest.Satisfaction + dish.Quality;
+                                    guest.Satisfaction = guest.Satisfaction + Orders[0].Quality;
                                     guest.Satisfaction = guest.Satisfaction + ServiceLevel;
 
                                 }
@@ -248,8 +252,7 @@ namespace RestaurantKrustyKrab.People
             }
 
                 
-                }
-            
+               
         void return_from_serving()
         {
             if (Busy == false && At_Kitchen == false && Giving_food_to_table == true )
@@ -268,6 +271,7 @@ namespace RestaurantKrustyKrab.People
                     if (table.Finished_Eating)
                     {
                         Busy = true;
+                        AT_Reception = false;
                         tableReset(table, this, PaidOrders, Dishstation);
                         table.WipeTimer = GlobalTimer;
                         table.WipeEnd = table.WipeTimer + 3;

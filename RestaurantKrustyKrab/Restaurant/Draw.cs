@@ -42,7 +42,7 @@ namespace RestaurantKrustyKrab.Restaurant
                     {  
                         Console.Write(waiter.Name);
                         if (waiter.CompanyProperty.Guests.Count > 0)
-                            Console.WriteLine(" " + waiter.CompanyProperty.Guests[0].Name + " + " + waiter.CompanyProperty.Guests.Count);
+                            Console.WriteLine(" " + waiter.CompanyProperty.Guests[0].Name + " + " + (waiter.CompanyProperty.Guests.Count -1));
                         Console.SetCursorPosition(Reception.PositionY + 30, Reception.PositionX + X);
                         X++;
                     }
