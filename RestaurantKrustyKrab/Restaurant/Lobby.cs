@@ -173,25 +173,30 @@ namespace RestaurantKrustyKrab.Restaurant
                 background_methods();
 
             } 
+            if (CompanyWaitingList.Count > 0)
+            {
+                GreetGuest();
+                background_methods();
 
-            GreetGuest();
-            background_methods();
+                Lead_To_table();
+                background_methods();
 
-            Lead_To_table();
-            background_methods();
+                Take_Order();
+                background_methods();
 
-            Take_Order();
-            background_methods();
+                Give_Kitchen_Order();
+                background_methods();
 
-            Give_Kitchen_Order();
-            background_methods();
+            }
+            if (Kitchen.Orders.Count > 0)
+            {
+                Chef_take_order();
+                background_methods();
 
-            
-            Chef_take_order();
-            background_methods();
-
-            Chef_Prepare();
-            background_methods();
+                Chef_Prepare();
+                background_methods();
+            }
+         
 
             void background_methods()
             {
