@@ -15,7 +15,6 @@ namespace RestaurantKrustyKrab.Restaurant
                 string waiterName = "Waiter " + (i + 1);
                 WaitersAtArea.Add(new Waiter(waiterName, 0, true, FromTop + 1, FromLeft + 2));
             }
-
         }
         public override void PrintMe()
         {

@@ -97,9 +97,9 @@
         //    return busy;
 
         //}
-        //if (number > 50 && MyRestaurantAreas["Reception"].CompaniesAtArea.Count > 0)   //Här någonstans kan vi ha en bool som en waiter styr när vi dequeuear
+        //if (number > 50 && MyRestaurantAreas["Reception"].CompanyAtArea.Count > 0)   //Här någonstans kan vi ha en bool som en waiter styr när vi dequeuear
         //{
-        //    foreach (Company company in MyRestaurantAreas["Reception"].CompaniesAtArea)
+        //    foreach (Company company in MyRestaurantAreas["Reception"].CompanyAtArea)
         //    {
         //        company.Guests[0].FromLeft = (company.Guests[0].FromLeft - 1);
         //    }
@@ -108,7 +108,7 @@
         //private void PrintRestaurantArea(RestaurantArea restaurantArea)
         //{
         //    PrintList(restaurantArea.GuestsAtArea);
-        //    PrintList(restaurantArea.CompaniesAtArea);
+        //    PrintList(restaurantArea.CompanyAtArea);
         //    PrintList(restaurantArea.WaitersAtArea);
         //    PrintList(restaurantArea.ChefsAtArea);
 
@@ -116,7 +116,7 @@
         //private void EraseRestaurantArea(RestaurantArea restaurantArea)
         //{
         //    EraseList(restaurantArea.GuestsAtArea);
-        //    EraseList(restaurantArea.CompaniesAtArea);
+        //    EraseList(restaurantArea.CompanyAtArea);
         //    EraseList(restaurantArea.WaitersAtArea);
         //    EraseList(restaurantArea.ChefsAtArea);
         //}

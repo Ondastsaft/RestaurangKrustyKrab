@@ -13,6 +13,7 @@ namespace RestaurantKrustyKrab.Restaurant
         internal bool IsAvailable = true;
         internal int TableNumber { get; set; }
         internal Hashtable Dishes { get; set; }
+        internal bool HasOrdered { get; set; }
 
 
         public Table(string name, int fromTop, int fromLeft, int seats, int quality, int tableNumber) : base(name, fromTop, fromLeft)
@@ -23,6 +24,7 @@ namespace RestaurantKrustyKrab.Restaurant
             FromTop = fromTop;
             FromLeft = fromLeft;
             TableNumber = tableNumber;
+            HasOrdered = false;
 
             Dishes = new Hashtable();
             Dishes.Add(1, "Wagyu beef");
@@ -52,15 +54,12 @@ namespace RestaurantKrustyKrab.Restaurant
                 }
             }
             row = 0;
-            foreach (Company company in CompaniesAtArea)
-            {
-                foreach (Guest guest in company.Guests)
+                foreach (Guest guest in CompanyAtArea.Guests)
                 {
                     Console.SetCursorPosition(FromLeft + 1, FromTop + 1 + row);
                     Console.Write(guest.Name + " " + guest.Activity + " " + guest.OrderedFood);
                     row++;
                 }
-            }
         }
 
         public override void EraseMe()

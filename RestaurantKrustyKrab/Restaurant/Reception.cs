@@ -11,9 +11,10 @@ namespace RestaurantKrustyKrab.Restaurant
             Frame = new string[13, 25];
             FromTop = fromTop;
             FromLeft = fromLeft;
+            WaitersAtArea = new List<Waiter>();
         }
         public override void PrintMe()
-        {
+         {
             int row = 0;
             foreach (Company company in CompanyWaitingQueue)
             {

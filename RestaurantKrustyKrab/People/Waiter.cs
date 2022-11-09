@@ -13,7 +13,6 @@
             ServiceLevel = serviceLevel;
             Available = available;
             Company = new Company(0);
-            Company.Guests.Clear();
         }
     }
 }

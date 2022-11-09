@@ -86,10 +86,18 @@ namespace RestaurantKrustyKrab.Restaurant
                     if (continueloop == true && kvpAreaWithWaiter.Key == "Reception")
                     {
                         if (kvpAreaWithWaiter.Value.WaitersAtArea.Count > 0)
-
+                        {
                             ShowTable(kvpAreaWithWaiter.Key, iWaitersIndex);
+                        }
                     }
-                    //TakeOrder() - Gör om
+                    if (continueloop == true && kvpAreaWithWaiter.Value is Table && (kvpAreaWithWaiter.Value as Table).HasOrdered == false)
+                    {
+                        if (kvpAreaWithWaiter.Value.WaitersAtArea.Count > 0)
+                        {
+                            TakeOrder(kvpAreaWithWaiter.Key, iWaitersIndex);
+                        }
+                    }
+                        //TakeOrder();
                     // continueLoop = (MyRestaurantAreas["Reception"] as Reception).WaitersAtArea.Count > 0 ? continueLoop = ShowTable(kvp.Key, i) : continueLoop;
 
 
@@ -151,28 +159,34 @@ namespace RestaurantKrustyKrab.Restaurant
                     {
                         if (company.Guests.Count < 3)
                         {
-                            if ((kvp.Value as Table).IsAvailable && (kvp.Value as Table).Seats == 2)
+                            if ((kvp.Value as Table).IsAvailable && (kvp.Value as Table).Seats == 2 && company.SeatedAtTable == false)
                             {
+                                MyRestaurantAreas[kvp.Key].CompanyAtArea = company;
+                                company.SeatedAtTable = true;
+                                MyRestaurantAreas[key].WaitersAtArea[index].Company = null;
                                 MyRestaurantAreas[kvp.Key].WaitersAtArea.Add(waiter);
-                                MyRestaurantAreas[kvp.Key].CompaniesAtArea.Add(company);
-                                EraseAllAreas();
                                 MyRestaurantAreas[key].WaitersAtArea.RemoveAt(index);
-                                PrintAllAreas();
-                                MyRestaurantAreas[kvp.Key].WaitersAtArea[MyRestaurantAreas[kvp.Key].WaitersAtArea.Count - 1].Company = null;
+                                MyRestaurantAreas[kvp.Key].CompanyAtArea.SeatedAtTable = true;
+                                EraseAllAreas();                                
+                                PrintAllAreas();                               
                                 continueLoop = false;
                                 break;
                             }
                         }
                         else if (company.Guests.Count >= 3)
                         {
-                            if ((kvp.Value as Table).IsAvailable && (kvp.Value as Table).Seats == 4)
+                            if ((kvp.Value as Table).IsAvailable && (kvp.Value as Table).Seats == 4 && company.SeatedAtTable == false)
                             {
+                                MyRestaurantAreas[kvp.Key].CompanyAtArea = company;
+                                company.SeatedAtTable = true;
+                                MyRestaurantAreas[key].WaitersAtArea[index].Company = null;
                                 MyRestaurantAreas[kvp.Key].WaitersAtArea.Add(waiter);
-                                MyRestaurantAreas[kvp.Key].CompaniesAtArea.Add(company);
-                                EraseAllAreas();
                                 MyRestaurantAreas[kvp.Key].WaitersAtArea.RemoveAt(index);
+                                MyRestaurantAreas[kvp.Key].CompanyAtArea.SeatedAtTable = true;
+                                EraseAllAreas();
                                 PrintAllAreas();
                                 continueLoop = false;
+                                break;
                             }
                         }
                     }
@@ -193,7 +207,6 @@ namespace RestaurantKrustyKrab.Restaurant
                 guest.Name = (guest.Name + " " + (MyRestaurantAreas[areaKey] as Table).Dishes[orderNumber]);
             }
             MyRestaurantAreas[areaKey].WaitersAtArea[waiterIndex].Area_Order.Add(areaKey, order);
-
             return continueLoop;
         }
         //RitMetoder
