@@ -38,10 +38,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
 
 
-        public override string ToString()
-        {
-            return "WaitersWaitingArea".ToString();
-        }
+
     }
 
 }

@@ -52,11 +52,14 @@ namespace RestaurantKrustyKrab.Restaurant
                 }
             }
             row = 0;
-            foreach (var guest in GuestsAtArea)
+            foreach (Company company in CompaniesAtArea)
             {
-                Console.SetCursorPosition(FromLeft + 1, FromTop + 1);
-                Console.Write(guest.Name + " " + guest.Activity + " " + guest.OrderedFood);
-                row++;
+                foreach (Guest guest in company.Guests)
+                {
+                    Console.SetCursorPosition(FromLeft + 1, FromTop + 1 + row);
+                    Console.Write(guest.Name + " " + guest.Activity + " " + guest.OrderedFood);
+                    row++;
+                }
             }
         }
 

@@ -24,6 +24,7 @@ namespace RestaurantKrustyKrab.Restaurant
             row = 0;
             foreach (Waiter waiter in WaitersAtArea)
             {
+
                 Console.SetCursorPosition(FromLeft - 12, FromTop + 1 + row);
                 Console.Write(waiter.Name);
                 foreach (Guest guest in waiter.Company.Guests)
@@ -33,6 +34,7 @@ namespace RestaurantKrustyKrab.Restaurant
                     row++;
                 }
 
+                row++;
                 row++;
             }
         }

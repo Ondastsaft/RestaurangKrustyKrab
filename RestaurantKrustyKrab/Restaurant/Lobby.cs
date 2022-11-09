@@ -9,14 +9,9 @@ namespace RestaurantKrustyKrab.Restaurant
         internal string Name { get; set; }
         internal int FromTop { get; set; }
         internal int FromLeft { get; set; }
-
         internal Dictionary<string, RestaurantArea> MyRestaurantAreas { get; set; }
-
         internal int CounterRestaurant { get; set; }
-
         public int Time { get; set; }
-
-
         public Lobby()
         {
             MyRestaurantAreas = new Dictionary<string, RestaurantArea>();
@@ -50,14 +45,17 @@ namespace RestaurantKrustyKrab.Restaurant
         {
 
             CompanyArrivalRandomizer();
+            Thread.Sleep(2000);
             EraseAllAreas();
+            Thread.Sleep(2000);
             PrintAllAreas();
             WorkWaiter();
+            Thread.Sleep(2000);
             EraseAllAreas();
+            Thread.Sleep(2000);
             PrintAllAreas();
 
         }
-
         private void CompanyArrivalRandomizer()
         {
             Random random = new Random();
@@ -77,13 +75,15 @@ namespace RestaurantKrustyKrab.Restaurant
                 {
                     bool continueloop = true;
 
+
                     if (kvpAreaWithWaiter.Value.WaitersAtArea[iWaitersIndex].Available && (MyRestaurantAreas["Reception"] as Reception).CompanyWaitingQueue.Count > 0)
                         continueloop = GreetCompany(kvpAreaWithWaiter.Key, iWaitersIndex);
+
                     EraseAllAreas();
                     PrintAllAreas();
                     Thread.Sleep(2000);
 
-                    if (continueloop && kvpAreaWithWaiter.Key == "Reception")
+                    if (continueloop == true && kvpAreaWithWaiter.Key == "Reception")
                     {
                         if (kvpAreaWithWaiter.Value.WaitersAtArea.Count > 0)
 
@@ -128,8 +128,6 @@ namespace RestaurantKrustyKrab.Restaurant
                 }
             }
         }
-
-
         private bool GreetCompany(string keyAreaContaingingWaiter, int indexOfWaiterInAreaWaiterList)
         {
             MyRestaurantAreas[keyAreaContaingingWaiter].WaitersAtArea[indexOfWaiterInAreaWaiterList].Available = false;
@@ -146,6 +144,7 @@ namespace RestaurantKrustyKrab.Restaurant
             {
                 Company company = MyRestaurantAreas[key].WaitersAtArea[index].Company;
                 Waiter waiter = MyRestaurantAreas[key].WaitersAtArea[index];
+
                 foreach (var kvp in MyRestaurantAreas)
                 {
                     if (kvp.Value is Table)
@@ -212,7 +211,6 @@ namespace RestaurantKrustyKrab.Restaurant
                 kvp.Value.EraseMe();
             }
         }
-
         public static void TimeCounter()
         {
 
