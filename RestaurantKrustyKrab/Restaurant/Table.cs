@@ -56,18 +56,18 @@ namespace RestaurantKrustyKrab.Restaurant
                 }
             }
             row = 0;
-                foreach (Guest guest in CompanyAtArea.Guests)
-                {
-                    Console.SetCursorPosition(FromLeft + 1, FromTop + 1 + row);
-                    Console.Write(guest.Name + " " + guest.Activity + " " + guest.OrderedFood);
-                    row++;
-                }
+            foreach (Guest guest in CompanyAtArea.Guests)
+            {
+                Console.SetCursorPosition(FromLeft + 1, FromTop + 1 + row);
+                Console.Write(guest.Name + " " + guest.Activity + " " + guest.OrderedFood);
+                row++;
+            }
         }
 
         public override void EraseMe()
         {
             Console.SetCursorPosition(FromLeft + 1, FromTop + 1);
-            Console.Write(new string(' ', Frame.GetLength(1) - 2));
+            Console.Write(new string(' ', Frame.GetLength(1)));
             for (int i = 0; i < Frame.GetLength(0) - 1; i++)
             {
                 Console.SetCursorPosition(FromLeft + 1, FromTop + 1 + i);

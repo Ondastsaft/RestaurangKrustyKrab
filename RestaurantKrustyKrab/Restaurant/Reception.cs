@@ -14,7 +14,7 @@ namespace RestaurantKrustyKrab.Restaurant
             WaitersAtArea = new List<Waiter>();
         }
         public override void PrintMe()
-         {
+        {
             int row = 0;
             foreach (Company company in CompanyWaitingQueue)
             {
@@ -39,5 +39,14 @@ namespace RestaurantKrustyKrab.Restaurant
                 row++;
             }
         }
+        public override void EraseMe()
+        {
+            for (int i = 0; i < Frame.GetLength(0); i++)
+            {
+                Console.SetCursorPosition(FromLeft - 12, FromTop + 1 + i);
+                Console.Write(new string(' ', 10));
+            }
+        }
     }
 }
+

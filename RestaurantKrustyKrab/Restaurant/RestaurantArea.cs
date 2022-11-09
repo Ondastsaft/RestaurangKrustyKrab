@@ -21,6 +21,7 @@ namespace RestaurantKrustyKrab.Restaurant
             WaitersAtArea = new List<Waiter>();
             ChefsAtArea = new List<Chef>();
             CompanyAtArea = new Company(0);
+            CompanyAtArea.Guests.Clear();
             GuestsAtArea = new List<Guest>();
             Frame = new string[1, 1];
             FromTop = fromTop;
