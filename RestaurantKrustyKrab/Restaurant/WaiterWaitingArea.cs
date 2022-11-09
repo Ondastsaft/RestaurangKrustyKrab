@@ -19,7 +19,7 @@ namespace RestaurantKrustyKrab.Restaurant
         public override void PrintMe()
         {
             int row = 0;
-            foreach (var waiter in WaitersAtArea)
+            foreach (Waiter waiter in WaitersAtArea)
             {
                 Console.SetCursorPosition(FromLeft + 1, FromTop + 1 + row);
                 Console.Write(waiter.Name);

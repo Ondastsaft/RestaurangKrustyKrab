@@ -21,7 +21,7 @@ namespace RestaurantKrustyKrab.Restaurant
             MyRestaurantAreas.Add("WC", new WC("WC", 25, 188));
             MyRestaurantAreas.Add("WaiterWaitingArea", new WaiterWaitingArea("Waiters", 3, 105));
             MyRestaurantAreas.Add("DishStation", new DishStation("Washing Bears", 3, 125));
-
+            CounterRestaurant = 0;
             this.MyDrawing = new string[50, 200];
             this.Name = "Krusty Krab";
             this.FromTop = 2;
@@ -38,16 +38,19 @@ namespace RestaurantKrustyKrab.Restaurant
             while (true)
             {
                 LoopRestaurant();
-                Console.ReadKey();
+
             }
         }
         public void LoopRestaurant()
         {
 
+
             CompanyArrivalRandomizer();
             WorkWaiter();
-
-
+            CounterRestaurant++;
+            Console.SetCursorPosition(25, 3);
+            Console.Write(CounterRestaurant.ToString());
+            Console.ReadLine();
 
         }
         private void CompanyArrivalRandomizer()
@@ -63,7 +66,19 @@ namespace RestaurantKrustyKrab.Restaurant
         //Servitörens LoopMetoder
         private void WorkWaiter()
         {
-            for (int i = 0; i < (MyRestaurantAreas["WaiterWaitingArea"] as WaiterWaitingArea).WaitersAtArea.Count - 1; i++)
+            foreach (var kvp in MyRestaurantAreas)
+            {
+                if (kvp.Value is Table)
+                {
+                    if ((kvp.Value as Table).WaiterAtTable != null)
+                    {
+                        (kvp.Value as Table).WaiterAtTable.Available = true;
+                    }
+                }
+
+            }
+
+            for (int i = 0; i < (MyRestaurantAreas["WaiterWaitingArea"] as WaiterWaitingArea).WaitersAtArea.Count; i++)
             {
                 bool continueloop = true;
                 if ((MyRestaurantAreas["WaiterWaitingArea"] as WaiterWaitingArea).WaitersAtArea[i].Available && (MyRestaurantAreas["Reception"] as Reception).CompanyWaitingQueue.Count > 0)
@@ -79,9 +94,11 @@ namespace RestaurantKrustyKrab.Restaurant
                 ShowTable("Reception", i);
             }
 
+
+
             foreach (var kvp in MyRestaurantAreas)
             {
-                if (kvp.Value is Table && (MyRestaurantAreas[kvp.Key] as Table).GuestsAtArea.Count > 0 && (MyRestaurantAreas[kvp.Key] as Table).WaiterAtTable.Available == true)
+                if (kvp.Value is Table && (MyRestaurantAreas[kvp.Key] as Table).CompanyAtArea.Guests.Count > 0 && (MyRestaurantAreas[kvp.Key] as Table).WaiterAtTable.Available == true)
                 {
                     TakeOrder(kvp.Key);
                 }
@@ -118,34 +135,36 @@ namespace RestaurantKrustyKrab.Restaurant
             //}
 
             //WaiterList.Add(waiter);
+            foreach (var kvp in MyRestaurantAreas)
+            {
+                if (kvp.Value is Table && (MyRestaurantAreas[kvp.Key] as Table).WaiterAtTable.Available == false)
 
-
-
+                    (MyRestaurantAreas[kvp.Key] as Table).WaiterAtTable.Available = true;
+            }
         }
-
         private bool GreetCompany(string keyAreaContaingingWaiter, int indexOfWaiterInAreaWaiterList)
         {
-            MyRestaurantAreas[keyAreaContaingingWaiter].WaitersAtArea[indexOfWaiterInAreaWaiterList].Available = false;
-            MyRestaurantAreas[keyAreaContaingingWaiter].WaitersAtArea[indexOfWaiterInAreaWaiterList].Company =
-                (MyRestaurantAreas["Reception"] as Reception).CompanyWaitingQueue.Dequeue();
-            MyRestaurantAreas["Reception"].WaitersAtArea.Add(MyRestaurantAreas[keyAreaContaingingWaiter].WaitersAtArea[indexOfWaiterInAreaWaiterList]);
+            Waiter waiter = new Waiter("", 0, false, 0, 0);
+            waiter = MyRestaurantAreas[keyAreaContaingingWaiter].WaitersAtArea[indexOfWaiterInAreaWaiterList];
+            waiter.Available = false;
+            waiter.WaitersCompany = (MyRestaurantAreas["Reception"] as Reception).CompanyWaitingQueue.Dequeue();
+            string company = waiter.WaitersCompany.Name;
+            MyRestaurantAreas["Reception"].WaitersAtArea.Add(waiter);
             MyRestaurantAreas[keyAreaContaingingWaiter].WaitersAtArea.RemoveAt(indexOfWaiterInAreaWaiterList);
             MyRestaurantAreas["WaiterWaitingArea"].EraseMe();
             MyRestaurantAreas["WaiterWaitingArea"].PrintMe();
             Console.SetCursorPosition(35, 20);
-            string company = MyRestaurantAreas[keyAreaContaingingWaiter].WaitersAtArea[indexOfWaiterInAreaWaiterList].Company.Name;
-            Console.WriteLine("Greet Company" + company);
+            Console.WriteLine("Greet Company " + company + " " + waiter.Name);
             MyRestaurantAreas["Reception"].EraseMe();
             MyRestaurantAreas["Reception"].PrintMe();
             return false;
         }
-
         private bool ShowTable(string key, int index)
         {
             bool continueLoop = true;
-            if (MyRestaurantAreas[key].WaitersAtArea.Count > 0)
+            if (MyRestaurantAreas[key].WaitersAtArea.Count >= 0)
             {
-                Company company = MyRestaurantAreas[key].WaitersAtArea[index].Company;
+                Company company = MyRestaurantAreas[key].WaitersAtArea[index].WaitersCompany;
                 Waiter waiter = MyRestaurantAreas[key].WaitersAtArea[index];
 
                 foreach (var kvp in MyRestaurantAreas)
@@ -161,13 +180,15 @@ namespace RestaurantKrustyKrab.Restaurant
                                 company.SeatedAtTable = true;
                                 MyRestaurantAreas[kvp.Key].EraseMe();
                                 MyRestaurantAreas[kvp.Key].PrintMe();
-                                MyRestaurantAreas[key].WaitersAtArea[index].Company = null;
+                                MyRestaurantAreas[key].WaitersAtArea[index].WaitersCompany = null;
                                 (MyRestaurantAreas[kvp.Key] as Table).WaiterAtTable = (waiter);
                                 MyRestaurantAreas[key].WaitersAtArea.RemoveAt(index);
                                 MyRestaurantAreas[key].EraseMe();
                                 MyRestaurantAreas[key].PrintMe();
                                 MyRestaurantAreas[kvp.Key].CompanyAtArea.SeatedAtTable = true;
-
+                                (MyRestaurantAreas[kvp.Key] as Table).IsAvailable = false;
+                                Console.SetCursorPosition(35, 21);
+                                Console.WriteLine("ShowTable " + company.Name + " " + waiter.Name + MyRestaurantAreas[kvp.Key].Name);
                                 continueLoop = false;
                                 break;
                             }
@@ -179,22 +200,23 @@ namespace RestaurantKrustyKrab.Restaurant
                                 waiter.Available = false;
                                 MyRestaurantAreas[kvp.Key].CompanyAtArea = company;
                                 company.SeatedAtTable = true;
+                                (MyRestaurantAreas[kvp.Key] as Table).WaiterAtTable = (waiter);
                                 MyRestaurantAreas[kvp.Key].EraseMe();
                                 MyRestaurantAreas[kvp.Key].PrintMe();
-                                MyRestaurantAreas[key].WaitersAtArea[index].Company = null;
-                                (MyRestaurantAreas[kvp.Key] as Table).WaiterAtTable = (waiter);
-                                MyRestaurantAreas[kvp.Key].WaitersAtArea.RemoveAt(index);
+                                (MyRestaurantAreas[kvp.Key] as Table).IsAvailable = false;
+                                MyRestaurantAreas[kvp.Key].CompanyAtArea.SeatedAtTable = true;
+                                MyRestaurantAreas[key].WaitersAtArea[index].WaitersCompany = null;
+                                MyRestaurantAreas[key].WaitersAtArea.RemoveAt(index);
                                 MyRestaurantAreas[key].EraseMe();
                                 MyRestaurantAreas[key].PrintMe();
-                                MyRestaurantAreas[kvp.Key].CompanyAtArea.SeatedAtTable = true;
-
+                                Console.SetCursorPosition(35, 21);
+                                Console.WriteLine("ShowTable " + company + " " + waiter + MyRestaurantAreas[kvp.Key].Name);
                                 continueLoop = false;
                                 break;
                             }
                         }
                     }
-                    Console.SetCursorPosition(35, 21);
-                    Console.WriteLine("ShowTable " + MyRestaurantAreas[kvp.Key].CompanyAtArea.Name + " " + MyRestaurantAreas[kvp.Key].Name);
+
                 }
             }
             return continueLoop;
@@ -203,22 +225,25 @@ namespace RestaurantKrustyKrab.Restaurant
         {
             bool continueLoop = false;
             Random random = new Random();
-            Dictionary<string, int> order = new Dictionary<string, int>();
-            List<Guest> newGuestList = new List<Guest>();
-            foreach (Guest guest in MyRestaurantAreas[areaKey].GuestsAtArea)
+            Company company = MyRestaurantAreas[areaKey].CompanyAtArea;
+            Waiter waiter = (MyRestaurantAreas[areaKey] as Table).WaiterAtTable;
+            int numberer = 1;
+            foreach (Guest guest in company.Guests)
             {
                 int orderNumber = random.Next(1, 10);
-                order.Add(guest.Name, orderNumber);
+                waiter.Name_MenuIndex.Add(guest.Name + numberer, orderNumber);
                 guest.Name = (guest.Name + " " + (MyRestaurantAreas[areaKey] as Table).Dishes[orderNumber]);
                 guest.Activity = "Waiting for food";
-                newGuestList.Add(guest);
+                numberer++;
             }
-            MyRestaurantAreas[areaKey].GuestsAtArea = newGuestList;
-            (MyRestaurantAreas[areaKey] as Table).WaiterAtTable.Area_Order.Add(areaKey, order);
-            (MyRestaurantAreas[areaKey] as Table).WaiterAtTable.Available = false;
+            waiter.Area_Order = new KeyValuePair<string, Dictionary<string, int>>(areaKey, waiter.Name_MenuIndex);
+            waiter.Available = false;
+            MyRestaurantAreas[areaKey].CompanyAtArea = company;
+
+            (MyRestaurantAreas[areaKey] as Table).WaiterAtTable = waiter;
             (MyRestaurantAreas[areaKey] as Table).HasOrdered = true;
             Console.SetCursorPosition(35, 22);
-            Console.WriteLine("take order");
+            Console.WriteLine("take order" + MyRestaurantAreas[areaKey].Name);
             MyRestaurantAreas[areaKey].EraseMe();
             MyRestaurantAreas[areaKey].PrintMe();
             return continueLoop;
@@ -255,7 +280,7 @@ namespace RestaurantKrustyKrab.Restaurant
                 int quality = i == 4 ? 1 : 2;
                 quality = i == 9 ? 1 : 2;
 
-                restaurantAreas.Add("Table " + i + 1, new Table($"Table {i + 1} ", fromTop, fromLeft, seats, quality, i + 1));
+                restaurantAreas.Add("Table " + (i + 1), new Table($"Table {(i + 1)} ", fromTop, fromLeft, seats, quality, i + 1));
                 fromLeft = i == 4 ? 12 : fromLeft + 30;
 
                 fromTop = i == 4 ? fromTop + 16 : fromTop;

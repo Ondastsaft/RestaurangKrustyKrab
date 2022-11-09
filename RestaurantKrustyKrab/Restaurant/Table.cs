@@ -43,18 +43,17 @@ namespace RestaurantKrustyKrab.Restaurant
         public override void PrintMe()
         {
             int row = 0;
-            foreach (var waiter in WaitersAtArea)
+
+            Console.SetCursorPosition(FromLeft + 1, FromTop + 8 + row);
+            Console.Write(WaiterAtTable.Name);
+            row++;
+            foreach (var kvp in WaiterAtTable.Name_MenuIndex)
             {
-                Console.SetCursorPosition(FromLeft + 1, FromTop + 6 + row);
-                Console.Write(waiter.Name);
+                Console.SetCursorPosition(FromLeft + 8, FromTop + 8 + row);
+                Console.Write(Dishes[kvp.Value]);
                 row++;
-                foreach (var kvp in waiter.Name_MenuIndex)
-                {
-                    Console.SetCursorPosition(FromLeft + 1, FromTop + 6 + row);
-                    Console.Write(Dishes[kvp.Value]);
-                    row++;
-                }
             }
+
             row = 0;
             foreach (Guest guest in CompanyAtArea.Guests)
             {

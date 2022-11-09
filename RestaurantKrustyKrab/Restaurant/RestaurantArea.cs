@@ -10,7 +10,7 @@ namespace RestaurantKrustyKrab.Restaurant
         internal List<Waiter> WaitersAtArea { get; set; }
         internal List<Chef> ChefsAtArea { get; set; }
         internal Company CompanyAtArea { get; set; }
-        internal List<Guest> GuestsAtArea { get; set; }
+
 
         internal int FromTop { get; set; }
         internal int FromLeft { get; set; }
@@ -22,7 +22,6 @@ namespace RestaurantKrustyKrab.Restaurant
             ChefsAtArea = new List<Chef>();
             CompanyAtArea = new Company(0);
             CompanyAtArea.Guests.Clear();
-            GuestsAtArea = new List<Guest>();
             Frame = new string[1, 1];
             FromTop = fromTop;
             FromLeft = fromLeft;

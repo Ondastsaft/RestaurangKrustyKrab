@@ -5,9 +5,8 @@
         public string Name { get; set; }
         internal List<Guest> Guests { get; set; }
         internal int timeWaiting { get; set; }
-        static internal Random random = new Random();
+        internal Random random = new Random();
         public bool SeatedAtTable = false;
-
         public Company(int offSetRow)
         {
             int guests = random.Next(1, 5);
@@ -16,7 +15,7 @@
             {
                 Guests.Add(new Guest(GetName(), 32, 4 + i + offSetRow));
             }
-            Name = ($"{Guests[0].Name} + {Guests.Count}");
+            Name = ($"{Guests[0].Name} + {(Guests.Count - 1)}");
 
             timeWaiting = 0;
         }
