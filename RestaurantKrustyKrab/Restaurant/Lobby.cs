@@ -117,7 +117,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
         internal void GenerateWaiter()
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 1; i++)
             {
                 string name = "Waiter " + (i + 1);
                 WaiterList.Add(new Waiter(name, random.Next(1,4), false, 110, (3 + i + 1)));
@@ -198,7 +198,9 @@ namespace RestaurantKrustyKrab.Restaurant
                     {
                         foreach (Dish dish in Kitchen.Orders.ToList())
                             if (dish.DestinationTable == chef.Preparing[0].DestinationTable)
-                                chef.Preparing.Add(Kitchen.Orders.Dequeue());
+                            {
+                                chef.Preparing.Add(Kitchen.Orders.Dequeue()); 
+                            }
                     }
                 }
             }

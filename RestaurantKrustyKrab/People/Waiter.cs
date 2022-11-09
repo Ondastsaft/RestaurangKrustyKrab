@@ -1,4 +1,7 @@
 ﻿using RestaurantKrustyKrab.Restaurant;
+using RestaurantKrustyKrab.Restaurant.Dishes.Fish;
+using RestaurantKrustyKrab.Restaurant.Dishes.Meat;
+using RestaurantKrustyKrab.Restaurant.Dishes.Vegetarian;
 using System.Security.Cryptography.X509Certificates;
 
 namespace RestaurantKrustyKrab.People
@@ -81,16 +84,84 @@ namespace RestaurantKrustyKrab.People
         void Take_Order()
 
         {
-
-            GoodMethod G = new GoodMethod();
          
                 if (Busy == false && Leading_to_table == true )
                 {
                     Leading_to_table = false;
                     Taking_order_at_table = true;
+                    
                     foreach (Guest guest in CompanyProperty.Guests)
+                {
+                    Dish dish = new Dish(ServingTable, guest.Name);
+
+                    switch (guest.Prefered_dish)
                     {
-                        G.AddOrderTo_Table_Guest_Waiter(guest.Prefered_dish, this, guest);
+                        case 1:
+
+                            {
+                                dish = new Cod(ServingTable, guest.Name);
+                                AddOrderToAll(dish);
+                            }
+                            break;
+                        case 2:
+                            {
+                                dish = new SalmonPie(ServingTable, guest.Name);
+                                AddOrderToAll(dish);
+                                break;
+                            }
+                        case 3:
+                            {
+                                dish = new Sushi(ServingTable, guest.Name);
+                                AddOrderToAll(dish);
+                            }
+
+                            break;
+
+                        case 4:
+                            {
+                                dish = new Curry(ServingTable, guest.Name);
+                                AddOrderToAll(dish);
+                            }
+                            break;
+
+                        case 5:
+                            {
+                                dish = new Ribs(ServingTable, guest.Name);
+                                AddOrderToAll(dish);
+                            }
+                            break;
+
+                        case 6:
+                            {
+                                dish = new Steak(ServingTable, guest.Name);
+                                AddOrderToAll(dish);
+                            }
+                            break;
+
+                        case 7:
+                            {
+                                dish = new Falafel(ServingTable, guest.Name);
+                                AddOrderToAll(dish);
+                            }
+                            break;
+
+                        case 8:
+                            dish = new Pasta(ServingTable, guest.Name);
+                            AddOrderToAll(dish);
+                            break;
+
+                        case 9:
+                            dish = new Salad(ServingTable, guest.Name);
+                            AddOrderToAll(dish);
+                            break;
+                    }
+
+                    void AddOrderToAll(Dish dish)
+                    {
+                        Orders.Add(dish);
+                        guest.Order.Add(dish);
+                    }
+                
                     }
 
                 }
@@ -132,7 +203,6 @@ namespace RestaurantKrustyKrab.People
                     if (dish.DestinationTable == Orders[0].DestinationTable)
                         Kitchen.ReadyOrders.Dequeue();
                 }
-                        
                     ServingTable = Orders[0].DestinationTable;
 
                 }
@@ -141,7 +211,7 @@ namespace RestaurantKrustyKrab.People
         void Give_food_to_table(List<Table> TableList, int GlobalTimer)
 
         {
-            if (Busy == false && Taking_order_from_kitchen == true)
+            if (Busy == false && Taking_order_from_kitchen == true && Orders.Count > 0)
             {
                 Busy = true;
 
@@ -150,6 +220,7 @@ namespace RestaurantKrustyKrab.People
                     if (Orders[0].DestinationTable == table.TableNumber)
                     {
                         ServingTable = Orders[0].DestinationTable;
+                        Taking_order_from_kitchen = false;
                         At_Kitchen = false;
                         Giving_food_to_table = true;
                         table.WaitingForFood = false;
@@ -181,7 +252,7 @@ namespace RestaurantKrustyKrab.People
             
         void return_from_serving()
         {
-            if (Busy == false && Giving_food_to_table == true || At_Kitchen == true)
+            if (Busy == false && At_Kitchen == false && Giving_food_to_table == true )
             {
                 Reset();
             }

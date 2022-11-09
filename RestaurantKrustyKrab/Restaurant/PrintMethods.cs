@@ -102,12 +102,15 @@ namespace RestaurantKrustyKrab.Restaurant
                         {
                             Console.Write("Company:");
                         
-                      
+                        
                         foreach (Guest guest in table.BookedSeats.Guests)
                         {
 
                             Console.Write(" " + guest.Name);
-
+                                if (table.WaitingForFood == true)
+                                    if (guest.Order.Count> 0)
+                                        Console.Write(" " + guest.Order[0].Name);
+                                    
                         }
 
                         Console.WriteLine();
@@ -132,7 +135,7 @@ namespace RestaurantKrustyKrab.Restaurant
                         Console.WriteLine("Preparing: ");
                         foreach (Dish dish in chef.Preparing)
                         {
-                            Console.WriteLine(dish.Name + " Table: " + dish.DestinationTable, "Guest:" + dish.Guest);
+                            Console.WriteLine("Dish: "+ dish.Name + " Table: " + dish.DestinationTable, "Guest:" + dish.Guest);
                         }
                         if (chef.TimeStart > 0)
                         {
