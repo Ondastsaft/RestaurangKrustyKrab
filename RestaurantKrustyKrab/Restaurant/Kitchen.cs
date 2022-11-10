@@ -35,31 +35,36 @@ namespace RestaurantKrustyKrab.Restaurant
                 ChefsAtArea.Add(new Chef(chefName, 0, FromTop + 1, FromLeft + 2));
             }
         }
-        public void TakeOrder(KeyValuePair<string, Dictionary<string, int>> order)
-        {
+        //public void TakeOrder(KeyValuePair<string, Dictionary<string, int>> order)
+        //{
 
-            OrderQueue.Add(order.Key, order.Value);
+        //    OrderQueue.Add(order.Key, order.Value);
 
-        }
+        //}
         public void CallForService(string table, List<Dish> dishesToServe)
         {
-            var destinationTable_names_MenuIndex = Chefmaster[table];
-            var names_MenuIndex = (destinationTable_names_MenuIndex as Dictionary<string, int>)[table];
-
+            Dictionary<string, Dictionary<string, int>> destinationTable_names_MenuIndex = Chefmaster[table] as Dictionary<string, Dictionary<string, int>>;
+            Dictionary<string, int> names_MenuIndex = destinationTable_names_MenuIndex[table];
             Dictionary<string, Dish> name_dish = new Dictionary<string, Dish>();
-            int indexer =
+
             foreach (var name in names_MenuIndex.Keys)
             {
+                name_dish.Add(name, dishesToServe[names_MenuIndex[name]]);
+
                 string dishname = (Dishes[names_MenuIndex[name]] as Dish).Name;
                 foreach (Dish dishFromChef in dishesToServe)
                 {
-                    if (dishesToServe.Name = )
+                    if (dishFromChef.Name == dishname)
+                    {
+                        name_dish.Add(name, dishFromChef);
+                    }
                 }
             }
-
-
-
-            foreach (var name in )
+            OrdersToServe.Enqueue(new KeyValuePair<string, Dictionary<string, Dish>>(table, name_dish));
+            Chefmaster.Remove(table);
+            FoodIsReady = true;
+            Console.SetCursorPosition(30, 15);
+            Console.WriteLine("Food is ready");
         }
         public void WorkKitchen()
         {
@@ -95,11 +100,11 @@ namespace RestaurantKrustyKrab.Restaurant
             int row = 0;
             foreach (Chef chef in ChefsAtArea)
             {
-                if (chef.OrderforTable.Value.Count > 1)
+                if (chef.OrderForTable.Value.Count > 1)
                 {
                     StringBuilder dishesCookingForTable = new StringBuilder();
-                    dishesCookingForTable.Append("Cooking for table " + chef.OrderforTable.Key);
-                    foreach (Dish dish in chef.OrderforTable.Value)
+                    dishesCookingForTable.Append("Cooking for table " + chef.OrderForTable.Key);
+                    foreach (Dish dish in chef.OrderForTable.Value)
                     {
                         dishesCookingForTable.Append(dish.Name + " ");
                     }

@@ -5,15 +5,12 @@ namespace RestaurantKrustyKrab.Restaurant
 {
     internal class Table : RestaurantArea
     {
-
+        internal bool IsAvailable = true;
+        internal bool HasOrdered = false;
         internal int Seats { get; set; }
         internal int Quality { get; set; }
-        internal Company Company { get; set; }
-
-        internal bool IsAvailable = true;
         internal int TableNumber { get; set; }
         internal Hashtable Dishes { get; set; }
-        internal bool HasOrdered { get; set; }
         internal Waiter WaiterAtTable { get; set; }
 
 
@@ -25,7 +22,7 @@ namespace RestaurantKrustyKrab.Restaurant
             FromTop = fromTop;
             FromLeft = fromLeft;
             TableNumber = tableNumber;
-            HasOrdered = false;
+
 
             Dishes = new Hashtable();
             Dishes.Add(1, "Wagyu beef");
@@ -42,24 +39,33 @@ namespace RestaurantKrustyKrab.Restaurant
         public override void PrintMe()
         {
             int row = 0;
-
-            Console.SetCursorPosition(FromLeft + 1, FromTop + 8 + row);
-            Console.Write(WaiterAtTable.Name);
-            row++;
-            foreach (var kvp in WaiterAtTable.Name_MenuIndex)
+            if (WaiterAtTable != null)
             {
-                Console.SetCursorPosition(FromLeft + 8, FromTop + 8 + row);
-                Console.Write(Dishes[kvp.Value]);
+                Console.SetCursorPosition(FromLeft + 1, FromTop + 8 + row);
+                Console.Write(WaiterAtTable.Name);
                 row++;
-            }
 
+                Console.SetCursorPosition(FromLeft + 1, FromTop + 8 + row);
+                Console.Write(WaiterAtTable.Name);
+                row++;
+                foreach (var kvp in WaiterAtTable.Name_MenuIndex)
+                {
+                    Console.SetCursorPosition(FromLeft + 8, FromTop + 8 + row);
+                    Console.Write(Dishes[kvp.Value]);
+                    row++;
+                }
+            }
             row = 0;
-            foreach (Guest guest in CompanyAtArea.Guests)
+            if (CompanyAtArea != null)
             {
-                Console.SetCursorPosition(FromLeft + 1, FromTop + 1 + row);
-                Console.Write(guest.Name + " " + guest.Activity + " " + guest.OrderedFood);
-                row++;
+                foreach (Guest guest in CompanyAtArea.Guests)
+                {
+                    Console.SetCursorPosition(FromLeft + 1, FromTop + 1 + row);
+                    Console.Write(guest.Name + " " + guest.Activity + " " + guest.OrderedFood);
+                    row++;
+                }
             }
+
         }
 
         public override void EraseMe()

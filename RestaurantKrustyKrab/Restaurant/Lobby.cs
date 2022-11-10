@@ -47,10 +47,12 @@ namespace RestaurantKrustyKrab.Restaurant
 
             CompanyArrivalRandomizer();
             WorkWaiter();
+            (MyRestaurantAreas["Kitchen"] as Kitchen).WorkKitchen();
             CounterRestaurant++;
             Console.SetCursorPosition(25, 3);
             Console.Write(CounterRestaurant.ToString());
             Console.ReadLine();
+
 
         }
         private void CompanyArrivalRandomizer()
@@ -98,7 +100,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
             foreach (var kvp in MyRestaurantAreas)
             {
-                if (kvp.Value is Table && (MyRestaurantAreas[kvp.Key] as Table).CompanyAtArea.Guests.Count > 0 && (MyRestaurantAreas[kvp.Key] as Table).WaiterAtTable.Available == true)
+                if (kvp.Value is Table && (kvp.Value as Table).CompanyAtArea.Guests.Count > 0 && (kvp.Value as Table).WaiterAtTable.Available && !(kvp.Value as Table).HasOrdered)
                 {
                     TakeOrder(kvp.Key);
                 }
@@ -107,37 +109,38 @@ namespace RestaurantKrustyKrab.Restaurant
 
             foreach (var kvp in MyRestaurantAreas)
             {
-                if (kvp.Value is Table && (MyRestaurantAreas[kvp.Key] as Table).HasOrdered && (MyRestaurantAreas[kvp.Key] as Table).WaiterAtTable.Available)
+                if (kvp.Value is Table && (kvp.Value as Table).HasOrdered && (kvp.Value as Table).WaiterAtTable != null && (kvp.Value as Table).WaiterAtTable.Available)
+                {
+                    MakeOrder(kvp.Key);
+                }
 
 
 
-                    //void hämta_mat()
-                    //{
+            }
 
-                    //}
-                    //void servera_mat()
-                    //{
 
-                    //}
-                    //void ta_Emot_Pengar()
-                    //{
-
-                    //}
-
-                    //void duka_undan()
-                    //{
-
-                    //}
-
-                    //WaiterList.Add(waiter);
-                    foreach (var kvp in MyRestaurantAreas)
+            foreach (var kvp in MyRestaurantAreas)
+            {
+                if (kvp.Value is Table)
+                {
+                    if ((kvp.Value as Table).WaiterAtTable != null)
                     {
-                        if (kvp.Value is Table && (MyRestaurantAreas[kvp.Key] as Table).WaiterAtTable.Available == false)
+                        if (kvp.Value is Table && (kvp.Value as Table).WaiterAtTable.Available == false)
 
                             (MyRestaurantAreas[kvp.Key] as Table).WaiterAtTable.Available = true;
                     }
+                }
+                else
+                {
+                    foreach (Waiter waiter in kvp.Value.WaitersAtArea)
+                    {
+                        waiter.Available = true;
+                    }
+                }
             }
+
         }
+
         private bool GreetCompany(string keyAreaContaingingWaiter, int indexOfWaiterInAreaWaiterList)
         {
             Waiter waiter = new Waiter("", 0, false, 0, 0);
@@ -155,13 +158,13 @@ namespace RestaurantKrustyKrab.Restaurant
             MyRestaurantAreas["Reception"].PrintMe();
             return false;
         }
-        private bool ShowTable(string key, int index)
+        private bool ShowTable(string areaKey, int WaiterIndex)
         {
             bool continueLoop = true;
-            if (MyRestaurantAreas[key].WaitersAtArea.Count >= 0)
+            if (MyRestaurantAreas[areaKey].WaitersAtArea.Count >= 0)
             {
-                Company company = MyRestaurantAreas[key].WaitersAtArea[index].WaitersCompany;
-                Waiter waiter = MyRestaurantAreas[key].WaitersAtArea[index];
+                Company company = MyRestaurantAreas[areaKey].WaitersAtArea[WaiterIndex].WaitersCompany;
+                Waiter waiter = MyRestaurantAreas[areaKey].WaitersAtArea[WaiterIndex];
 
                 foreach (var kvp in MyRestaurantAreas)
                 {
@@ -176,11 +179,11 @@ namespace RestaurantKrustyKrab.Restaurant
                                 company.SeatedAtTable = true;
                                 MyRestaurantAreas[kvp.Key].EraseMe();
                                 MyRestaurantAreas[kvp.Key].PrintMe();
-                                MyRestaurantAreas[key].WaitersAtArea[index].WaitersCompany = null;
+                                MyRestaurantAreas[areaKey].WaitersAtArea[WaiterIndex].WaitersCompany = null;
                                 (MyRestaurantAreas[kvp.Key] as Table).WaiterAtTable = (waiter);
-                                MyRestaurantAreas[key].WaitersAtArea.RemoveAt(index);
-                                MyRestaurantAreas[key].EraseMe();
-                                MyRestaurantAreas[key].PrintMe();
+                                MyRestaurantAreas[areaKey].WaitersAtArea.RemoveAt(WaiterIndex);
+                                MyRestaurantAreas[areaKey].EraseMe();
+                                MyRestaurantAreas[areaKey].PrintMe();
                                 MyRestaurantAreas[kvp.Key].CompanyAtArea.SeatedAtTable = true;
                                 (MyRestaurantAreas[kvp.Key] as Table).IsAvailable = false;
                                 Console.SetCursorPosition(35, 21);
@@ -201,10 +204,10 @@ namespace RestaurantKrustyKrab.Restaurant
                                 MyRestaurantAreas[kvp.Key].PrintMe();
                                 (MyRestaurantAreas[kvp.Key] as Table).IsAvailable = false;
                                 MyRestaurantAreas[kvp.Key].CompanyAtArea.SeatedAtTable = true;
-                                MyRestaurantAreas[key].WaitersAtArea[index].WaitersCompany = null;
-                                MyRestaurantAreas[key].WaitersAtArea.RemoveAt(index);
-                                MyRestaurantAreas[key].EraseMe();
-                                MyRestaurantAreas[key].PrintMe();
+                                MyRestaurantAreas[areaKey].WaitersAtArea[WaiterIndex].WaitersCompany = null;
+                                MyRestaurantAreas[areaKey].WaitersAtArea.RemoveAt(WaiterIndex);
+                                MyRestaurantAreas[areaKey].EraseMe();
+                                MyRestaurantAreas[areaKey].PrintMe();
                                 Console.SetCursorPosition(35, 21);
                                 Console.WriteLine("ShowTable " + company + " " + waiter + MyRestaurantAreas[kvp.Key].Name);
                                 continueLoop = false;
@@ -250,12 +253,14 @@ namespace RestaurantKrustyKrab.Restaurant
             bool continueLoop = false;
             Waiter waiter = (MyRestaurantAreas[areakey] as Table).WaiterAtTable;
 
-            (MyRestaurantAreas[areakey] as Table).WaiterAtTable = null;
+            (MyRestaurantAreas[areakey] as Table).WaiterAtTable = new Waiter("", 0, false, 0, 0);
             var order = new KeyValuePair<string, Dictionary<string, int>>(waiter.Area_Order.Key, waiter.Area_Order.Value);
-            (MyRestaurantAreas["Kitchen"] as Kitchen).TakeOrder(order);
             Dictionary<string, int> names_DishIndexes = waiter.Area_Order.Value;
-            names_DishIndexes.Clear();
             order = new KeyValuePair<string, Dictionary<string, int>>("", names_DishIndexes);
+            (MyRestaurantAreas["Kitchen"] as Kitchen).TakeOrder(order);
+
+            names_DishIndexes.Clear();
+
             waiter.Area_Order = order;
             waiter.Available = false;
             MyRestaurantAreas["Kitchen"].WaitersAtArea.Add(waiter);
@@ -264,7 +269,25 @@ namespace RestaurantKrustyKrab.Restaurant
 
             return continueLoop;
         }
+        //void hämta_mat()
+        //{
 
+        //}
+        //void servera_mat()
+        //{
+
+        //}
+        //void ta_Emot_Pengar()
+        //{
+
+        //}
+
+        //void duka_undan()
+        //{
+
+        //}
+
+        //WaiterList.Add(waiter);
 
 
         //RitMetoder
@@ -274,6 +297,7 @@ namespace RestaurantKrustyKrab.Restaurant
             {
                 kvp.Value.PrintMe();
             }
+            Console.ReadLine();
         }
         public void EraseAllAreas()
         {
