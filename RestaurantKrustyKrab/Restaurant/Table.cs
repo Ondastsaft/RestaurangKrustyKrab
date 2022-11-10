@@ -29,13 +29,13 @@ namespace RestaurantKrustyKrab.Restaurant
             WaiterAtTable = new Waiter("", 0, false, 0, 0);
 
             Dishes = new Hashtable();
-            Dishes.Add(1, "Wagyu beef");
-            Dishes.Add(2, "Pasta Bolgonese");
-            Dishes.Add(3, "Hot Hund");
-            Dishes.Add(4, "Fisk o' Chips");
-            Dishes.Add(5, "Fisk grataine");
-            Dishes.Add(6, "Fisk sticks");
-            Dishes.Add(7, "Halloumi salad");
+            Dishes.Add(1, "Wagyu");
+            Dishes.Add(2, "Pasta");
+            Dishes.Add(3, "Korv");
+            Dishes.Add(4, "Fisk");
+            Dishes.Add(5, "Gryta");
+            Dishes.Add(6, "Soppa");
+            Dishes.Add(7, "Sallad");
             Dishes.Add(8, "Falafel");
             Dishes.Add(9, "Wok");
         }
@@ -44,12 +44,12 @@ namespace RestaurantKrustyKrab.Restaurant
         {
             int row = 0;
 
-            Console.SetCursorPosition(FromLeft + 1, FromTop + 8 + row);
+            Console.SetCursorPosition(FromLeft + 1, FromTop + 7 + row);
             Console.Write(WaiterAtTable.Name);
             row++;
             foreach (var kvp in WaiterAtTable.Name_MenuIndex)
             {
-                Console.SetCursorPosition(FromLeft + 8, FromTop + 8 + row);
+                Console.SetCursorPosition(FromLeft + 8, FromTop + 7 + row);
                 Console.Write(Dishes[kvp.Value]);
                 row++;
             }

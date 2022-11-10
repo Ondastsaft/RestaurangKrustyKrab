@@ -6,7 +6,7 @@
         public string Activity { get; set; }
         public Guest(string name, int fromTop, int fromLeft) : base(name, fromTop, fromLeft)
         {
-            Activity = "Waiting to order";
+            Activity = "Waiting";
 
         }
     }

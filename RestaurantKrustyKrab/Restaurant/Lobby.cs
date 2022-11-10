@@ -38,18 +38,18 @@ namespace RestaurantKrustyKrab.Restaurant
             while (true)
             {
                 LoopRestaurant();
-
             }
         }
         public void LoopRestaurant()
         {
 
-
             CompanyArrivalRandomizer();
+            PrintAllAreas();
+            Console.ReadLine();
             WorkWaiter();
             CounterRestaurant++;
-            Console.SetCursorPosition(25, 3);
-            Console.Write(CounterRestaurant.ToString());
+            Console.SetCursorPosition(5, 4);
+            Console.Write("TURN: " + CounterRestaurant.ToString());
             Console.ReadLine();
 
         }
@@ -153,7 +153,7 @@ namespace RestaurantKrustyKrab.Restaurant
             MyRestaurantAreas[keyAreaContaingingWaiter].WaitersAtArea.RemoveAt(indexOfWaiterInAreaWaiterList);
             MyRestaurantAreas["WaiterWaitingArea"].EraseMe();
             MyRestaurantAreas["WaiterWaitingArea"].PrintMe();
-            Console.SetCursorPosition(35, 20);
+            Console.SetCursorPosition(63, 4);
             Console.WriteLine("Greet Company " + company + " " + waiter.Name);
             MyRestaurantAreas["Reception"].EraseMe();
             MyRestaurantAreas["Reception"].PrintMe();
@@ -187,8 +187,8 @@ namespace RestaurantKrustyKrab.Restaurant
                                 MyRestaurantAreas[key].PrintMe();
                                 MyRestaurantAreas[kvp.Key].CompanyAtArea.SeatedAtTable = true;
                                 (MyRestaurantAreas[kvp.Key] as Table).IsAvailable = false;
-                                Console.SetCursorPosition(35, 21);
-                                Console.WriteLine("ShowTable " + company.Name + " " + waiter.Name + MyRestaurantAreas[kvp.Key].Name);
+                                Console.SetCursorPosition(63, 5);
+                                Console.WriteLine("ShowTable " + company.Name + " " + waiter.Name + " " + MyRestaurantAreas[kvp.Key].Name);
                                 continueLoop = false;
                                 break;
                             }
@@ -209,8 +209,8 @@ namespace RestaurantKrustyKrab.Restaurant
                                 MyRestaurantAreas[key].WaitersAtArea.RemoveAt(index);
                                 MyRestaurantAreas[key].EraseMe();
                                 MyRestaurantAreas[key].PrintMe();
-                                Console.SetCursorPosition(35, 21);
-                                Console.WriteLine("ShowTable " + company + " " + waiter + MyRestaurantAreas[kvp.Key].Name);
+                                Console.SetCursorPosition(63, 5);
+                                Console.WriteLine("ShowTable " + company.Name + " " + waiter.Name + " " + MyRestaurantAreas[kvp.Key].Name);
                                 continueLoop = false;
                                 break;
                             }
@@ -233,7 +233,7 @@ namespace RestaurantKrustyKrab.Restaurant
                 int orderNumber = random.Next(1, 10);
                 waiter.Name_MenuIndex.Add(guest.Name + numberer, orderNumber);
                 guest.Name = (guest.Name + " " + (MyRestaurantAreas[areaKey] as Table).Dishes[orderNumber]);
-                guest.Activity = "Waiting for food";
+                guest.Activity = "Waiting";
                 numberer++;
             }
             waiter.Area_Order = new KeyValuePair<string, Dictionary<string, int>>(areaKey, waiter.Name_MenuIndex);
@@ -242,8 +242,8 @@ namespace RestaurantKrustyKrab.Restaurant
 
             (MyRestaurantAreas[areaKey] as Table).WaiterAtTable = waiter;
             (MyRestaurantAreas[areaKey] as Table).HasOrdered = true;
-            Console.SetCursorPosition(35, 22);
-            Console.WriteLine("take order" + MyRestaurantAreas[areaKey].Name);
+            Console.SetCursorPosition(63, 6);
+            Console.WriteLine("Take order " + MyRestaurantAreas[areaKey].Name);
             MyRestaurantAreas[areaKey].EraseMe();
             MyRestaurantAreas[areaKey].PrintMe();
             return continueLoop;
@@ -276,7 +276,7 @@ namespace RestaurantKrustyKrab.Restaurant
             for (int i = 0; i < 10; i++)
             {
 
-                int seats = i < 4 ? 2 : 4;
+                int seats = i <= 4 ? 2 : 4;
                 int quality = i == 4 ? 1 : 2;
                 quality = i == 9 ? 1 : 2;
 
