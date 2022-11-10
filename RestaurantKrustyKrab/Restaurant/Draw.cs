@@ -40,7 +40,7 @@ namespace RestaurantKrustyKrab.Restaurant
                 {
                     if (waiter.Location == "Reception")
                     {  
-                        Console.Write(waiter.Name + waiter.Activity  );
+                        Console.Write(waiter.Name + " " + waiter.Activity  );
                         if (waiter.CompanyProperty.Guests.Count > 0)
                             Console.WriteLine(" " + waiter.CompanyProperty.Guests[0].Name + " + " + (waiter.CompanyProperty.Guests.Count -1));
                         Console.SetCursorPosition(Reception.PositionY + 30, Reception.PositionX + X);
@@ -55,13 +55,33 @@ namespace RestaurantKrustyKrab.Restaurant
                 Console.SetCursorPosition(Reception.PositionY + 2, Reception.PositionX + Y);
                 Console.Write("Guests: ");
 
+
+
+
                 foreach (Company company in CompanyWaitingList)
                 {
-                    Y++;
-                    Console.SetCursorPosition(Reception.PositionY + 2, Reception.PositionX + Y);
-                    Console.WriteLine("Company " + company.Guests[0].Name + " + " + ( company.Guests.Count - 1));
+                    if (CompanyWaitingList.Count > 0)
+                    {
+                        Y++;
+                        Console.SetCursorPosition(Reception.PositionY + 2, Reception.PositionX + Y);
+                        try
+                        {
+                             Console.WriteLine("Company " + company.Guests[0].Name + " + " + (company.Guests.Count - 1));
+                        }
+
+                        catch(ArgumentOutOfRangeException)
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Buggen");
+                            Console.ReadKey();
+                            break;
+                        }
+
+                    }
+
                 }
             }
+            
 
             void DrawTables()
                 {
@@ -118,7 +138,7 @@ namespace RestaurantKrustyKrab.Restaurant
                         if (waiter.ServingTable == table.TableNumber && waiter.Location == "Tables")
                         {
                             Console.SetCursorPosition(table.PositionY + 1, table.PositionX - 1);
-                            Console.Write(waiter.Name + waiter.Activity);
+                            Console.Write(waiter.Name + " "+ waiter.Activity);
                         }    
                 }
                     
@@ -134,7 +154,7 @@ namespace RestaurantKrustyKrab.Restaurant
                     {
                         Console.SetCursorPosition(Kitchen.PositionY - 10, Kitchen.PositionX + K);
                         Console.Write(waiter.Name  );
-                        Console.SetCursorPosition(Kitchen.PositionY - 10, Kitchen.PositionX + K + 1);
+                        Console.SetCursorPosition(Kitchen.PositionY - 20, Kitchen.PositionX + K + 1);
                         Console.Write(waiter.Activity);
                         K = K + 2;
                     }
@@ -219,10 +239,17 @@ namespace RestaurantKrustyKrab.Restaurant
                 {
                     foreach (Guest guest in DishStation.Guests)
                     {
-                        Console.SetCursorPosition(DishStation.PositionY + 2  , DishStation.PositionX    + 1 + X);
-                        Console.Write(guest.Name + "Done at: " + guest.Dishing_end);
-                        X++;
+                        if (DishStation.Guests.Count > 0)
+                        {
+                            Console.SetCursorPosition(DishStation.PositionY + 2, DishStation.PositionX + 1 + X);
+                            Console.Write(guest.Name + "Done at: " + guest.Dishing_end);
+                            X++;
+                        }
+                        else
+                            break;
+                         
                     }
+                    
                 }
                
 

@@ -16,6 +16,7 @@ namespace RestaurantKrustyKrab.People
         internal int ServingTable { get; set; }
         internal string Activity { get; set;}
         internal string Location { get; set; }
+        internal bool TableFound { get; set; }
 
 
 
@@ -31,7 +32,7 @@ namespace RestaurantKrustyKrab.People
 
             GreetGuest(CompanyWaitingList, Full_Restaurant);
             if (Busy == false && Activity == "Greeting guests")
-                Lead_To_table(TableList);
+                Lead_To_table(TableList, CompanyWaitingList);
             if (Busy == false && Activity == "Leading to table" )
                 Take_Order();
             if (Busy == false && Activity == "Taking order")
@@ -59,29 +60,42 @@ namespace RestaurantKrustyKrab.People
             
         }
 
-        void Lead_To_table(List<Table> TableList)
+        void Lead_To_table(List<Table> TableList, Queue<Company> CompanyWaitingList)
         {
-            foreach (Table table in TableList)
+            do
             {
-                if (Busy == false && Activity == "Greeting guests")
+                foreach (Table table in TableList)
                 {
-
-                    if (table.Seats >= CompanyProperty.Guests.Count && table.IsAvailable == true && Activity == "Greeting guests")
-                    {
-                        Activity = "Leading to table";
-                        Busy = true;
-                        ServingTable = table.TableNumber;
-                        foreach (Guest guest in CompanyProperty.Guests)
+                        if (table.Seats >= CompanyProperty.Guests.Count && table.IsAvailable == true && Activity == "Greeting guests")
                         {
-                            guest.Satisfaction = guest.Satisfaction + table.Quality + ServiceLevel;
-                            table.BookedSeats.Guests.Add(guest);
+                            TableFound = true;
+                            Activity = "Leading to table";
+                            ServingTable = table.TableNumber;
+                            foreach (Guest guest in CompanyProperty.Guests)
+                            {
+                                guest.Satisfaction = guest.Satisfaction + table.Quality + ServiceLevel;
+                                table.BookedSeats.Guests.Add(guest);
+                            }
+                            table.IsAvailable = false;
+                            table.WaitingForFood = true;
+                            Location = "Tables";
+                            Busy = true;
+                            break;
                         }
-                        table.IsAvailable = false;
-                        table.WaitingForFood = true;
-                        Location = "Tables";
-                    }
                 }
-            }
+
+                if (TableFound == false)
+                {
+                    CompanyWaitingList.Enqueue(CompanyProperty);
+                    CompanyProperty.Guests.Clear();
+                    Location = "Reception";
+                    Activity = "Waiting";
+                    TableFound = false;
+                    Busy = true;
+                }
+               
+
+            } while (Busy == false);
         }
         
         void Take_Order()
@@ -210,6 +224,7 @@ namespace RestaurantKrustyKrab.People
                 Busy = true;
                 Activity = "Waiting";
                 Location = "Reception";
+
              
             }
                 
@@ -325,6 +340,7 @@ namespace RestaurantKrustyKrab.People
             Busy = true;
             Location = "Reception";
             Activity = "Waiting";
+            TableFound = false;
     }
 
 
