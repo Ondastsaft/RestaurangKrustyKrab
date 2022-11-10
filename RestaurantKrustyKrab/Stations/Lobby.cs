@@ -30,7 +30,7 @@ namespace RestaurantKrustyKrab.Stations
         internal List<Guest> Visited_Guests { get; set; }
         internal bool Full_Restaurant { get; set; }
         internal List<string> PaidOrders { get; set; }
-
+        internal int LargeTables { get; set; }
         internal List<Guest> Dishers { get; set; }
 
 
@@ -41,7 +41,7 @@ namespace RestaurantKrustyKrab.Stations
             PositionX = 4;
             PositionY = 2;
 
-            DishStation = new DishStation(3, 128);
+            DishStation = new DishStation(3, 115);
             Reception = new Reception(55, 31);
             TableList = new List<Table>();
             Kitchen = new Kitchen(false, 3, 180);
@@ -54,7 +54,7 @@ namespace RestaurantKrustyKrab.Stations
             PaidOrders = new List<string>(new string[5]);
             Dishers = new List<Guest>();
             Dishers.Clear();
-
+            LargeTables = 4;
 
             Generate();
         }
@@ -143,7 +143,7 @@ namespace RestaurantKrustyKrab.Stations
 
             foreach (Waiter waiter in WaiterList)
             {
-                waiter.Work(CompanyWaitingList, Full_Restaurant, TableList, Kitchen, GlobalTimer, PaidOrders, DishStation);
+                waiter.Work(CompanyWaitingList, Full_Restaurant, TableList, Kitchen, GlobalTimer, PaidOrders, DishStation, LargeTables);
 
             }
             background_methods();
@@ -161,6 +161,7 @@ namespace RestaurantKrustyKrab.Stations
                 Chef_readies_an_order();
                 Check_if_food_has_been_eaten();
                 Check_if_table_has_been_wiped();
+                Check_Large_tables();
                 Check_if_Restaurant_is_full();
                 Check_if_dishers_are_done();
                 draw.draw(TableList, Kitchen, Reception, DishStation, WaiterList, CompanyWaitingList, ChefList, GlobalTimer, PaidOrders, Visited_Guests);
@@ -311,6 +312,7 @@ namespace RestaurantKrustyKrab.Stations
                 }
         }
 
+   
         internal void Check_if_Restaurant_is_full()
         {
             int tablecounter = 0;
@@ -321,11 +323,22 @@ namespace RestaurantKrustyKrab.Stations
                     tablecounter++;
                 }
             }
+
             if (tablecounter == 9)
                 Full_Restaurant = true;
             else
                 Full_Restaurant = false;
+        }
 
+        internal void Check_Large_tables()
+        {
+            int largetables = 0;
+            foreach (Table table in TableList)
+            {
+                if (table.IsAvailable && table.Seats >= 3 && table.Clean == true && table.WaitingForFood == false && table.RecievedOrder == false && table.Finished_Eating == false)
+                    largetables++;
+            }
+            LargeTables = largetables;
         }
 
         internal void Check_if_dishers_are_done()

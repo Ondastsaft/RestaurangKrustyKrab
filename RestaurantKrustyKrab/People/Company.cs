@@ -32,7 +32,7 @@ namespace RestaurantKrustyKrab.People
 
         public Company(int offSetRow)
         {
-            int guests = random.Next(1, 5);   
+            int guests = random.Next(1,5);   
             Guests = new List<Guest>();
             for(int i = 0; i < guests; i++)
             {

@@ -24,20 +24,15 @@ namespace RestaurantKrustyKrab.People
 
 
         public void Work(Queue<Company> CompanyWaitingList, bool Full_Restaurant, List<Table> TableList, 
-                         Kitchen Kitchen, int GlobalTimer, List<string> PaidOrders, DishStation Dishstation)
+                         Kitchen Kitchen, int GlobalTimer, List<string> PaidOrders, DishStation Dishstation, int Largetables)
         {
 
-            int largetables = 0;
-            foreach (Table table in TableList)
-            {
-                if (table.IsAvailable && table.Seats >= 2)
-                    largetables++;
-            }
+           
             Busy = false;
 
             if (Busy == false && Activity == "Waiting" && Location == "Reception")
                 Waiter_start_cleaning_And_Take_payment(TableList, GlobalTimer, PaidOrders, Dishstation);
-            if (Busy == false && Full_Restaurant == false && CompanyWaitingList.Count > 0 && Activity == "Waiting" && largetables >= 1)
+            if (Busy == false && Full_Restaurant == false && CompanyWaitingList.Count > 0 && Activity == "Waiting" && Largetables >= 1 && Location == "Reception")
             GreetGuest(CompanyWaitingList, Full_Restaurant, TableList);
             if (Busy == false && Activity == "Greeting guests")
                 Lead_To_table(TableList, CompanyWaitingList);
@@ -57,9 +52,14 @@ namespace RestaurantKrustyKrab.People
         }
         void GreetGuest(Queue<Company> CompanyWaitingList, bool Full_Restaurant, List<Table> TableList)
         {
-            
-                
-            if (Busy == false && Full_Restaurant == false && CompanyWaitingList.Count > 0 && Activity == "Waiting")
+            int largetables = 0;
+            foreach (Table table in TableList)
+            {
+                if (table.IsAvailable && table.Seats >= 3)
+                    largetables++;
+            }
+
+            if (Busy == false && Full_Restaurant == false && CompanyWaitingList.Count > 0 && Activity == "Waiting" && largetables >=1)
             {
                 
                     Activity = "Greeting guests";

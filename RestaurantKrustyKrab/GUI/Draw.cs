@@ -42,8 +42,12 @@ namespace RestaurantKrustyKrab.GUI
                     if (waiter.Location == "Reception")
                     {
                         Console.Write(waiter.Name + " " + waiter.Activity);
-                        if (waiter.CompanyProperty.Guests.Count > 0)
-                            Console.WriteLine(" " + waiter.CompanyProperty.Guests[0].Name + " + " + (waiter.CompanyProperty.Guests.Count - 1));
+                        if (waiter.CompanyProperty.Guests.Count >= 1)
+                        {
+                                Console.Write(" " + waiter.CompanyProperty.Guests[0].Name);
+                                if (waiter.CompanyProperty.Guests.Count > 1 )
+                                Console.Write((" + " + (waiter.CompanyProperty.Guests.Count - 1)));
+                        }
                         Console.SetCursorPosition(Reception.PositionY + 30, Reception.PositionX + X);
                         X++;
                     }
@@ -67,7 +71,9 @@ namespace RestaurantKrustyKrab.GUI
                         Console.SetCursorPosition(Reception.PositionY + 2, Reception.PositionX + Y);
                         try
                         {
-                            Console.WriteLine("Company " + company.Guests[0].Name + " + " + (company.Guests.Count - 1));
+                            Console.Write("Company " + company.Guests[0].Name);
+                            if ((company.Guests.Count) > 1)
+                                Console.Write(" + " + (company.Guests.Count - 1));
                         }
 
                         catch (ArgumentOutOfRangeException)
