@@ -66,7 +66,8 @@ namespace RestaurantKrustyKrab.Stations
 
             if (Visited_Guests.Count < 80)
             {
-                Addguests();
+                for (int i = 0; i < random.Next(1, 2); i++)
+                    Addguests();
             }
 
             Sequence();

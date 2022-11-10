@@ -75,7 +75,8 @@ namespace RestaurantKrustyKrab.GUI
                             //Console.Clear();
                             //Console.WriteLine("Buggen");    //känd bug
                             //Console.ReadKey();
-                            break;
+                            Console.WriteLine("Ghost");
+                            continue;
                         }
 
                     }
