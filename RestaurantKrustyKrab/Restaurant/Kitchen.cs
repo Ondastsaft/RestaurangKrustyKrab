@@ -35,12 +35,12 @@ namespace RestaurantKrustyKrab.Restaurant
                 ChefsAtArea.Add(new Chef(chefName, 0, FromTop + 1, FromLeft + 2));
             }
         }
-        //public void TakeOrder(KeyValuePair<string, Dictionary<string, int>> order)
-        //{
+        public void TakeOrder(KeyValuePair<string, Dictionary<string, int>> order)
+        {
 
-        //    OrderQueue.Add(order.Key, order.Value);
+            OrderQueue.Add(order.Key, order.Value);
 
-        //}
+        }
         public void CallForService(string table, List<Dish> dishesToServe)
         {
             Dictionary<string, Dictionary<string, int>> destinationTable_names_MenuIndex = Chefmaster[table] as Dictionary<string, Dictionary<string, int>>;
@@ -68,14 +68,15 @@ namespace RestaurantKrustyKrab.Restaurant
         }
         public void WorkKitchen()
         {
-            int chefindex = 0;
-            foreach (Chef chef in ChefsAtArea)
+
+            for (int i = 0; i < ChefsAtArea.Count; i++)
             {
+                bool foodFinished = false;
                 if (OrderQueue.Count > 0)
                 {
-                    if (chef.IsAvailable)
+                    if (ChefsAtArea[i].IsAvailable)
                     {
-                        chef.IsAvailable = false;
+                        ChefsAtArea[i].IsAvailable = false;
                         var order = OrderQueue.First();
                         string destinationTable = order.Key;
                         var names_DishIndexes = order.Value;
@@ -86,13 +87,18 @@ namespace RestaurantKrustyKrab.Restaurant
                         }
                         KeyValuePair<string, List<Dish>> table_Dishes = new KeyValuePair<string, List<Dish>>();
                         Chefmaster.Add(destinationTable, names_DishIndexes);
-                        chef.Cook(table_Dishes);
+                        ChefsAtArea[i].Cook(table_Dishes);
                         OrderQueue.Remove(order.Key);
-                        break;
                     }
-                    chefindex++;
+                    else
+                    {
+                        foodFinished = ChefsAtArea[i].Cook();
+                        if (foodFinished)
+                        {
+                            KeyValuePair<string, List<Dish>> = ChefsAtArea[i].OrderForTable;
+                        }
+                    }
                 }
-
             }
         }
         public override void PrintMe()

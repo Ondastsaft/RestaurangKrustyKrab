@@ -12,14 +12,16 @@ namespace RestaurantKrustyKrab.People
 
         public Chef(string name, int competence, int fromTop, int fromLeft) : base(name, fromTop, fromLeft)
         {
+            IsAvailable = true;
             Name = name;
             Competence = competence;
             List<Dish> dishes = new List<Dish>();
             OrderForTable = new KeyValuePair<string, List<Dish>>("", dishes);
         }
 
-        public void Cook()
+        public bool Cook()
         {
+            bool foodFinished = false;
             if (!IsAvailable)
             {
                 if (TimeToCook > 0)
@@ -28,10 +30,12 @@ namespace RestaurantKrustyKrab.People
                 }
                 if (TimeToCook == 0)
                 {
-
+                    {
+                        foodFinished = true;
+                    }
                 }
             }
-
+            return foodFinished;
         }
         public void Cook(KeyValuePair<string, List<Dish>> order)
         {

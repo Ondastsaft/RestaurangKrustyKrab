@@ -109,7 +109,8 @@ namespace RestaurantKrustyKrab.Restaurant
 
             foreach (var kvp in MyRestaurantAreas)
             {
-                if (kvp.Value is Table && (kvp.Value as Table).HasOrdered && (kvp.Value as Table).WaiterAtTable != null && (kvp.Value as Table).WaiterAtTable.Available)
+                if (kvp.Value is Table && (kvp.Value as Table).HasOrdered && (kvp.Value as Table).WaiterAtTable.Area_Order.Value != null &&
+                    (kvp.Value as Table).WaiterAtTable.Area_Order.Value.Count > 0 && (kvp.Value as Table).WaiterAtTable.Available)
                 {
                     MakeOrder(kvp.Key);
                 }
@@ -252,13 +253,12 @@ namespace RestaurantKrustyKrab.Restaurant
         {
             bool continueLoop = false;
             Waiter waiter = (MyRestaurantAreas[areakey] as Table).WaiterAtTable;
-
             (MyRestaurantAreas[areakey] as Table).WaiterAtTable = new Waiter("", 0, false, 0, 0);
             var order = new KeyValuePair<string, Dictionary<string, int>>(waiter.Area_Order.Key, waiter.Area_Order.Value);
             Dictionary<string, int> names_DishIndexes = waiter.Area_Order.Value;
-            order = new KeyValuePair<string, Dictionary<string, int>>("", names_DishIndexes);
-            (MyRestaurantAreas["Kitchen"] as Kitchen).TakeOrder(order);
+            order = new KeyValuePair<string, Dictionary<string, int>>(waiter.Area_Order.Key, names_DishIndexes);
 
+            (MyRestaurantAreas["Kitchen"] as Kitchen).TakeOrder(order);
             names_DishIndexes.Clear();
 
             waiter.Area_Order = order;
