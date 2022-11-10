@@ -22,7 +22,7 @@ namespace RestaurantKrustyKrab.Restaurant
             MyRestaurantAreas.Add("WaiterWaitingArea", new WaiterWaitingArea("Waiters", 3, 105));
             MyRestaurantAreas.Add("DishStation", new DishStation("Washing Bears", 3, 125));
             CounterRestaurant = 0;
-            this.MyDrawing = new string[50, 200];
+            MyDrawing = new string[50, 200];
             this.Name = "Krusty Krab";
             this.FromTop = 2;
             this.FromLeft = 2;
@@ -51,7 +51,7 @@ namespace RestaurantKrustyKrab.Restaurant
             CounterRestaurant++;
             Console.SetCursorPosition(25, 3);
             Console.Write(CounterRestaurant.ToString());
-            Console.ReadLine();
+
 
 
         }
@@ -102,7 +102,7 @@ namespace RestaurantKrustyKrab.Restaurant
             {
                 if (kvp.Value is Table && (kvp.Value as Table).CompanyAtArea.Guests.Count > 0 && (kvp.Value as Table).WaiterAtTable.Available && !(kvp.Value as Table).HasOrdered)
                 {
-                    TakeOrder(kvp.Key);
+                    TakeOrderFromGuest(kvp.Key);
                 }
             }
 
@@ -112,7 +112,7 @@ namespace RestaurantKrustyKrab.Restaurant
                 if (kvp.Value is Table && (kvp.Value as Table).HasOrdered && (kvp.Value as Table).WaiterAtTable.Area_Order.Value != null &&
                     (kvp.Value as Table).WaiterAtTable.Area_Order.Value.Count > 0 && (kvp.Value as Table).WaiterAtTable.Available)
                 {
-                    MakeOrder(kvp.Key);
+                    PlaceOrderAtKitchen(kvp.Key);
                 }
 
 
@@ -221,20 +221,29 @@ namespace RestaurantKrustyKrab.Restaurant
             }
             return continueLoop;
         }
-        private bool TakeOrder(string areaKey)
+        private bool TakeOrderFromGuest(string areaKey)
         {
             bool continueLoop = false;
             Random random = new Random();
             Company company = MyRestaurantAreas[areaKey].CompanyAtArea;
             Waiter waiter = (MyRestaurantAreas[areaKey] as Table).WaiterAtTable;
-            int numberer = 1;
+            int indexer = 1;
             foreach (Guest guest in company.Guests)
             {
+                foreach (Guest guest2 in company.Guests)
+                {
+                    if (guest.Name == guest2.Name)
+                    {
+                        guest.Name = (guest.Name + " " + indexer);
+                        indexer++;
+                        guest2.Name = (guest2.Name + " " + indexer);
+                        indexer++;
+                    }
+                }
                 int orderNumber = random.Next(1, 10);
-                waiter.Name_MenuIndex.Add(guest.Name + numberer, orderNumber);
+                waiter.Name_MenuIndex.Add(guest.Name, orderNumber);
                 guest.Name = (guest.Name + " " + (MyRestaurantAreas[areaKey] as Table).Dishes[orderNumber]);
                 guest.Activity = "Waiting for food";
-                numberer++;
             }
             waiter.Area_Order = new KeyValuePair<string, Dictionary<string, int>>(areaKey, waiter.Name_MenuIndex);
             waiter.Available = false;
@@ -249,18 +258,17 @@ namespace RestaurantKrustyKrab.Restaurant
             return continueLoop;
         }
 
-        private bool MakeOrder(string areakey)
+        private bool PlaceOrderAtKitchen(string areakey)
         {
             bool continueLoop = false;
             Waiter waiter = (MyRestaurantAreas[areakey] as Table).WaiterAtTable;
+
             (MyRestaurantAreas[areakey] as Table).WaiterAtTable = new Waiter("", 0, false, 0, 0);
             var order = new KeyValuePair<string, Dictionary<string, int>>(waiter.Area_Order.Key, waiter.Area_Order.Value);
             Dictionary<string, int> names_DishIndexes = waiter.Area_Order.Value;
-            order = new KeyValuePair<string, Dictionary<string, int>>(waiter.Area_Order.Key, names_DishIndexes);
-
-            (MyRestaurantAreas["Kitchen"] as Kitchen).TakeOrder(order);
+            (MyRestaurantAreas["Kitchen"] as Kitchen).GetOrderFromWaiter(order);
             names_DishIndexes.Clear();
-
+            order = new KeyValuePair<string, Dictionary<string, int>>("", names_DishIndexes);
             waiter.Area_Order = order;
             waiter.Available = false;
             MyRestaurantAreas["Kitchen"].WaitersAtArea.Add(waiter);

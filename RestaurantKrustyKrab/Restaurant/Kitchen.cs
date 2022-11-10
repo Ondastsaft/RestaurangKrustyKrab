@@ -8,7 +8,8 @@ namespace RestaurantKrustyKrab.Restaurant
     {
         internal bool FoodIsReady = false;
         private Dictionary<string, Dictionary<string, int>> OrderQueue = new Dictionary<string, Dictionary<string, int>>();
-        private Queue<KeyValuePair<string, Dictionary<string, Dish>>> OrdersToServe = new Queue<KeyValuePair<string, Dictionary<string, Dish>>>();
+        private Dictionary<string, Dictionary<string, List<Dish>>> OrdersToServe = new Dictionary<string, Dictionary<string, List<Dish>>>();
+
         private Hashtable Dishes { get; set; }
         private Hashtable Chefmaster { get; set; }
 
@@ -35,10 +36,10 @@ namespace RestaurantKrustyKrab.Restaurant
                 ChefsAtArea.Add(new Chef(chefName, 0, FromTop + 1, FromLeft + 2));
             }
         }
-        public void TakeOrder(KeyValuePair<string, Dictionary<string, int>> order)
+        public void GetOrderFromWaiter(KeyValuePair<string, Dictionary<string, int>> order)
         {
 
-            OrderQueue.Add(order.Key, order.Value);
+            // OrderQueue.Enqueue(order);
 
         }
         public void CallForService(string table, List<Dish> dishesToServe)
@@ -77,25 +78,28 @@ namespace RestaurantKrustyKrab.Restaurant
                     if (ChefsAtArea[i].IsAvailable)
                     {
                         ChefsAtArea[i].IsAvailable = false;
-                        var order = OrderQueue.First();
-                        string destinationTable = order.Key;
-                        var names_DishIndexes = order.Value;
+                        var kvp_order = OrderQueue.Dequeue();
+                        string destinationTable = kvp_order.Key;
+                        var names_DishIndexes = kvp_order.Value;
                         List<Dish> dishesForChef = new List<Dish>();
                         foreach (int menuIndex in names_DishIndexes.Values)
                         {
                             dishesForChef.Add(Dishes[menuIndex] as Dish);
                         }
-                        KeyValuePair<string, List<Dish>> table_Dishes = new KeyValuePair<string, List<Dish>>();
+                        KeyValuePair<string, List<Dish>> table_Dishes = new KeyValuePair<string, List<Dish>>(destinationTable, dishesForChef);
                         Chefmaster.Add(destinationTable, names_DishIndexes);
                         ChefsAtArea[i].Cook(table_Dishes);
-                        OrderQueue.Remove(order.Key);
                     }
                     else
                     {
                         foodFinished = ChefsAtArea[i].Cook();
                         if (foodFinished)
                         {
-                            KeyValuePair<string, List<Dish>> = ChefsAtArea[i].OrderForTable;
+                            KeyValuePair<string, List<Dish>> finishedFood = new KeyValuePair<string, List<Dish>>(ChefsAtArea[i].OrderForTable.Key, ChefsAtArea[i].OrderForTable.Value);
+                            List<Dish> emptyList = new List<Dish>();
+                            ChefsAtArea[i].OrderForTable = new KeyValuePair<string, List<Dish>>("", emptyList);
+                            ChefsAtArea[i].IsAvailable = true;
+                            FoodIsReady = true;
                         }
                     }
                 }
