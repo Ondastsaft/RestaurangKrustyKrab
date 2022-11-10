@@ -71,9 +71,9 @@ namespace RestaurantKrustyKrab.Restaurant
 
                         catch(ArgumentOutOfRangeException)
                         {
-                            Console.Clear();
-                            Console.WriteLine("Buggen");
-                            Console.ReadKey();
+                            //Console.Clear();
+                            //Console.WriteLine("Buggen");
+                            //Console.ReadKey();
                             break;
                         }
 

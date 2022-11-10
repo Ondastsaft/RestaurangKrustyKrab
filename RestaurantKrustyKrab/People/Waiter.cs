@@ -251,7 +251,7 @@ namespace RestaurantKrustyKrab.People
                             table.TimeEnd = table.EatTimer + 20;
                             foreach (Guest guest in table.BookedSeats.Guests)
                             {
-                                //if dish.guest == guest.name maybe maybe
+                                //if dish.guest == guest.name maybe maybe funkar ej
                                 {
                                     guest.Recieved_Order = true;
                                     guest.Satisfaction = guest.Satisfaction + Orders[0].Quality;
@@ -316,7 +316,7 @@ namespace RestaurantKrustyKrab.People
 
                     if (guest.Money >= guest.Order[0].Price)
                     {
-                        PaidOrders.Add(guest.Name + " ordered " + guest.Order[0].Name + " for " + guest.Order[0].Price + " and paid for it, they rate this restaurant " + guest.Satisfaction + "/12");
+                        PaidOrders.Add(guest.Name + " ordered " + guest.Order[0].Name + " for " + guest.Order[0].Price + "kr and paid for it, they rate this restaurant " + guest.Satisfaction + "/12" + "They tipped " + (0.1 * guest.Satisfaction * guest.Order[0].Price) + "kr");
                     }
                     else
                     {

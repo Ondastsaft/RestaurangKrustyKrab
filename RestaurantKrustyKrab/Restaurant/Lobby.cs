@@ -50,7 +50,7 @@ namespace RestaurantKrustyKrab.Restaurant
             ChefList = new List<Chef>();
             Visited_Guests = new List<Guest>();
             Full_Restaurant = false;
-            PaidOrders = new List<string>(new string[12]);
+            PaidOrders = new List<string>(new string[5]);
             Dishers = new List<Guest>();
             Dishers.Clear();
 
@@ -94,14 +94,14 @@ namespace RestaurantKrustyKrab.Restaurant
             int tablenumber = 1;
             for (int i = 0; i < 5; i++)
             {
-                tableList.Add(new Table(2, random.Next(1, 4), 24, top, true, tablenumber, false, 4, 30));
+                tableList.Add(new Table(2, random.Next(0, 4), 24, top, true, tablenumber, false, 4, 30));
                 tablenumber++;
                 top = top + 33;
             }
             top = 12;
             for (int i = 0; i < 5; i++)
             {
-                tableList.Add(new Table(4, random.Next(1, 4), 40, top, true, tablenumber, false, 8, 30));
+                tableList.Add(new Table(4, random.Next(0, 4), 40, top, true, tablenumber, false, 8, 30));
                 tablenumber++;
                 top = top + 33;
             }
@@ -120,7 +120,7 @@ namespace RestaurantKrustyKrab.Restaurant
             for (int i = 0; i < 3; i++)
             {
                 string name = "Waiter " + (i + 1);
-                WaiterList.Add(new Waiter(name, random.Next(1,4), false, 110, (3 + i + 1)));
+                WaiterList.Add(new Waiter(name, random.Next(0,4), false, 110, (3 + i + 1)));
             }
 
         }
@@ -129,12 +129,10 @@ namespace RestaurantKrustyKrab.Restaurant
 
         {
             for (int i = 1; i < 6; i++)
-                ChefList.Add(new Chef("Chef: " + i, random.Next(1, 4), 0, 0));
+                ChefList.Add(new Chef("Chef: " + i, random.Next(0, 4), 0, 0));
         }
       
-        
-      
-            internal void Sequence() 
+        internal void Sequence() 
 
             {
 
@@ -179,7 +177,6 @@ namespace RestaurantKrustyKrab.Restaurant
             DisherTimer();
             GlobalTimer++;
         }
-
         
         void Chef_take_order()
 
