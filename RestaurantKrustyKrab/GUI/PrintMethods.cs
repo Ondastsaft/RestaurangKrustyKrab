@@ -50,7 +50,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
                 foreach (Waiter waiter in WaiterList)
                 {
-                    Console.WriteLine(waiter.Name + " Busy? " + waiter.Busy);
+                    Console.Write(waiter.Name + "Activity: " + waiter.Activity +"\n" );
 
                     if (waiter.Busy == true)
                     {
@@ -151,22 +151,22 @@ namespace RestaurantKrustyKrab.Restaurant
                 Console.WriteLine("Orders: " + kitchen.Orders.Count);
                 Console.WriteLine();
 
-                //if (Kitchen.Orders.Count > 0)
-                //{
-                //    foreach (Dish order in Kitchen.Orders)
-                //    {
-                //        Console.WriteLine("Guest: " + order.Guest + " Dish: " + order.Name + "Table: " + order.DestinationTable);
-                //    }
-                //    Console.WriteLine();
-                //}
-
-                Console.WriteLine("Orders ready for delivery: " + kitchen.ReadyOrders.Count);
-                //if (Kitchen.ReadyOrders.Count > 0)
-                //{
-                //    foreach (Dish order in Kitchen.ReadyOrders)
-                //        Console.WriteLine("Dish: " + order.Name + "Table: " + order.DestinationTable + " Guest Name: " + order.Guest);
-                //}
+            if (kitchen.Orders.Count > 0)
+            {
+                foreach (Dish order in kitchen.Orders)
+                {
+                    Console.WriteLine("Guest: " + order.Guest + " Dish: " + order.Name + "Table: " + order.DestinationTable);
+                }
                 Console.WriteLine();
+            }
+
+            Console.WriteLine("Orders ready for delivery: " + kitchen.ReadyOrders.Count);
+            if (kitchen.ReadyOrders.Count > 0)
+            {
+                foreach (Dish order in kitchen.ReadyOrders)
+                    Console.WriteLine("Dish: " + order.Name + "Table: " + order.DestinationTable + " Guest Name: " + order.Guest);
+            }
+            Console.WriteLine();
             }
 
             void PrintTotal_Number_Of_Visited_Guests(List<Guest> Visited_Guests)
