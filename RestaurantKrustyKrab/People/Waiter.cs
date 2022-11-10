@@ -83,8 +83,6 @@ namespace RestaurantKrustyKrab.People
             }
         }
 
-
-
         void Take_Order()
 
         {
@@ -217,36 +215,31 @@ namespace RestaurantKrustyKrab.People
 
             Activity = "Giving food to table";
             Location = "Tables";
-           
-                foreach (Table table in TableList)
+            Busy = true;
 
-                    foreach (Dish dish in Orders)
+            foreach (Table table in TableList)
+                foreach (Dish dish in Orders)
+                {
+                    if (dish.DestinationTable == table.TableNumber)
                     {
-                        if (dish.DestinationTable == table.TableNumber)
+                        table.WaitingForFood = false;
+                        table.RecievedOrder = true;
+                        table.EatTimer = GlobalTimer;
+                        table.TimeEnd = table.EatTimer + 20;
+                        foreach (Guest guest in table.BookedSeats.Guests)
                         {
-                            table.WaitingForFood = false;
-                            table.RecievedOrder = true;
-                            table.EatTimer = GlobalTimer;
-                            table.TimeEnd = table.EatTimer + 20;
-
-
-                            foreach (Guest guest in table.BookedSeats.Guests)
+                            //if dish.guest == guest.name maybe maybe funkar ej
                             {
-                                if (dish.Guest == guest.Name)
-                                {
-                                    guest.Recieved_Order = true;
-                                    guest.Satisfaction = guest.Satisfaction + dish.Quality;
-                                    guest.Satisfaction = guest.Satisfaction + ServiceLevel;
+                                guest.Recieved_Order = true;
+                                guest.Satisfaction = guest.Satisfaction + Orders[0].Quality;
+                                guest.Satisfaction = guest.Satisfaction + ServiceLevel;
 
-                                }
                             }
-
-                            break;
                         }
-
-                    } 
+                    }
+                    break;
+                }
         }
-
 
         void return_from_serving()
         {
@@ -278,9 +271,6 @@ namespace RestaurantKrustyKrab.People
             }
         }
 
-
-
-
         void tableReset(Table table, Waiter waiter, List<string> PaidOrders, DishStation Dishstation, int GlobalTimer)
         {
             table.WaitingForFood = false;
@@ -294,11 +284,11 @@ namespace RestaurantKrustyKrab.People
 
                 if (guest.Money >= guest.Order[0].Price)
                 {
-                    PaidOrders.Add(guest.Name + " ordered " + guest.Order[0].Name + " for " + guest.Order[0].Price + "kr and paid for it, they rate this restaurant " + guest.Satisfaction + "/12" + "They tipped " + (0.1 * guest.Satisfaction * guest.Order[0].Price) + "kr");
+                    PaidOrders.Add(guest.Name + " ordered " + guest.Order[0].Name + " for " + guest.Order[0].Price + "kr and paid for it, they rate this restaurant " + guest.Satisfaction + "/12" + "They tipped " + (0.1 * guest.Satisfaction * guest.Order[0].Price));
                 }
                 else
                 {
-                    PaidOrders.Add(guest.Name + " could not afford their " + guest.Order[0].Name + " was forced to help with the dishes, they rate this restaurant " + guest.Satisfaction + "/12 they spent ");
+                    PaidOrders.Add(guest.Name + " could not afford their " + guest.Order[0].Name + " was forced to help with the dishes, they rate this restaurant " + guest.Satisfaction + "/12");
                     Dishstation.Guests.Add(guest);
                     guest.Dishing_start = GlobalTimer;
                     guest.Dishing_end = GlobalTimer + 5;
@@ -309,7 +299,6 @@ namespace RestaurantKrustyKrab.People
             table.Orders.Clear();
             table.BookedSeats.Guests.Clear();
         }
-
 
         void Reset()
         {
@@ -337,8 +326,6 @@ namespace RestaurantKrustyKrab.People
             Location = "Reception";
 
         }
-
-
     }
 }
 
