@@ -26,7 +26,6 @@ namespace RestaurantKrustyKrab.Restaurant
             FromLeft = fromLeft;
             TableNumber = tableNumber;
             HasOrdered = false;
-            WaiterAtTable = new Waiter("", 0, false, 0, 0);
 
             Dishes = new Hashtable();
             Dishes.Add(1, "Wagyu beef");

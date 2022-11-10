@@ -7,15 +7,35 @@ namespace RestaurantKrustyKrab.People
         internal bool IsAvailable { get; set; }
         internal int Competence { get; set; }
         public string Activity { get; set; }
-        public string OrderforTable { get; set; }
-        public List<Dish> DishesCooking { get; set; }
-        internal int TimeToCook { get; set; }
+        public KeyValuePair<string, List<Dish>> OrderforTable { get; set; }
+        private int TimeToCook { get; set; }
 
         public Chef(string name, int competence, int fromTop, int fromLeft) : base(name, fromTop, fromLeft)
         {
             Name = name;
             Competence = competence;
-            DishesCooking = new List<Dish>();
+        }
+
+        public void Cook()
+        {
+            if (!IsAvailable)
+            {
+                if (TimeToCook > 0)
+                {
+                    TimeToCook--;
+                }
+                if (TimeToCook == 0)
+                {
+
+                }
+            }
+
+        }
+        public void Cook(KeyValuePair<string, List<Dish>> order)
+        {
+            OrderforTable = order;
+            TimeToCook = 10;
+            IsAvailable = false;
         }
     }
 }

@@ -7,8 +7,10 @@ namespace RestaurantKrustyKrab.Restaurant
     internal class Kitchen : RestaurantArea
     {
         internal bool FoodIsReady = false;
-        private Dictionary<string, Dictionary<string, int>> orderQueue = new Dictionary<string, Dictionary<string, int>>();
-        internal Hashtable Dishes { get; set; }
+        private Dictionary<string, Dictionary<string, int>> OrderQueue = new Dictionary<string, Dictionary<string, int>>();
+        private Queue<KeyValuePair<string, Dictionary<string, Dish>>> OrdersToServe = new Queue<KeyValuePair<string, Dictionary<string, Dish>>>();
+        private Hashtable Dishes { get; set; }
+        private Hashtable Chefmaster { get; set; }
 
 
         public Kitchen(string name, int fromTop, int fromLeft) : base(name, fromTop, fromLeft)
@@ -33,34 +35,54 @@ namespace RestaurantKrustyKrab.Restaurant
                 ChefsAtArea.Add(new Chef(chefName, 0, FromTop + 1, FromLeft + 2));
             }
         }
-        public void TakeOrder(Dictionary<string, Dictionary<string, int>> order)
+        public void TakeOrder(KeyValuePair<string, Dictionary<string, int>> order)
         {
-            var orderkvp = order.First();
-            orderQueue.Add(orderkvp.Key, orderkvp.Value);
+
+            OrderQueue.Add(order.Key, order.Value);
 
         }
+        public void CallForService(string table, List<Dish> dishesToServe)
+        {
+            var destinationTable_names_MenuIndex = Chefmaster[table];
+            var names_MenuIndex = (destinationTable_names_MenuIndex as Dictionary<string, int>)[table];
 
+            Dictionary<string, Dish> name_dish = new Dictionary<string, Dish>();
+            int indexer =
+            foreach (var name in names_MenuIndex.Keys)
+            {
+                string dishname = (Dishes[names_MenuIndex[name]] as Dish).Name;
+                foreach (Dish dishFromChef in dishesToServe)
+                {
+                    if (dishesToServe.Name = )
+                }
+            }
+
+
+
+            foreach (var name in )
+        }
         public void WorkKitchen()
         {
             int chefindex = 0;
             foreach (Chef chef in ChefsAtArea)
             {
-                if (orderQueue.Count > 0)
+                if (OrderQueue.Count > 0)
                 {
-                    var orderkvp = orderQueue.First();
-                    var order = orderkvp.Value;
-
                     if (chef.IsAvailable)
                     {
                         chef.IsAvailable = false;
-                        foreach (var kvp in order)
+                        var order = OrderQueue.First();
+                        string destinationTable = order.Key;
+                        var names_DishIndexes = order.Value;
+                        List<Dish> dishesForChef = new List<Dish>();
+                        foreach (int menuIndex in names_DishIndexes.Values)
                         {
-                            var dish = (Dish)Dishes[kvp.Value];
-                            dish.DestinationTable = orderkvp.Key;
-                            ChefsAtArea[chefindex].DishesCooking.Add(Dishes[kvp.Value] as Dish);
-                            ChefsAtArea[chefindex].TimeToCook = 10;
+                            dishesForChef.Add(Dishes[menuIndex] as Dish);
                         }
-                        orderQueue.Remove(orderkvp.Key);
+                        KeyValuePair<string, List<Dish>> table_Dishes = new KeyValuePair<string, List<Dish>>();
+                        Chefmaster.Add(destinationTable, names_DishIndexes);
+                        chef.Cook(table_Dishes);
+                        OrderQueue.Remove(order.Key);
                         break;
                     }
                     chefindex++;
@@ -73,11 +95,11 @@ namespace RestaurantKrustyKrab.Restaurant
             int row = 0;
             foreach (Chef chef in ChefsAtArea)
             {
-                if (chef.DishesCooking.Count > 1)
+                if (chef.OrderforTable.Value.Count > 1)
                 {
                     StringBuilder dishesCookingForTable = new StringBuilder();
-                    dishesCookingForTable.Append("Cooking for table " + chef.DishesCooking[0].DestinationTable);
-                    foreach (Dish dish in chef.DishesCooking)
+                    dishesCookingForTable.Append("Cooking for table " + chef.OrderforTable.Key);
+                    foreach (Dish dish in chef.OrderforTable.Value)
                     {
                         dishesCookingForTable.Append(dish.Name + " ");
                     }
