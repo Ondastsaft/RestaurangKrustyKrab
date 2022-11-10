@@ -1,25 +1,26 @@
-﻿using RestaurantKrustyKrab.GUI;
-using RestaurantKrustyKrab.People;
+﻿using RestaurantKrustyKrab.People;
+using RestaurantKrustyKrab.Restaurant;
+using RestaurantKrustyKrab.Stations;
 using System.Xml.Linq;
 
-namespace RestaurantKrustyKrab.Restaurant
+namespace RestaurantKrustyKrab.GUI
 {
     internal class Draw
     {
 
 
-        public void draw(List<Table> TableList, Kitchen Kitchen, Reception Reception, DishStation DishStation, List<Waiter> WaiterList, 
-                         Queue<Company> CompanyWaitingList, List<Chef> ChefList, int Globaltimer, List<string> PaidOrders, List<Guest>Visited_Guests)
+        public void draw(List<Table> TableList, Kitchen Kitchen, Reception Reception, DishStation DishStation, List<Waiter> WaiterList,
+                         Queue<Company> CompanyWaitingList, List<Chef> ChefList, int Globaltimer, List<string> PaidOrders, List<Guest> Visited_Guests)
         {
             Console.Clear();
             foreach (Table table in TableList)
             {
                 Window.OurDraw("Bord " + table.TableNumber, table.PositionY, table.PositionX, table.Frame);
             }
-            
+
             Window.OurDraw("Kitchen", Kitchen.PositionY, Kitchen.PositionX, Kitchen.Frame);
             Window.OurDraw("Dish Station", DishStation.PositionY, DishStation.PositionX, DishStation.Frame);
-            Window.OurDraw("Reception", Reception.PositionY, Reception.PositionX, Reception.Frame);  
+            Window.OurDraw("Reception", Reception.PositionY, Reception.PositionX, Reception.Frame);
             DrawWaitersAtReception();
             DrawGuestsAtReception();
             DrawTables();
@@ -34,21 +35,21 @@ namespace RestaurantKrustyKrab.Restaurant
 
             void DrawWaitersAtReception()
             {
-                Console.SetCursorPosition(Reception.PositionY + 30, (Reception.PositionX));  //Y flyttar i sidled, X flyttar på höjden
+                Console.SetCursorPosition(Reception.PositionY + 30, Reception.PositionX);  //Y flyttar i sidled, X flyttar på höjden
                 int X = 1;
                 foreach (Waiter waiter in WaiterList)
                 {
                     if (waiter.Location == "Reception")
-                    {  
-                        Console.Write(waiter.Name + " " + waiter.Activity  );
+                    {
+                        Console.Write(waiter.Name + " " + waiter.Activity);
                         if (waiter.CompanyProperty.Guests.Count > 0)
-                            Console.WriteLine(" " + waiter.CompanyProperty.Guests[0].Name + " + " + (waiter.CompanyProperty.Guests.Count -1));
+                            Console.WriteLine(" " + waiter.CompanyProperty.Guests[0].Name + " + " + (waiter.CompanyProperty.Guests.Count - 1));
                         Console.SetCursorPosition(Reception.PositionY + 30, Reception.PositionX + X);
                         X++;
                     }
                 }
             }
-            
+
             void DrawGuestsAtReception()
             {
                 int Y = 1;
@@ -66,13 +67,13 @@ namespace RestaurantKrustyKrab.Restaurant
                         Console.SetCursorPosition(Reception.PositionY + 2, Reception.PositionX + Y);
                         try
                         {
-                             Console.WriteLine("Company " + company.Guests[0].Name + " + " + (company.Guests.Count - 1));
+                            Console.WriteLine("Company " + company.Guests[0].Name + " + " + (company.Guests.Count - 1));
                         }
 
-                        catch(ArgumentOutOfRangeException)
+                        catch (ArgumentOutOfRangeException)
                         {
                             //Console.Clear();
-                            //Console.WriteLine("Buggen");
+                            //Console.WriteLine("Buggen");    //känd bug
                             //Console.ReadKey();
                             break;
                         }
@@ -81,15 +82,15 @@ namespace RestaurantKrustyKrab.Restaurant
 
                 }
             }
-            
+
 
             void DrawTables()
+            {
+                foreach (Table table in TableList)
                 {
-                    foreach (Table table in TableList)
-                    {
                     Draw_Tables(table);
-                    }
-                } //Loops through all tables
+                }
+            } //Loops through all tables
 
             void Draw_Tables(Table table)
             {
@@ -99,7 +100,7 @@ namespace RestaurantKrustyKrab.Restaurant
                 {
                     Console.SetCursorPosition(table.PositionY + 1, table.PositionX + Z);
                     Console.Write("Being wiped by: ");
-                    Console.SetCursorPosition(table.PositionY + 1, table.PositionX + Z+1);
+                    Console.SetCursorPosition(table.PositionY + 1, table.PositionX + Z + 1);
                     Console.Write(table.WipedBy);
                     Console.SetCursorPosition(table.PositionY + 1, table.PositionX + Z + 2);
                     Console.Write("Done at: " + table.WipeEnd);
@@ -121,12 +122,12 @@ namespace RestaurantKrustyKrab.Restaurant
                     }
                     Z++;
                 }
-                    if (table.RecievedOrder == true)
-                    {
-                        Console.SetCursorPosition(table.PositionY + 1, table.PositionX + Z+1);
-                        Console.Write("Done eating at " + table.TimeEnd); 
-                    }
+                if (table.RecievedOrder == true)
+                {
+                    Console.SetCursorPosition(table.PositionY + 1, table.PositionX + Z + 1);
+                    Console.Write("Done eating at " + table.TimeEnd);
                 }
+            }
 
             void DrawWaitersAtTables()
             {
@@ -138,27 +139,27 @@ namespace RestaurantKrustyKrab.Restaurant
                         if (waiter.ServingTable == table.TableNumber && waiter.Location == "Tables")
                         {
                             Console.SetCursorPosition(table.PositionY + 1, table.PositionX - 1);
-                            Console.Write(waiter.Name + " "+ waiter.Activity);
-                        }    
+                            Console.Write(waiter.Name + " " + waiter.Activity);
+                        }
                 }
-                    
+
             }
 
-            void DrawWaitersAtKitchen() 
+            void DrawWaitersAtKitchen()
             {
-                
+
                 int K = 5;
                 foreach (Waiter waiter in WaiterList)
                 {
                     if (waiter.Location == "Kitchen")
                     {
                         Console.SetCursorPosition(Kitchen.PositionY - 10, Kitchen.PositionX + K);
-                        Console.Write(waiter.Name  );
+                        Console.Write(waiter.Name);
                         Console.SetCursorPosition(Kitchen.PositionY - 20, Kitchen.PositionX + K + 1);
                         Console.Write(waiter.Activity);
                         K = K + 2;
                     }
-                
+
                 }
             }
 
@@ -169,11 +170,11 @@ namespace RestaurantKrustyKrab.Restaurant
                 {
                     Console.SetCursorPosition(Kitchen.PositionY + 10, Kitchen.PositionX + C);
                     Console.Write(chef.Name);
-                    if(chef.Cooking == true && chef.Busy == true)
+                    if (chef.Cooking == true && chef.Busy == true)
                     {
                         Console.Write(" Cooking for table " + chef.Preparing[0].DestinationTable + " Ready at: " + chef.TimeEnd);
                     }
-                    else if(chef.Busy == true)
+                    else if (chef.Busy == true)
                     {
                         Console.WriteLine(" Grabbing orders");
                     }
@@ -194,21 +195,21 @@ namespace RestaurantKrustyKrab.Restaurant
                 Console.SetCursorPosition(Kitchen.PositionY + 3, Kitchen.PositionX + 15);
                 Console.Write("Unfinished Orders: ");
                 if (Kitchen.Orders.Count > 0)
-                
+
                     Console.Write(Kitchen.Orders.Count);
-                
+
 
                 Console.SetCursorPosition(Kitchen.PositionY + 25, Kitchen.PositionX + 15);
                 Console.Write("Finished Orders: ");
                 if (Kitchen.ReadyOrders.Count > 0)
-                
+
                     Console.WriteLine("Ready Orders " + Kitchen.ReadyOrders.Count);
-                
+
             }
 
             void DrawTransactions()
             {
-                
+
                 Console.SetCursorPosition(90, 59);  //Y flyttar i sidled, X flyttar på höjden
                 Console.WriteLine("EventLog:");
                 int X = 1;
@@ -218,12 +219,12 @@ namespace RestaurantKrustyKrab.Restaurant
                     foreach (string Event in PaidOrders.ToArray().Reverse())
                     {
                         X++;
-                            Console.SetCursorPosition(90, 60 + X);
-                            Console.WriteLine(Event);    
-                        }
+                        Console.SetCursorPosition(90, 60 + X);
+                        Console.WriteLine(Event);
                     }
                 }
-                
+            }
+
             void Draw_Total_Number_Of_Guests()
             {
                 Console.SetCursorPosition(1, 1);
@@ -233,7 +234,7 @@ namespace RestaurantKrustyKrab.Restaurant
             void Draw_Dishers(DishStation DishStation)
             {
                 int X = 1;
-                Console.SetCursorPosition(DishStation.PositionY + 2, DishStation.PositionX +1);
+                Console.SetCursorPosition(DishStation.PositionY + 2, DishStation.PositionX + 1);
                 Console.Write("Dishers: ");
                 if (DishStation.Guests.Count > 0)
                 {
@@ -247,14 +248,14 @@ namespace RestaurantKrustyKrab.Restaurant
                         }
                         else
                             break;
-                         
+
                     }
-                    
+
                 }
-               
+
 
             }
-            Console.ReadKey(); 
+            Console.ReadKey();
 
 
         }
@@ -262,7 +263,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
         public Draw()
         {
-           
+
 
         }
 

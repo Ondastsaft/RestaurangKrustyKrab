@@ -1,10 +1,11 @@
 ﻿using RestaurantKrustyKrab.People;
+using RestaurantKrustyKrab.Restaurant;
 
-namespace RestaurantKrustyKrab.Restaurant
+namespace RestaurantKrustyKrab.Stations
 {
     internal class DishStation : Template
     {
-  
+
         internal List<Guest> Guests { get; set; }
 
         public DishStation(int positionX, int positionY)

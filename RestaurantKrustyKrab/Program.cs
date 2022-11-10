@@ -1,5 +1,5 @@
 ﻿using RestaurantKrustyKrab.People;
-using RestaurantKrustyKrab.Restaurant;
+using RestaurantKrustyKrab.Stations;
 using System.Collections;
 using System.Security.Cryptography.X509Certificates;
 

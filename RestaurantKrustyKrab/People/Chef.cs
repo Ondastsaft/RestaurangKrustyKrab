@@ -1,4 +1,4 @@
-﻿using RestaurantKrustyKrab.Restaurant;
+﻿using RestaurantKrustyKrab.Restaurant.Dishes;
 using System.Transactions;
 
 namespace RestaurantKrustyKrab.People

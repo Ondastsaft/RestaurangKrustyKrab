@@ -7,13 +7,14 @@ using RestaurantKrustyKrab.Restaurant.Dishes.Fish;
 using RestaurantKrustyKrab.Restaurant.Dishes.Meat;
 using RestaurantKrustyKrab.Restaurant.Dishes.Vegetarian;
 using System.Collections.Generic;
+using RestaurantKrustyKrab.Restaurant;
 
-namespace RestaurantKrustyKrab.Restaurant
+namespace RestaurantKrustyKrab.Stations
 {
     internal class Lobby
     {
-        internal DishStation DishStation { get; set; }                                 
-        internal Reception Reception { get; set; }                                       
+        internal DishStation DishStation { get; set; }
+        internal Reception Reception { get; set; }
         internal string[,] MyDrawing { get; set; }
         internal string Name { get; set; }
         internal int PositionX { get; set; }
@@ -54,7 +55,7 @@ namespace RestaurantKrustyKrab.Restaurant
             Dishers = new List<Guest>();
             Dishers.Clear();
 
-           
+
             Generate();
         }
 
@@ -70,7 +71,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
             Sequence();
         }
- 
+
         internal void Generate()
         {
             GenerateTable(TableList);
@@ -83,9 +84,9 @@ namespace RestaurantKrustyKrab.Restaurant
         {
             var company = GenerateCompany();
             CompanyWaitingList.Enqueue(company);
-            
+
             foreach (Guest guest in company.Guests)
-            Visited_Guests.Add(guest);
+                Visited_Guests.Add(guest);
         }
 
         static List<Table> GenerateTable(List<Table> tableList)
@@ -111,7 +112,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
         internal Company GenerateCompany()
         {
-            Company company = new Company(this.CompanyWaitingList.Count);
+            Company company = new Company(CompanyWaitingList.Count);
             return company;
         }
 
@@ -120,7 +121,7 @@ namespace RestaurantKrustyKrab.Restaurant
             for (int i = 0; i < 3; i++)
             {
                 string name = "Waiter " + (i + 1);
-                WaiterList.Add(new Waiter(name, random.Next(0,4), false, 110, (3 + i + 1)));
+                WaiterList.Add(new Waiter(name, random.Next(0, 4), false, 110, 3 + i + 1));
             }
 
         }
@@ -131,10 +132,10 @@ namespace RestaurantKrustyKrab.Restaurant
             for (int i = 1; i < 6; i++)
                 ChefList.Add(new Chef("Chef: " + i, random.Next(0, 4), 0, 0));
         }
-      
-        internal void Sequence() 
 
-            {
+        internal void Sequence()
+
+        {
 
             PrintMethods printMethods = new PrintMethods();
             Draw draw = new Draw();
@@ -177,7 +178,7 @@ namespace RestaurantKrustyKrab.Restaurant
             DisherTimer();
             GlobalTimer++;
         }
-        
+
         void Chef_take_order()
 
         {
@@ -194,7 +195,7 @@ namespace RestaurantKrustyKrab.Restaurant
                         foreach (Dish dish in Kitchen.Orders.ToList())
                             if (dish.DestinationTable == chef.Preparing[0].DestinationTable)
                             {
-                                chef.Preparing.Add(Kitchen.Orders.Dequeue()); 
+                                chef.Preparing.Add(Kitchen.Orders.Dequeue());
                             }
                     }
                 }
@@ -221,7 +222,7 @@ namespace RestaurantKrustyKrab.Restaurant
 
         internal void GuestTimer()
         {
-            foreach(Company company in CompanyWaitingList)
+            foreach (Company company in CompanyWaitingList)
             {
                 company.TimeWaiting++;
             }
@@ -299,20 +300,20 @@ namespace RestaurantKrustyKrab.Restaurant
         {
             foreach (Table table in TableList)
                 if (table.Clean == false)
+                {
+                    if (table.WipeTimer >= table.WipeEnd)
                     {
-                        if (table.WipeTimer >= table.WipeEnd)
-                        {
-                            table.WipedBy = "";
-                            table.Clean = true;
-                            
-                        }
+                        table.WipedBy = "";
+                        table.Clean = true;
+
                     }
+                }
         }
 
         internal void Check_if_Restaurant_is_full()
         {
             int tablecounter = 0;
-            foreach(Table table in TableList)
+            foreach (Table table in TableList)
             {
                 if (table.IsAvailable == false)
                 {
@@ -328,26 +329,26 @@ namespace RestaurantKrustyKrab.Restaurant
 
         internal void Check_if_dishers_are_done()
         {
-            
+
             {
                 if (DishStation.Guests.Count > 0)
 
                     foreach (Guest guest in DishStation.Guests)
-                        {
-                            if (guest.Dishing_start >= guest.Dishing_end)
+                    {
+                        if (guest.Dishing_start >= guest.Dishing_end)
                         {
                             DishStation.Guests.Clear();
                             break;
                         }
-                    }  
-                }
+                    }
             }
-               
+        }
+
     }
 }
 
 
-    
+
 
 
 

@@ -1,4 +1,5 @@
-﻿using RestaurantKrustyKrab.Restaurant;
+﻿using RestaurantKrustyKrab.Restaurant.Dishes;
+
 namespace RestaurantKrustyKrab.People
 {
     internal class Guest : Person

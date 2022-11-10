@@ -1,4 +1,4 @@
-﻿namespace RestaurantKrustyKrab.Restaurant
+﻿namespace RestaurantKrustyKrab.Restaurant.Dishes
 {
     internal class Dish
     {

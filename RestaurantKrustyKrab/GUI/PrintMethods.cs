@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RestaurantKrustyKrab.Restaurant;
+using RestaurantKrustyKrab.Restaurant.Dishes;
+using RestaurantKrustyKrab.Stations;
 
 namespace RestaurantKrustyKrab.Restaurant
 {

@@ -1,7 +1,9 @@
 ﻿using RestaurantKrustyKrab.Restaurant;
+using RestaurantKrustyKrab.Restaurant.Dishes;
 using RestaurantKrustyKrab.Restaurant.Dishes.Fish;
 using RestaurantKrustyKrab.Restaurant.Dishes.Meat;
 using RestaurantKrustyKrab.Restaurant.Dishes.Vegetarian;
+using RestaurantKrustyKrab.Stations;
 using System.Security.Cryptography.X509Certificates;
 
 namespace RestaurantKrustyKrab.People
@@ -21,8 +23,8 @@ namespace RestaurantKrustyKrab.People
 
 
 
-        public void Work(Queue<Company> CompanyWaitingList, bool Full_Restaurant, 
-                         List<Table> TableList, Kitchen Kitchen, int GlobalTimer, List<string> PaidOrders, DishStation Dishstation)
+        public void Work(Queue<Company> CompanyWaitingList, bool Full_Restaurant, List<Table> TableList, 
+                         Kitchen Kitchen, int GlobalTimer, List<string> PaidOrders, DishStation Dishstation)
         {
 
             Busy = false;
@@ -92,6 +94,7 @@ namespace RestaurantKrustyKrab.People
                     Activity = "Waiting";
                     TableFound = false;
                     Busy = true;
+                    break;
                 }
                
 
@@ -201,7 +204,6 @@ namespace RestaurantKrustyKrab.People
                 }
             }
 
-
         void Take_order_from_kitchen(Kitchen Kitchen)
         {
             if (Kitchen.ReadyOrders.Count > 0 && Busy == false)
@@ -265,9 +267,6 @@ namespace RestaurantKrustyKrab.People
             }
         }
             
-
-
-
         void return_from_serving()
         {
             if (Busy == false && Location == "Tables" && Activity == "Giving food to table")
@@ -275,7 +274,6 @@ namespace RestaurantKrustyKrab.People
                 Reset();
             }
         }
-
 
         void Waiter_start_cleaning_And_Take_payment(List<Table> TableList, int GlobalTimer, List<string> PaidOrders, DishStation Dishstation)  //Also keeps the paidOrders List to max
         {
