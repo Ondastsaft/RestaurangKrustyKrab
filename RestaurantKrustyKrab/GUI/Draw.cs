@@ -20,8 +20,8 @@ namespace RestaurantKrustyKrab.GUI
             }
 
             Window.OurDraw("Kitchen", Kitchen.PositionY, Kitchen.PositionX, Kitchen.Frame);
-            Window.OurDraw("Dish Station", DishStation.PositionY, DishStation.PositionX, DishStation.Frame);
-            Window.OurDraw("Reception", Reception.PositionY, Reception.PositionX, Reception.Frame);
+            Window.OurDrawBottomLess("Dish Station", DishStation.PositionY, DishStation.PositionX, DishStation.Frame);
+            Window.OurDrawBottomLess("Reception", Reception.PositionY, Reception.PositionX, Reception.Frame);
             DrawWaitersAtReception();
             DrawGuestsAtReception();
             DrawTables();

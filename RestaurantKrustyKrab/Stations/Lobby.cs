@@ -20,18 +20,18 @@ namespace RestaurantKrustyKrab.Stations
         internal int PositionX { get; set; }
         internal int PositionY { get; set; }
 
-        internal static Random random = new Random();
-        public List<Table> TableList { get; set; }
-        internal List<Waiter> WaiterList { get; set; }
-        internal Queue<Company> CompanyWaitingList { get; set; }
-        internal List<Chef> ChefList { get; set; }
-        public int GlobalTimer { get; set; }
-        internal Kitchen Kitchen { get; set; }
-        internal List<Guest> Visited_Guests { get; set; }
-        internal bool Full_Restaurant { get; set; }
-        internal List<string> PaidOrders { get; set; }
-        internal int LargeTables { get; set; }
-        internal List<Guest> Dishers { get; set; }
+        private static Random random = new Random();
+        private List<Table> TableList { get; set; }
+        private List<Waiter> WaiterList { get; set; }
+        private Queue<Company> CompanyWaitingList { get; set; }
+        private List<Chef> ChefList { get; set; }
+        private int GlobalTimer { get; set; }
+        private Kitchen Kitchen { get; set; }
+        private List<Guest> Visited_Guests { get; set; }
+        private bool Full_Restaurant { get; set; }
+        private List<string> PaidOrders { get; set; }
+        private int LargeTables { get; set; }
+        private List<Guest> Dishers { get; set; }
 
 
         public Lobby()
@@ -66,7 +66,7 @@ namespace RestaurantKrustyKrab.Stations
 
             if (Visited_Guests.Count < 80)
             {
-                for (int i = 0; i < random.Next(1, 2); i++)
+                for (int i = 0; i < random.Next(0, 4); i++)
                     Addguests();
             }
 
