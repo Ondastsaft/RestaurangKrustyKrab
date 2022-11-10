@@ -1,5 +1,6 @@
 ﻿using RestaurantKrustyKrab.People;
 using RestaurantKrustyKrab.Restaurant;
+using RestaurantKrustyKrab.Restaurant.Dishes;
 using RestaurantKrustyKrab.Stations;
 using System.Xml.Linq;
 
@@ -162,7 +163,7 @@ namespace RestaurantKrustyKrab.GUI
                     {
                         Console.SetCursorPosition(Kitchen.PositionY - 10, Kitchen.PositionX + K);
                         Console.Write(waiter.Name);
-                        Console.SetCursorPosition(Kitchen.PositionY - 20, Kitchen.PositionX + K + 1);
+                        Console.SetCursorPosition(Kitchen.PositionY - 26, Kitchen.PositionX + K + 1);
                         Console.Write(waiter.Activity);
                         K = K + 2;
                     }
@@ -199,19 +200,34 @@ namespace RestaurantKrustyKrab.GUI
 
             void DrawOrders()
             {
+                int Y = 1;
                 Console.SetCursorPosition(Kitchen.PositionY + 3, Kitchen.PositionX + 15);
-                Console.Write("Unfinished Orders: ");
+                Console.Write("Not prepared dishes: ");
                 if (Kitchen.Orders.Count > 0)
-
+                {
                     Console.Write(Kitchen.Orders.Count);
+                    foreach(Dish dish in Kitchen.Orders)
+                    {
+                        Console.SetCursorPosition(Kitchen.PositionY + 3, Kitchen.PositionX + 15 + Y);
+                        Console.Write(dish.Name + " "  + dish.Guest + " " + dish.DestinationTable);
+                            Y++;
+                    }
+                }
 
 
-                Console.SetCursorPosition(Kitchen.PositionY + 25, Kitchen.PositionX + 15);
+
+                Y = 1;
+                Console.SetCursorPosition(Kitchen.PositionY + 40, Kitchen.PositionX + 15);
                 Console.Write("Finished Orders: ");
                 if (Kitchen.ReadyOrders.Count > 0)
 
-                    Console.WriteLine("Ready Orders " + Kitchen.ReadyOrders.Count);
-
+                    Console.WriteLine("Ready dishes " + Kitchen.ReadyOrders.Count);
+                foreach (Dish dish in Kitchen.ReadyOrders)
+                {
+                    Console.SetCursorPosition(Kitchen.PositionY + 40 + Y, Kitchen.PositionX + 15 + Y);
+                    Console.Write(dish.Name+ " " + dish.Guest + " " + dish.DestinationTable);
+                    Y++;
+                }
             }
 
             void DrawTransactions()
