@@ -8,8 +8,6 @@ namespace RestaurantKrustyKrab.GUI
 {
     internal class Draw
     {
-
-
         public void draw(List<Table> TableList, Kitchen Kitchen, Reception Reception, DishStation DishStation, List<Waiter> WaiterList,
                          Queue<Company> CompanyWaitingList, List<Chef> ChefList, int Globaltimer, List<string> PaidOrders, List<Guest> Visited_Guests)
         {
@@ -22,38 +20,17 @@ namespace RestaurantKrustyKrab.GUI
             Window.OurDraw("Kitchen", Kitchen.PositionY, Kitchen.PositionX, Kitchen.Frame);
             Window.OurDrawBottomLess("Dish Station", DishStation.PositionY, DishStation.PositionX, DishStation.Frame);
             Window.OurDrawBottomLess("Reception", Reception.PositionY, Reception.PositionX, Reception.Frame);
-            DrawWaitersAtReception();
+            
             DrawGuestsAtReception();
             DrawTables();
-            DrawWaitersAtTables();
-            DrawWaitersAtKitchen();
+            Draw_Waiters();
+
             DrawChefsAtKitchen();
             DrawGlobalTimer(Globaltimer);
             DrawOrders();
             DrawTransactions();
             Draw_Total_Number_Of_Guests();
             Draw_Dishers(DishStation);
-
-            void DrawWaitersAtReception()
-            {
-                Console.SetCursorPosition(Reception.PositionY + 30, Reception.PositionX);  //Y flyttar i sidled, X flyttar på höjden
-                int X = 1;
-                foreach (Waiter waiter in WaiterList)
-                {
-                    if (waiter.Location == "Reception")
-                    {
-                        Console.Write(waiter.Name + " " + waiter.Activity);
-                        if (waiter.CompanyProperty.Guests.Count >= 1)
-                        {
-                                Console.Write(" " + waiter.CompanyProperty.Guests[0].Name);
-                                if (waiter.CompanyProperty.Guests.Count > 1 )
-                                Console.Write((" + " + (waiter.CompanyProperty.Guests.Count - 1)));
-                        }
-                        Console.SetCursorPosition(Reception.PositionY + 30, Reception.PositionX + X);
-                        X++;
-                    }
-                }
-            }
 
             void DrawGuestsAtReception()
             {
@@ -91,6 +68,70 @@ namespace RestaurantKrustyKrab.GUI
                 }
             }
 
+            void Draw_Waiters()
+                {
+                DrawWaitersAtReception();
+                DrawWaitersAtTables();
+                DrawWaitersAtKitchen();
+
+
+                void DrawWaitersAtReception()
+            {
+                Console.SetCursorPosition(Reception.PositionY + 30, Reception.PositionX);  //Y flyttar i sidled, X flyttar på höjden
+                int X = 1;
+                foreach (Waiter waiter in WaiterList)
+                {
+                    if (waiter.Location == "Reception")
+                    {
+                        Console.Write(waiter.Name + " " + waiter.Activity);
+                        if (waiter.CompanyProperty.Guests.Count >= 1)
+                        {
+                                Console.Write(" " + waiter.CompanyProperty.Guests[0].Name);
+                                if (waiter.CompanyProperty.Guests.Count > 1 )
+                                Console.Write((" + " + (waiter.CompanyProperty.Guests.Count - 1)));
+                        }
+                        Console.SetCursorPosition(Reception.PositionY + 30, Reception.PositionX + X);
+                        X++;
+                    }
+                }
+            }
+                
+                void DrawWaitersAtTables()
+            {
+
+                foreach (Waiter waiter in WaiterList)
+                {
+                    foreach (Table table in TableList)
+
+                        if (waiter.ServingTable == table.TableNumber && waiter.Location == "Tables")
+                        {
+                            Console.SetCursorPosition(table.PositionY + 1, table.PositionX - 1);
+                            Console.Write(waiter.Name + " " + waiter.Activity);
+                        }
+                }
+
+            }
+
+                void DrawWaitersAtKitchen()
+            {
+
+                int K = 5;
+                foreach (Waiter waiter in WaiterList)
+                {
+                    if (waiter.Location == "Kitchen")
+                    {
+                        Console.SetCursorPosition(Kitchen.PositionY - 10, Kitchen.PositionX + K);
+                        Console.Write(waiter.Name);
+                        Console.SetCursorPosition(Kitchen.PositionY - 26, Kitchen.PositionX + K + 1);
+                        Console.Write(waiter.Activity);
+                        K = K + 2;
+                    }
+
+                }
+            }
+
+
+            }
 
             void DrawTables()
             {
@@ -98,9 +139,8 @@ namespace RestaurantKrustyKrab.GUI
                 {
                     Draw_Tables(table);
                 }
-            } //Loops through all tables
 
-            void Draw_Tables(Table table)
+                void Draw_Tables(Table table)
             {
                 int Z = 1;
 
@@ -136,40 +176,7 @@ namespace RestaurantKrustyKrab.GUI
                     Console.Write("Done eating at " + table.TimeEnd);
                 }
             }
-
-            void DrawWaitersAtTables()
-            {
-
-                foreach (Waiter waiter in WaiterList)
-                {
-                    foreach (Table table in TableList)
-
-                        if (waiter.ServingTable == table.TableNumber && waiter.Location == "Tables")
-                        {
-                            Console.SetCursorPosition(table.PositionY + 1, table.PositionX - 1);
-                            Console.Write(waiter.Name + " " + waiter.Activity);
-                        }
-                }
-
-            }
-
-            void DrawWaitersAtKitchen()
-            {
-
-                int K = 5;
-                foreach (Waiter waiter in WaiterList)
-                {
-                    if (waiter.Location == "Kitchen")
-                    {
-                        Console.SetCursorPosition(Kitchen.PositionY - 10, Kitchen.PositionX + K);
-                        Console.Write(waiter.Name);
-                        Console.SetCursorPosition(Kitchen.PositionY - 26, Kitchen.PositionX + K + 1);
-                        Console.Write(waiter.Activity);
-                        K = K + 2;
-                    }
-
-                }
-            }
+            } //Loops through all tables
 
             void DrawChefsAtKitchen()
             {
@@ -278,7 +285,14 @@ namespace RestaurantKrustyKrab.GUI
 
 
             }
-            Console.ReadKey();
+            PrintMethods printMethods = new PrintMethods();
+            ConsoleKeyInfo key = Console.ReadKey();
+            if (key.KeyChar == 'p')
+            {
+                printMethods.PrintAll(CompanyWaitingList, Globaltimer, WaiterList, TableList, ChefList, Kitchen, PaidOrders, Visited_Guests); //readkey finns i PrintAll
+            }
+           
+
 
 
         }

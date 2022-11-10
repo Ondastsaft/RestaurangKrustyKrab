@@ -298,7 +298,7 @@ namespace RestaurantKrustyKrab.People
                 }
                 else
                 {
-                    PaidOrders.Add(guest.Name + " could not afford their " + guest.Order[0].Name + " was forced to help with the dishes, they rate this restaurant " + guest.Satisfaction + "/12");
+                    PaidOrders.Add(guest.Name + " could not afford their " + guest.Order[0].Name + " was forced to help with the dishes, they rate this restaurant " + guest.Satisfaction + "/12 they spent ");
                     Dishstation.Guests.Add(guest);
                     guest.Dishing_start = GlobalTimer;
                     guest.Dishing_end = GlobalTimer + 5;

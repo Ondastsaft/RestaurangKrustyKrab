@@ -138,7 +138,7 @@ namespace RestaurantKrustyKrab.Stations
 
         {
 
-            PrintMethods printMethods = new PrintMethods();
+           
             Draw draw = new Draw();
 
             foreach (Waiter waiter in WaiterList)
@@ -166,8 +166,7 @@ namespace RestaurantKrustyKrab.Stations
                 Check_if_dishers_are_done();
                 draw.draw(TableList, Kitchen, Reception, DishStation, WaiterList, CompanyWaitingList, ChefList, GlobalTimer, PaidOrders, Visited_Guests);
 
-                //printMethods.PrintAll(CompanyWaitingList, GlobalTimer, WaiterList, TableList, ChefList, Kitchen, PaidOrders, Visited_Guests); //readkey finns i PrintAll
-
+                
             }
         }
 
