@@ -217,30 +217,34 @@ namespace RestaurantKrustyKrab.People
 
             Activity = "Giving food to table";
             Location = "Tables";
-            Busy = true;
+           
+                foreach (Table table in TableList)
 
-            foreach (Table table in TableList)
-                foreach (Dish dish in Orders)
-                {
-                    if (dish.DestinationTable == table.TableNumber)
+                    foreach (Dish dish in Orders)
                     {
-                        table.WaitingForFood = false;
-                        table.RecievedOrder = true;
-                        table.EatTimer = GlobalTimer;
-                        table.TimeEnd = table.EatTimer + 20;
-                        foreach (Guest guest in table.BookedSeats.Guests)
+                        if (dish.DestinationTable == table.TableNumber)
                         {
-                            //if dish.guest == guest.name maybe maybe funkar ej
-                            {
-                                guest.Recieved_Order = true;
-                                guest.Satisfaction = guest.Satisfaction + Orders[0].Quality;
-                                guest.Satisfaction = guest.Satisfaction + ServiceLevel;
+                            table.WaitingForFood = false;
+                            table.RecievedOrder = true;
+                            table.EatTimer = GlobalTimer;
+                            table.TimeEnd = table.EatTimer + 20;
 
+
+                            foreach (Guest guest in table.BookedSeats.Guests)
+                            {
+                                if (dish.Guest == guest.Name)
+                                {
+                                    guest.Recieved_Order = true;
+                                    guest.Satisfaction = guest.Satisfaction + dish.Quality;
+                                    guest.Satisfaction = guest.Satisfaction + ServiceLevel;
+
+                                }
                             }
+
+                            break;
                         }
-                    }
-                    break;
-                }
+
+                    } 
         }
 
 
