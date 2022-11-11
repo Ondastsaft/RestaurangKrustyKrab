@@ -1,6 +1,6 @@
-﻿using RestaurantKrustyKrab.People;
+﻿
+using RestaurantKrustyKrab.People;
 using System.Collections;
-
 namespace RestaurantKrustyKrab.Restaurant
 {
     internal class Table : RestaurantArea

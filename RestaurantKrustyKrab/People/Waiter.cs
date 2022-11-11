@@ -1,5 +1,4 @@
 ﻿using RestaurantKrustyKrab.Restaurant;
-
 namespace RestaurantKrustyKrab.People
 {
     internal class Waiter : Person

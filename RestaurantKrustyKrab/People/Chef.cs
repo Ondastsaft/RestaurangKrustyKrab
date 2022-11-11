@@ -1,5 +1,4 @@
 ﻿using RestaurantKrustyKrab.Restaurant;
-
 namespace RestaurantKrustyKrab.People
 {
     internal class Chef : Person
@@ -40,6 +39,7 @@ namespace RestaurantKrustyKrab.People
         public void Cook(KeyValuePair<string, List<Dish>> order)
         {
             OrderForTable = order;
+
             TimeToCook = 10;
             IsAvailable = false;
         }

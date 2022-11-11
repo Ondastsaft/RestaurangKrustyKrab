@@ -1,5 +1,4 @@
 ﻿using RestaurantKrustyKrab.Restaurant;
-
 namespace RestaurantKrustyKrab
 {
     internal class Program
