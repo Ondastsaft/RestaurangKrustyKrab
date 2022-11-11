@@ -38,9 +38,6 @@ namespace RestaurantKrustyKrab.GUI
                 Console.SetCursorPosition(Reception.PositionY + 2, Reception.PositionX + Y);
                 Console.Write("Guests: ");
 
-
-
-
                 foreach (Company company in CompanyWaitingList)
                 {
                     if (CompanyWaitingList.Count > 0)
@@ -57,7 +54,7 @@ namespace RestaurantKrustyKrab.GUI
                         catch (ArgumentOutOfRangeException)
                         {
                             //Console.Clear();
-                            //Console.WriteLine("Buggen");    //känd bug
+                            //Console.WriteLine("Buggen");    //känd bug solved :)
                             //Console.ReadKey();
                             Console.WriteLine("Ghost");
                             continue;
@@ -159,17 +156,31 @@ namespace RestaurantKrustyKrab.GUI
                 {
                     Console.SetCursorPosition(table.PositionY + 1, table.PositionX + Z);
                     Console.Write(guest.Name);
+                        Z++;
 
-                    if (guest.Order.Count > 0)
+
+                        if (guest.Order.Count > 0)
                     {
                         if (guest.Recieved_Order == true)
                             Console.Write(" has recieved " + guest.Order[0].Name);
 
                         else
                             Console.Write(" has ordered " + guest.Order[0].Name);
+                           
+                                             
+                            }
+                        }
+
+                    if (table.Orders.Count > 0)
+                    {
+                        foreach (Dish dish in table.Orders)
+                        {
+                            Console.SetCursorPosition(table.PositionY + 1, table.PositionX + Z);
+                            Console.Write(dish.Name + " " + dish.Guest);
+                            Z++;
+                        }
                     }
-                    Z++;
-                }
+
                 if (table.RecievedOrder == true)
                 {
                     Console.SetCursorPosition(table.PositionY + 1, table.PositionX + Z + 1);

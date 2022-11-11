@@ -1,4 +1,5 @@
 ﻿using RestaurantKrustyKrab.People;
+using RestaurantKrustyKrab.Restaurant.Dishes;
 using System.Collections;
 using System.ComponentModel.DataAnnotations;
 
@@ -12,7 +13,7 @@ namespace RestaurantKrustyKrab.Restaurant
         internal Company BookedSeats { get; set; }
         internal bool IsAvailable { get; set; }
         internal int TableNumber { get; set; }
-        internal Hashtable Orders { get; set; }
+        internal List<Dish> Orders { get; set; }
         internal bool WaitingForFood { get; set; }
         internal bool RecievedOrder { get; set; }
         internal int EatTimer { get; set; }
@@ -22,6 +23,7 @@ namespace RestaurantKrustyKrab.Restaurant
         internal string WipedBy { get; set; }
         internal int WipeTimer { get; set; }
         internal int WipeEnd { get; set; }
+        
         
         
 
@@ -37,7 +39,7 @@ namespace RestaurantKrustyKrab.Restaurant
             TableNumber = tableNumber;
             BookedSeats = new Company(0);
             BookedSeats.Guests.Clear();
-            Orders = new Hashtable();
+            Orders = new List<Dish>();
             WaitingForFood = false;
             RecievedOrder = false;
             EatTimer = -21;

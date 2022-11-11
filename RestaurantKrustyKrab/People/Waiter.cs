@@ -194,7 +194,7 @@ namespace RestaurantKrustyKrab.People
                 foreach (Dish dish in Kitchen.ReadyOrders.ToList())
                 {
                     if (dish.DestinationTable == Orders[0].DestinationTable)
-                        Kitchen.ReadyOrders.Dequeue();
+                        Orders.Add(Kitchen.ReadyOrders.Dequeue());
                 }
                 ServingTable = Orders[0].DestinationTable;
 
@@ -218,14 +218,15 @@ namespace RestaurantKrustyKrab.People
             Busy = true;
 
             foreach (Table table in TableList)
-                foreach (Dish dish in Orders)
                 {
-                    if (dish.DestinationTable == table.TableNumber)
-                    {
+                    if (Orders[0].DestinationTable == table.TableNumber)
+                    {   
                         table.WaitingForFood = false;
                         table.RecievedOrder = true;
                         table.EatTimer = GlobalTimer;
                         table.TimeEnd = table.EatTimer + 20;
+                        foreach (Dish dish in Orders)
+                            table.Orders.Add(dish);
                         foreach (Guest guest in table.BookedSeats.Guests)
                         {
                             //if dish.guest == guest.name maybe maybe funkar ej
@@ -237,7 +238,6 @@ namespace RestaurantKrustyKrab.People
                             }
                         }
                     }
-                    break;
                 }
         }
 
