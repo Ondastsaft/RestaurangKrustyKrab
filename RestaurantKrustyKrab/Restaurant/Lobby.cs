@@ -22,15 +22,15 @@ namespace RestaurantKrustyKrab.Restaurant
             MyRestaurantAreas.Add("DishStation", new DishStation("Washing Bears", 3, 125));
             CounterRestaurant = 0;
             MyDrawing = new string[50, 200];
-            this.Name = "Krusty Krab";
-            this.FromTop = 2;
-            this.FromLeft = 2;
-            this.Time = 0;
+            Name = "Krusty Krab";
+            FromTop = 2;
+            FromLeft = 2;
+            Time = 0;
         }
         //LoopMetoder
         public void LobbyRun()
         {
-            Window.OurDraw(this.Name, this.FromTop, this.FromLeft, this.MyDrawing);
+            Window.OurDraw(Name, FromTop, FromLeft, MyDrawing);
             Draw();
             PrintAllAreas();
 
