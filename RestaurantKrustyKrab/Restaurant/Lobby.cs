@@ -98,10 +98,12 @@ namespace RestaurantKrustyKrab.Restaurant
 
             foreach (var kvp in MyRestaurantAreas)
             {
-                if (kvp.Value is Table && (MyRestaurantAreas[kvp.Key] as Table).CompanyAtArea.Guests.Count > 0 && (MyRestaurantAreas[kvp.Key] as Table).WaiterAtTable.Available == true)
+                if (kvp.Value is Table && (MyRestaurantAreas[kvp.Key] as Table).CompanyAtArea.Guests.Count > 0 && (MyRestaurantAreas[kvp.Key] as Table).WaiterAtTable.Available == true && (MyRestaurantAreas[kvp.Key] as Table).CompanyAtArea.HasOrdered == false)
                 {
                     TakeOrder(kvp.Key);
+                    (MyRestaurantAreas[kvp.Key] as Table).CompanyAtArea.HasOrdered = true;
                 }
+
             }
 
             //TakeOrder();

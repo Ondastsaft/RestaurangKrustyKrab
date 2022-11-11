@@ -7,6 +7,7 @@
         internal int timeWaiting { get; set; }
         internal Random random = new Random();
         public bool SeatedAtTable = false;
+        internal bool HasOrdered = false;
         public Company(int offSetRow)
         {
             int guests = random.Next(1, 5);
