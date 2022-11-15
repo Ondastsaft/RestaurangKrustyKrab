@@ -16,19 +16,20 @@ namespace RestaurantKrustyKrab.Restaurant
 
         public Table(string name, int fromTop, int fromLeft, int seats, int quality, int tableNumber) : base(name, fromTop, fromLeft)
         {
-            Frame = new string[5, 25];
+            Frame = new string[5, 30];
             Seats = seats;
             Quality = quality;
             FromTop = fromTop;
             FromLeft = fromLeft;
             TableNumber = tableNumber;
+            
 
 
             Dishes = new Hashtable();
             Dishes.Add(1, "Wagyu beef");
             Dishes.Add(2, "Pasta Bolgonese");
             Dishes.Add(3, "Hot Hund");
-            Dishes.Add(4, "Fisk o' Chips");
+            Dishes.Add(4, "Fisk o'Chips");
             Dishes.Add(5, "Fisk grataine");
             Dishes.Add(6, "Fisk sticks");
             Dishes.Add(7, "Halloumi salad");
@@ -39,22 +40,25 @@ namespace RestaurantKrustyKrab.Restaurant
         public override void PrintMe()
         {
             int row = 0;
-            if (WaiterAtTable != null)
+            if (WaiterAtTable != null && WaiterAtTable.Name_MenuIndex.Count < 1)
             {
-                Console.SetCursorPosition(FromLeft + 1, FromTop + 8 + row);
+                Console.SetCursorPosition(FromLeft + 1, FromTop + 10 + row);
                 Console.Write(WaiterAtTable.Name);
-                row++;
-
-                Console.SetCursorPosition(FromLeft + 1, FromTop + 8 + row);
+            }
+            else if (WaiterAtTable != null && WaiterAtTable.Name_MenuIndex.Count >= 1 )
+            {
+                Console.SetCursorPosition(FromLeft + 1, FromTop + 10 + row);
                 Console.Write(WaiterAtTable.Name);
                 row++;
                 foreach (var kvp in WaiterAtTable.Name_MenuIndex)
                 {
-                    Console.SetCursorPosition(FromLeft + 8, FromTop + 8 + row);
+                    Console.SetCursorPosition(FromLeft + 8, FromTop + 10 + row);
                     Console.Write(Dishes[kvp.Value]);
                     row++;
                 }
             }
+               
+            
             row = 0;
             if (CompanyAtArea != null)
             {
