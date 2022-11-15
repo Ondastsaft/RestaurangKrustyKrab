@@ -259,12 +259,13 @@ namespace RestaurantKrustyKrab.Restaurant
             (MyRestaurantAreas[areakey] as Table).HasOrdered = false;
             (MyRestaurantAreas[areakey] as Table).WaiterAtTable = new Waiter("", 0, false, 0, 0);
 
-            var order = new KeyValuePair<string, Dictionary<string, int>>(waiter.Area_Order.Key, waiter.Area_Order.Value);
-            Dictionary<string, int> names_DishIndexes = waiter.Area_Order.Value;
-            (MyRestaurantAreas["Kitchen"] as Kitchen).GetOrderFromWaiter(order);
+            //var order = new KeyValuePair<string, Dictionary<string, int>>(waiter.Area_Order.Key, waiter.Area_Order.Value);
+            //Dictionary<string, int> names_DishIndexes = waiter.Area_Order.Value;
 
-            order = new KeyValuePair<string, Dictionary<string, int>>("", names_DishIndexes);
-            waiter.Area_Order = order;
+            (MyRestaurantAreas["Kitchen"] as Kitchen).GetOrderFromWaiter(waiter.Area_Order);
+
+            
+            //waiter.Area_Order = order;
             waiter.Available = false;
             MyRestaurantAreas["Kitchen"].WaitersAtArea.Add(waiter);
 

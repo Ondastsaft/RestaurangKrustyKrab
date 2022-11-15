@@ -48,12 +48,13 @@ namespace RestaurantKrustyKrab.Restaurant
             {
                 if (!OrderQueue.ContainsKey(order.Key))
                     OrderQueue.Add(order.Key, order.Value);
+
                 OrderQueueTables.Enqueue(order.Key);
             }
 
         }
 
-        public void CallForService(string table, List<Dish> dishesToServe)
+        public void CallForService(string table, List<Dish> dishesToServe)  //funkar ej, lämnar ut färdig mat
         {
             Dictionary<string, Dictionary<string, int>> destinationTable_names_MenuIndex = Chefmaster[table] as Dictionary<string, Dictionary<string, int>>;
             Dictionary<string, int> names_MenuIndex = destinationTable_names_MenuIndex[table];
@@ -79,7 +80,9 @@ namespace RestaurantKrustyKrab.Restaurant
             FoodIsReady = true;
 
         }
-        public void WorkKitchen()
+
+
+        public void WorkKitchen()  //kockar lagar mat ifall det finns ordrar, kockar hämtar ordrar ifall hen är ledig
         {
 
             for (int i = 0; i < ChefsAtArea.Count; i++)
@@ -125,6 +128,8 @@ namespace RestaurantKrustyKrab.Restaurant
                 }
             }
         }
+
+
         public override void PrintMe()
         {
             int row = 0;
